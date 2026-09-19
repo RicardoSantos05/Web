@@ -3,727 +3,1114 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfólio de Arte | Obras & Artesanato</title>
+    <title>Maria da Graça Silva | Portfólio de Arte</title>
     
-    <!-- Tipografia Elegante -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
     
-    <!-- Bibliotecas de Animação (GSAP) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
 
     <style>
-        /* --- Variáveis de Cor (Tema Africano: Neutros Quentes + Cores Vivas) --- */
+        /* --- Variáveis de Cor --- */
         :root {
             --bg-color: #F4EFE6;      /* Areia do deserto / Creme quente */
-            --bg-alt: #E8DFD3;        /* Pó de argila / Bege escuro para contraste */
-            --text-color: #2F241F;    /* Cacau escuro (quase preto, mas mais quente) */
-            --accent-color: #D35400;  /* Terracota / Laranja queimado vibrante */
+            --bg-alt: #E8DFD3;        /* Pó de argila / Bege escuro */
+            --text-color: #2F241F;    /* Preto/Cacau muito escuro */
+            --accent-color: #8a2a22;  /* Bordeaux requintado */
             --accent-alt: #C09F52;    /* Ocre / Dourado mostarda */
+            --success-color: #25D366; 
         }
 
         /* --- Reset & Base --- */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            cursor: none; /* Esconde o cursor padrão para usarmos o nosso */
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; cursor: none; }
+        html { scroll-behavior: smooth; }
+        body { background-color: var(--bg-color); color: var(--text-color); font-family: 'Inter', sans-serif; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
 
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            font-family: 'Inter', sans-serif;
-            overflow-x: hidden;
-            -webkit-font-smoothing: antialiased;
-        }
+        /* --- Canvas Interativo --- */
+        #bg-canvas { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: -2; opacity: 0.9; }
 
-        /* --- Canvas Interativo (Fundo Pintura) --- */
-        #art-canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            z-index: -1; 
-            pointer-events: none; 
-            opacity: 0.9; 
-        }
+        h1, h2, h3, .serif { font-family: 'Playfair Display', serif; font-weight: 400; }
+        a { text-decoration: none; color: inherit; }
 
-        h1, h2, h3, .serif {
-            font-family: 'Playfair Display', serif;
-            font-weight: 400;
-        }
+        /* --- Cursor Magnético --- */
+        .cursor { width: 8px; height: 8px; background-color: var(--accent-color); border-radius: 50%; position: fixed; top: 0; left: 0; pointer-events: none; z-index: 9999; transform: translate(-50%, -50%); transition: background-color 0.3s ease; }
+        .cursor-follower { width: 45px; height: 45px; border: 1px solid var(--accent-color); border-radius: 50%; position: fixed; top: 0; left: 0; pointer-events: none; z-index: 9998; transform: translate(-50%, -50%); transition: width 0.3s cubic-bezier(0.2, 0, 0, 1), height 0.3s cubic-bezier(0.2, 0, 0, 1), border-color 0.3s ease, background-color 0.3s ease; }
+        .cursor.hovering { background-color: var(--text-color); }
+        .cursor-follower.hovering { width: 20px; height: 20px; border-color: var(--text-color); background-color: rgba(47, 36, 31, 0.05); }
 
-        a {
-            text-decoration: none;
-            color: inherit;
-        }
-
-        /* --- Cursor Personalizado --- */
-        .cursor {
-            width: 12px;
-            height: 12px;
-            background-color: var(--accent-color);
-            border-radius: 50%;
-            position: fixed;
-            top: 0;
-            left: 0;
-            pointer-events: none;
-            z-index: 9999;
-            transform: translate(-50%, -50%);
-            transition: width 0.3s, height 0.3s;
-        }
-        
-        .cursor.hovering {
-            width: 40px;
-            height: 40px;
-            background-color: transparent;
-            border: 1px solid var(--text-color);
-        }
+        @media (hover: none) and (pointer: coarse) { * { cursor: auto !important; } .cursor, .cursor-follower { display: none !important; } }
 
         /* --- Navegação --- */
-        nav {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            padding: 2rem 4rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            z-index: 100;
-            mix-blend-mode: difference;
-            color: #fff;
-        }
-        
-        .nav-links {
-            display: flex;
-            gap: 2rem;
-            font-size: 0.9rem;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-        }
+        nav { position: fixed; top: 0; width: 100%; padding: 1rem 4rem; display: flex; justify-content: space-between; align-items: center; z-index: 100; background-color: rgba(244, 239, 230, 0.95); backdrop-filter: blur(10px); box-shadow: 0 4px 30px rgba(47, 36, 31, 0.08); color: var(--text-color); }
+        .logo-img { height: 50px; width: auto; display: block; transition: transform 0.3s ease; }
+        .logo a:hover .logo-img { transform: scale(1.05); }
+        .nav-links { display: flex; gap: 2rem; font-size: 0.9rem; letter-spacing: 1px; text-transform: uppercase; }
 
-        /* --- Hero Section --- */
-        .hero {
-            height: 100vh;
+        /* --- SELO FLUTUANTE DE EVENTOS --- */
+        .floating-event-btn {
+            left: 30px;
+            width: 60px;
+            height: 60px;
+            background-color: var(--text-color); 
+            color: var(--accent-alt); 
+            border-radius: 50%;
             display: flex;
-            flex-direction: column;
+            align-items: center;
             justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 2rem;
-            position: relative;
-        }
-
-        .hero-title {
-            font-size: clamp(4rem, 8vw, 10rem);
-            line-height: 1;
-            margin-bottom: 1rem;
-            overflow: hidden;
-        }
-
-        .hero-title span {
-            display: block;
-            transform: translateY(100%);
-        }
-
-        .hero-subtitle {
-            font-size: 1.2rem;
-            letter-spacing: 2px;
-            text-transform: uppercase;
+            text-decoration: none;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+            z-index: 1000;
             opacity: 0;
+            pointer-events: none;
+            transition: transform 0.3s ease, opacity 0.5s ease;
         }
-
-        /* --- Biografia --- */
-        .bio-section {
-            padding: 10rem 5vw;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background-color: transparent; 
-        }
-
-        .bio-text {
-            width: 45%;
-            font-size: 1.5rem;
-            line-height: 1.6;
-            background: rgba(244, 239, 230, 0.85);
-            padding: 2rem;
-            border-radius: 8px;
-            backdrop-filter: blur(5px);
-        }
-
-        .bio-image {
-            width: 45%;
-            height: 80vh;
-            background-image: url('https://placehold.co/800x1200/C09F52/2F241F?text=Foto+do+Artista');
-            background-size: cover;
-            background-position: center;
-            filter: grayscale(10%) sepia(20%);
-        }
-
-        /* --- Exposição (Scroll Horizontal Mágico) --- */
-        .exhibition-wrapper {
-            overflow: hidden;
-            background-color: var(--bg-alt); 
-        }
-
-        .exhibition-container {
-            width: 300vw;
-            display: flex;
-            height: 100vh;
-            align-items: center;
-            padding-left: 10vw;
-        }
-
-        .exhibition-intro {
-            width: 50vw;
-            flex-shrink: 0;
-            font-size: 4rem;
-        }
-
-        .art-panel {
-            width: 60vw;
-            height: 70vh;
-            margin-right: 10vw;
-            flex-shrink: 0;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .art-panel img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.8s ease;
-        }
-
-        .art-panel:hover img {
-            transform: scale(1.05);
-        }
-
-        .art-caption {
-            position: absolute;
-            bottom: -50px;
-            left: 0;
-            width: 100%;
-            padding: 1.5rem;
-            background: rgba(244, 239, 230, 0.95);
-            transition: bottom 0.4s ease;
-            font-size: 1.1rem;
-        }
-
-        .art-panel:hover .art-caption {
-            bottom: 0;
-        }
-
-        /* --- Obras Disponíveis (Loja) --- */
-        .shop-section {
-            padding: 10rem 5vw;
-            background-color: transparent; 
-        }
-
-        .section-header {
-            text-align: center;
-            font-size: 3rem;
-            margin-bottom: 5rem;
-        }
-
-        .shop-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 3rem;
-        }
-
-        .shop-item {
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            opacity: 0;
-            transform: translateY(50px);
-        }
-
-        .shop-image-wrapper {
-            width: 100%;
-            aspect-ratio: 4/5;
-            overflow: hidden;
-        }
-
-        .shop-image-wrapper img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.5s ease;
-        }
-
-        .shop-item:hover .shop-image-wrapper img {
-            transform: scale(1.1);
-        }
-
-        .shop-details {
-            display: flex;
-            justify-content: space-between;
-            align-items: baseline;
-            font-family: 'Playfair Display', serif;
-        }
-        
-        .price {
-            color: var(--accent-color);
-            font-weight: bold;
-        }
-
-        /* --- Contacto --- */
-        .contact-section {
-            padding: 10rem 5vw;
-            background-color: rgba(232, 223, 211, 0.9);
-            backdrop-filter: blur(10px);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-        }
-
-        .contact-email {
-            font-size: clamp(2rem, 5vw, 5rem);
-            margin: 2rem 0;
-            position: relative;
-            display: inline-block;
-        }
-
-        .contact-email::after {
+        .floating-event-btn::after {
             content: '';
             position: absolute;
-            width: 100%;
-            height: 2px;
-            bottom: 0;
-            left: 0;
-            background-color: var(--accent-color);
-            transform: scaleX(0);
-            transform-origin: bottom right;
-            transition: transform 0.4s ease;
+            top: -6px; left: -6px; right: -6px; bottom: -6px;
+            border: 1.5px dashed var(--accent-alt);
+            border-radius: 50%;
+            animation: spin-slow 15s linear infinite;
+            pointer-events: none;
+        }
+        .floating-event-btn.visible { opacity: 1; pointer-events: all; }
+        .floating-event-btn:hover { transform: scale(1.15) !important; }
+        .event-icon { font-size: 2.2rem; margin-top: -3px; animation: pulse-icon 2s infinite; }
+        @keyframes pulse-icon {
+            0% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.2); opacity: 1; }
+            100% { transform: scale(1); opacity: 0.8; }
+        }
+        @keyframes spin-slow { 100% { transform: rotate(360deg); } }
+
+        /* --- Hero Section & Slider --- */
+        .hero { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 2rem; position: relative; isolation: isolate; color: #fff; }
+        .hero-slider { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; overflow: hidden; }
+        .hero-slide { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-size: cover; background-position: center; opacity: 0; transition: opacity 1.5s ease-in-out; }
+        .hero-slide.active { opacity: 1; }
+        .hero-slider::after { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(47, 36, 31, 0.4); z-index: 1; }
+        .hero-title { font-size: clamp(2.5rem, 8vw, 10rem); line-height: 1; margin-bottom: 1rem; overflow: hidden; z-index: 2; text-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .hero-title span { display: block; transform: translateY(100%); }
+        .hero-subtitle { font-size: clamp(0.9rem, 3vw, 1.2rem); letter-spacing: 2px; text-transform: uppercase; opacity: 0; z-index: 2; text-shadow: 0 5px 15px rgba(0,0,0,0.5); }
+
+        .exhibition-intro span, .section-header span, .bio-text-title span, .contact-slogan span { color: var(--accent-color); font-style: italic; }
+
+        /* --- SECÇÃO DE NOTÍCIAS / EVENTOS --- */
+        .news-section {
+            display: none; 
+            position: relative;
+            background: linear-gradient(135deg, var(--text-color), #402f27, var(--text-color));
+            background-size: 200% 200%;
+            color: var(--bg-color);
+            padding: 7rem 5vw; 
+            text-align: center;
+            z-index: 10;
+            width: 100vw;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: event-bg-shift 8s ease infinite;
+        }
+        @keyframes event-bg-shift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .news-section::before, .news-section::after {
+            content: ''; position: absolute; left: 0; right: 0; height: 10px;
+            background-color: rgba(192, 159, 82, 0.15); 
+            background-image: linear-gradient(90deg, transparent, rgba(192, 159, 82, 0.6) 40%, rgba(255, 255, 255, 1) 50%, rgba(192, 159, 82, 0.6) 60%, transparent);
+            background-size: 300px 100%; background-repeat: no-repeat;
+            animation: event-border-reflection 6s linear infinite; z-index: 11;
+        }
+        .news-section::before { top: 0; }
+        .news-section::after { bottom: 0; }
+        @keyframes event-border-reflection {
+            0% { background-position: -300px 0; }
+            70% { background-position: calc(100vw + 300px) 0; }
+            100% { background-position: calc(100vw + 300px) 0; }
         }
 
-        .contact-email:hover::after {
-            transform: scaleX(1);
-            transform-origin: bottom left;
+        .news-title { font-family: 'Playfair Display', serif; font-style: italic; color: var(--accent-alt); font-size: clamp(2rem, 4vw, 3rem); margin-bottom: 2rem; position: relative; z-index: 2; }
+        .news-content { font-family: 'Inter', sans-serif; font-size: clamp(1.1rem, 2vw, 1.3rem); line-height: 1.8; font-weight: 300; max-width: 800px; margin: 0 auto; opacity: 0.95; position: relative; z-index: 2; }
+
+        /* --- Exposição & Percurso --- */
+        .exhibition-wrapper { overflow: hidden; background-color: var(--bg-alt); }
+        .exhibition-container { width: 550vw; display: flex; height: 100vh; align-items: center; padding-left: 10vw; gap: 5vw; }
+        .exhibition-intro { width: 40vw; flex-shrink: 0; font-size: clamp(2.5rem, 4vw, 3.5rem); line-height: 1.1; color: var(--text-color); }
+        .expo-card { width: 45vw; height: 65vh; background: rgba(244, 239, 230, 0.95); border-radius: 12px; display: flex; flex-direction: column; justify-content: center; box-shadow: 0 15px 35px rgba(0,0,0,0.05); flex-shrink: 0; overflow: hidden; position: relative; }
+        .expo-card img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
+        .expo-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(47, 36, 31, 0.6); color: var(--bg-color); display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s ease; font-family: 'Inter', sans-serif; font-size: 1.2rem; letter-spacing: 2px; text-transform: uppercase; text-align: center; padding: 1rem; }
+        .expo-card:hover img { transform: scale(1.05); }
+        .expo-card:hover .expo-overlay { opacity: 1; }
+
+        /* --- Design dos Modais --- */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(47, 36, 31, 0.9); backdrop-filter: blur(15px); z-index: 2000; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.4s ease; }
+        .modal-overlay.active { opacity: 1; pointer-events: all; }
+        .modal-content { background: var(--bg-color); width: 90vw; height: 85vh; max-width: 1400px; border-radius: 12px; display: flex; overflow: hidden; position: relative; transform: translateY(30px); transition: transform 0.4s ease; box-shadow: 0 25px 60px rgba(0,0,0,0.5); }
+        .modal-overlay.active .modal-content { transform: translateY(0); }
+        
+        /* Modal Slider Horizontal */
+        .modal-image { width: 65%; height: 100%; background-color: #1a1411; position: relative; display: flex; align-items: center; overflow: hidden; }
+        .slider-wrapper { display: flex; width: 100%; height: 100%; transition: transform 0.4s ease-in-out; }
+        .slider-wrapper img { min-width: 100%; max-width: 100%; height: 100%; object-fit: contain; padding: 2rem; filter: drop-shadow(0 15px 25px rgba(0,0,0,0.5)); }
+        
+        .slider-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(47, 36, 31, 0.6); backdrop-filter: blur(5px); color: #fff; border: 1px solid rgba(255,255,255,0.2); width: 50px; height: 50px; border-radius: 50%; font-size: 1.5rem; display: flex; align-items: center; justify-content: center; z-index: 10; transition: all 0.3s ease; }
+        .slider-btn:hover { background: var(--accent-color); border-color: var(--accent-color); transform: translateY(-50%) scale(1.1); }
+        .prev-btn { left: 20px; }
+        .next-btn { right: 20px; }
+        
+        .slider-dots { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); display: flex; gap: 10px; z-index: 10; }
+        .dot { width: 12px; height: 12px; background: rgba(255,255,255,0.3); border-radius: 50%; transition: all 0.3s ease; border: 1px solid transparent; }
+        .dot.active { background: var(--accent-alt); border-color: rgba(255,255,255,0.5); transform: scale(1.2); }
+
+        .modal-text { width: 35%; padding: 4rem; display: flex; flex-direction: column; justify-content: center; overflow-y: auto; background-color: var(--bg-color); }
+        .modal-text h3 { font-size: clamp(2rem, 3vw, 3rem); color: var(--accent-color); margin-bottom: 1.5rem; }
+        .modal-text p { font-size: 1.15rem; line-height: 1.8; opacity: 0.85; }
+
+        .modal-content.preview-mode { background: transparent; box-shadow: none; width: 95vw; height: 95vh; justify-content: center; align-items: center; }
+        .modal-content.preview-mode .modal-image { width: 100%; background-color: transparent; }
+        .modal-content.preview-mode .slider-wrapper img { padding: 0; } 
+
+        .modal-content.text-only-mode { flex-direction: column; width: 70vw; max-width: 800px; height: 80vh; padding: 4rem; overflow-y: auto; background-color: var(--bg-color); }
+        .modal-content.text-only-mode h3 { font-family: 'Playfair Display', serif; font-size: clamp(2rem, 3vw, 2.5rem); color: var(--accent-color); margin-bottom: 1.5rem; border-bottom: 2px solid var(--accent-color); padding-bottom: 1rem; }
+        .modal-content.text-only-mode h4 { font-family: 'Inter', sans-serif; font-size: 1.2rem; color: var(--text-color); margin-top: 2.5rem; margin-bottom: 0.5rem; }
+        .modal-content.text-only-mode p { font-family: 'Inter', sans-serif; font-size: 1rem; line-height: 1.8; opacity: 0.9; margin-bottom: 1rem; }
+
+        .modal-close { position: absolute; top: 20px; right: 20px; background: var(--bg-color); color: var(--text-color); border: none; width: 50px; height: 50px; border-radius: 50%; font-size: 1.8rem; display: flex; align-items: center; justify-content: center; z-index: 20; transition: background 0.3s ease, color 0.3s ease; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+        .modal-close:hover { background: var(--accent-color); color: #fff; }
+
+        /* --- Galeria de Obras --- */
+        .shop-section { padding: 10rem 5vw; background-color: transparent; position: relative; }
+        .section-header { text-align: center; font-size: clamp(2.5rem, 5vw, 3.5rem); line-height: 1.1; margin-bottom: 1.5rem; }
+        .gallery-filters { display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; margin-bottom: 4rem; }
+        .filter-btn { background: transparent; border: 1px solid var(--text-color); padding: 0.5rem 1.5rem; border-radius: 30px; font-family: 'Inter', sans-serif; color: var(--text-color); transition: all 0.3s; }
+        .filter-btn.active, .filter-btn:hover { background: var(--accent-color); border-color: var(--accent-color); color: #fff; }
+        .shop-grid, .shop-hidden-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2.5rem; }
+        .shop-hidden-grid { max-height: 0; overflow: hidden; transition: max-height 1s cubic-bezier(0.4, 0, 0.2, 1); margin-top: 0; }
+        
+        .shop-item { position: relative; display: flex; flex-direction: column; gap: 1rem; opacity: 0; transform: translateY(50px); background: rgba(244, 239, 230, 0.8); padding: 1rem; border-radius: 12px; transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 0.3s ease; }
+        .shop-item.hidden-by-filter { display: none !important; }
+        .shop-item:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
+        .shop-image-wrapper { width: 100%; aspect-ratio: 4/5; overflow: hidden; border-radius: 8px; position: relative; border: 3px solid transparent; transition: border-color 0.3s ease; }
+        .shop-image-wrapper img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease, filter 0.3s ease; }
+        .shop-image-wrapper:hover img { transform: scale(1.05); }
+        .shop-item.selected .shop-image-wrapper { border-color: var(--accent-color); }
+        .select-checkbox { position: absolute; top: 15px; right: 15px; width: 25px; height: 25px; background: rgba(244, 239, 230, 0.9); border: 2px solid var(--text-color); border-radius: 4px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; z-index: 5; }
+        .select-checkbox::after { content: '✓'; color: #fff; font-size: 1rem; font-weight: bold; opacity: 0; transform: scale(0); transition: all 0.2s ease; }
+        .shop-item.selected .select-checkbox { background: var(--accent-color); border-color: var(--accent-color); }
+        .shop-item.selected .select-checkbox::after { opacity: 1; transform: scale(1); }
+        .preview-icon { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.8); background: rgba(47, 36, 31, 0.6); backdrop-filter: blur(4px); color: #fff; padding: 1rem; border-radius: 50%; opacity: 0; pointer-events: none; transition: all 0.3s ease; }
+        .shop-image-wrapper:hover .preview-icon { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+        .shop-details { display: flex; justify-content: space-between; align-items: baseline; font-family: 'Playfair Display', serif; pointer-events: none; }
+        .artwork-code { font-size: 0.75rem; font-family: 'Inter', sans-serif; background: var(--bg-alt); padding: 0.2rem 0.5rem; border-radius: 4px; font-weight: 600; display: inline-block; margin-bottom: 0.3rem; opacity: 0.8; }
+        .status-badge { font-family: 'Inter', sans-serif; font-size: 0.75rem; padding: 0.3rem 0.8rem; border-radius: 20px; font-weight: 600; }
+        .status-disp { background: rgba(37, 211, 102, 0.15); color: #1e8745; }
+        .status-indisp { background: rgba(138, 42, 34, 0.1); color: var(--accent-color); }
+        .gallery-expand-container { text-align: center; margin-top: 5rem; }
+        .gallery-expand-btn { display: inline-flex; align-items: center; gap: 0.8rem; background: var(--text-color); color: var(--bg-color); border: none; padding: 1rem 2.5rem; border-radius: 30px; font-size: 1rem; font-weight: 500; transition: background 0.3s ease; }
+        .gallery-expand-btn:hover { background: var(--accent-color); }
+
+        /* --- Biografia (Sobre) --- */
+        .bio-section { padding: 10rem 5vw; display: flex; justify-content: space-between; align-items: flex-start; gap: 4rem; background-color: transparent; }
+        .bio-text { width: 50%; background: rgba(244, 239, 230, 0.9); padding: 3rem; border-radius: 12px; backdrop-filter: blur(8px); box-shadow: 0 10px 30px rgba(47, 36, 31, 0.05); }
+        .bio-text-title { font-size: clamp(2.5rem, 4vw, 3.5rem); line-height: 1.1; margin-bottom: 2rem; }
+        .bio-more-content { max-height: 0; overflow: hidden; transition: max-height 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
+        .bio-text p { font-size: 1rem; line-height: 1.8; margin-bottom: 1.5rem; }
+        .bio-images-col { width: 40%; display: flex; flex-direction: column; gap: 2rem; }
+        .bio-image { width: 100%; height: 60vh; background-image: url('Imagem_retrato_bio.png'); background-size: cover; background-position: center; border-radius: 12px; box-shadow: 0 20px 40px rgba(47, 36, 31, 0.15); }
+        .bio-image-extra { width: 100%; height: 40vh; background-image: url('imagem_14.jpeg'); background-size: cover; background-position: center; border-radius: 12px; box-shadow: 0 20px 40px rgba(47, 36, 31, 0.15); max-height: 0; opacity: 0; transition: max-height 0.8s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.8s ease; }
+        .read-more-btn { display: inline-flex; align-items: center; gap: 0.8rem; margin-top: 2rem; background: none; border: none; font-family: 'Playfair Display', serif; font-size: 1.4rem; font-style: italic; color: var(--accent-color); transition: opacity 0.3s ease; }
+        .read-more-btn:hover { opacity: 0.7; }
+        .read-more-btn .arrow { display: inline-block; transition: transform 0.4s ease; font-style: normal; font-size: 1.2rem; }
+        .read-more-btn.active .arrow { transform: rotate(180deg); }
+
+        /* --- LAYOUT CONTACTO --- */
+        .contact-section { position: relative; padding: 8rem 5vw 5rem 5vw; background-color: var(--bg-alt); display: flex; flex-direction: column; align-items: center; }
+        .contact-container { display: flex; justify-content: space-between; align-items: center; width: 100%; max-width: 1200px; margin-bottom: 5rem; gap: 4rem; }
+        .contact-left { flex: 1; text-align: left; }
+        .contact-right { flex: 1; display: flex; flex-direction: column; align-items: flex-start; gap: 1.5rem; text-align: left; }
+        .contact-slogan { font-size: clamp(2.5rem, 5vw, 4.5rem); line-height: 1.1; margin-bottom: 1rem; }
+        .contact-sub-slogan { font-size: 1.1rem; opacity: 0.8; max-width: 400px; }
+        
+        .contact-email { font-size: clamp(1.2rem, 2.5vw, 2rem); position: relative; display: inline-block; word-break: break-all; }
+        .contact-email::after { content: ''; position: absolute; width: 100%; height: 2px; bottom: 0; left: 0; background-color: var(--accent-color); transform: scaleX(0); transform-origin: bottom right; transition: transform 0.4s ease; }
+        .contact-email:hover::after { transform: scaleX(1); transform-origin: bottom left; }
+        
+        .terms-note { font-family: 'Inter', sans-serif; font-size: 0.95rem; opacity: 0.9; padding-top: 1.5rem; border-top: 1px solid rgba(47, 36, 31, 0.1); width: 100%; }
+        .terms-note a { color: var(--accent-color); font-weight: 600; text-decoration: none; transition: opacity 0.3s; }
+        .terms-note a:hover { opacity: 0.7; }
+        
+        .social-links { display: flex; gap: 2rem; flex-wrap: wrap; margin-top: 1rem; }
+        .social-links a { font-size: 1rem; text-transform: uppercase; letter-spacing: 1px; font-weight: 500; opacity: 0.7; transition: opacity 0.3s, color 0.3s; }
+        .social-links a:hover { opacity: 1; color: var(--accent-color); }
+        
+        footer { font-size: 0.9rem; opacity: 0.5; text-align: center; width: 100%; }
+
+        /* --- Painel de Ações Fixas --- */
+        .action-panel { position: fixed; bottom: 30px; right: 30px; background: var(--text-color); color: var(--bg-color); padding: 1.5rem; border-radius: 12px; box-shadow: 0 15px 40px rgba(0,0,0,0.3); z-index: 1000; display: flex; flex-direction: column; gap: 1rem; opacity: 0; pointer-events: none; transform: translateY(20px); transition: opacity 0.4s ease, transform 0.4s ease; }
+        .action-panel.visible { opacity: 1; pointer-events: all; transform: translateY(0); }
+        .action-panel-header { font-family: 'Playfair Display', serif; font-size: 1.2rem; border-bottom: 1px solid rgba(244, 239, 230, 0.2); padding-bottom: 0.5rem; display: flex; justify-content: space-between; align-items: center; }
+        .clear-selection-btn { background: none; border: none; color: var(--bg-alt); font-size: 0.8rem; text-decoration: underline; opacity: 0.7; padding: 0.2rem; transition: opacity 0.3s ease; }
+        .clear-selection-btn:hover { opacity: 1; }
+        .action-btn { background: transparent; color: var(--bg-color); border: 1px solid var(--bg-color); padding: 0.8rem 1rem; border-radius: 6px; font-size: 0.9rem; text-align: left; transition: all 0.3s ease; display: flex; justify-content: space-between; align-items: center; }
+        .action-btn:hover { background: var(--bg-color); color: var(--text-color); }
+        .action-btn.btn-buy:hover { background: var(--accent-color); border-color: var(--accent-color); color: #fff; }
+
+        /* --- MEDIA QUERIES (Responsividade) --- */
+        @media (max-width: 1024px) {
+            .shop-grid, .shop-hidden-grid { grid-template-columns: repeat(2, 1fr); }
+            .bio-section { flex-direction: column; gap: 3rem; }
+            .bio-text, .bio-images-col { width: 100%; }
+            .modal-content.text-only-mode { width: 85vw; padding: 3rem; }
         }
 
-        footer {
-            margin-top: 5rem;
-            font-size: 0.9rem;
-            opacity: 0.6;
-        }
-
-        /* Media Queries */
         @media (max-width: 768px) {
-            .bio-section { flex-direction: column; padding: 6rem 5vw; gap: 3rem; }
-            .bio-text, .bio-image { width: 100%; }
-            .exhibition-container { width: 400vw; }
-            .art-panel { width: 80vw; }
-            nav { padding: 1.5rem; flex-direction: column; gap: 1rem; }
-            .nav-links { font-size: 0.7rem; }
+            nav { padding: 1rem; flex-direction: column; gap: 0.8rem; }
+            .nav-links { font-size: 0.8rem; gap: 1rem; flex-wrap: wrap; justify-content: center; }
+            .logo-img { height: 40px; }
+            .shop-section, .bio-section { padding: 5rem 5vw; }
+            .contact-section { padding: 5rem 5vw; }
+            .contact-container { flex-direction: column; text-align: center; gap: 3rem; }
+            .contact-left, .contact-right { width: 100%; align-items: center; text-align: center; }
+            .exhibition-container { width: 750vw; gap: 5vw; padding-left: 5vw; }
+            .exhibition-intro { width: 85vw; font-size: 2.5rem; }
+            .expo-card { width: 80vw; height: 50vh; }
+            .shop-grid, .shop-hidden-grid { grid-template-columns: 1fr; gap: 1.5rem; }
+            .bio-text { padding: 1.5rem; }
+            .bio-text-title { font-size: 2.2rem; }
+            .bio-image { height: 40vh; }
+            .action-panel { bottom: 0; right: 0; width: 100%; border-radius: 20px 20px 0 0; }
+            
+            .modal-content { flex-direction: column; height: 90vh; width: 95vw; }
+            .modal-image { width: 100%; height: 50%; }
+            .modal-text { width: 100%; height: 50%; padding: 2rem; }
+            .modal-text h3 { font-size: 1.8rem; margin-bottom: 0.5rem; }
+            .modal-close { top: -15px; right: -10px; width: 40px; height: 40px; font-size: 1.2rem; background: var(--accent-color); color: white; }
+            .modal-content.text-only-mode { width: 95vw; height: 90vh; padding: 2rem; }
+
+            .news-section { padding: 4rem 5vw; }
+            .floating-event-btn { width: 50px; height: 50px; left: 20px; }
+            .event-icon { font-size: 1.5rem; }
         }
     </style>
 </head>
 <body>
 
-    <!-- Fundo de Pintura Interativo -->
-    <canvas id="art-canvas"></canvas>
+    <canvas id="bg-canvas"></canvas>
 
-    <!-- Cursor customizado -->
     <div class="cursor" id="cursor"></div>
+    <div class="cursor-follower" id="cursor-follower"></div>
 
-    <!-- Navegação -->
     <nav>
-        <div class="logo serif">Atelier de Arte</div>
+        <div class="logo">
+            <a href="#home" class="hover-target">
+                <img src="MariaIcon.png" alt="Maria da Graça Silva" class="logo-img">
+            </a>
+        </div>
         <div class="nav-links">
-            <a href="#bio" class="hover-target">Biografia</a>
-            <a href="#exhibition" class="hover-target">Exposição</a>
-            <a href="#shop" class="hover-target">Disponíveis</a>
+            <a href="#exhibition" class="hover-target">Exposições</a>
+            <a href="#shop" class="hover-target">Galeria</a>
+            <a href="#bio" class="hover-target">Sobre</a>
             <a href="#contact" class="hover-target">Contacto</a>
         </div>
     </nav>
+    
+    <!-- SELO DE EVENTO INTELIGENTE -->
+    <a href="#news-section" id="floating-event-btn" class="floating-event-btn hover-target">
+        <span class="event-icon">★</span>
+    </a>
 
-    <!-- Hero -->
-    <section class="hero">
+    <!-- Hero com Slider -->
+    <section class="hero" id="home">
+        <div class="hero-slider">
+            <div class="hero-slide active" style="background-image: url('WhatsApp Image 2026-08-18 at 20.00.54.jpeg')"></div>
+            <div class="hero-slide" style="background-image: url('WhatsApp Image 2026-08-18 at 20.07.11.jpeg')"></div>
+            <div class="hero-slide" style="background-image: url('imagem_7.jpeg')"></div>
+        </div>
         <h1 class="hero-title">
-            <span class="title-line">Maria da Graça Silva</span>
+            <span class="title-line">MARIA DA GRAÇA</span>
         </h1>
         <h1 class="hero-title">
-            <span class="title-line"></span>
+            <span class="title-line">SILVA</span>
         </h1>
         <div class="hero-subtitle">Aguarela • Óleo • Artesanato</div>
     </section>
 
-    <!-- Biografia -->
-    <section id="bio" class="bio-section">
-        <div class="bio-text serif">
-            <p>"A arte é a expressão da alma materializada nas mãos."</p>
-            <br>
-            <p style="font-family: 'Inter', sans-serif; font-size: 1.1rem;">Com uma paixão profunda pelas texturas e cores, o meu trabalho viaja entre a fluidez da aguarela, a intensidade do óleo e o detalhe minucioso do grafite. Paralelamente, dou vida a personagens e cenários através de artesanato exclusivo, criando bonecas de tecido e presépios singulares que contam as suas próprias histórias.</p>
+    <!-- SECÇÃO: Notícias / Eventos -->
+    <section id="news-section" class="news-section">
+        <h2 class="news-title">Avisos & Novidades</h2>
+        <div class="news-content" id="news-content">
+            <!-- A mensagem injetada pelo Contentful aparece aqui -->
         </div>
-        <div class="bio-image hover-target"></div>
     </section>
 
-    <!-- Exposição -->
+    <!-- Exposições -->
     <section id="exhibition" class="exhibition-wrapper">
         <div class="exhibition-container">
-            <h2 class="exhibition-intro serif">Obras em<br>Destaque</h2>
+            <div class="exhibition-intro">
+                <h2 class="serif" style="font-size: inherit; line-height: inherit;">Exposições<br><span>& Concursos</span></h2>
+                <p style="font-size: 1.1rem; font-family: 'Inter', sans-serif; opacity: 0.8; margin-top: 1.5rem; line-height: 1.6; font-weight: 300;">Alguns registos fotográficos que marcam o meu percurso</p>
+            </div>
             
-            <div class="art-panel hover-target">
-                <img src="https://placehold.co/1200x1600/E8DFD3/2F241F?text=Obra+Principal+1" alt="Aguarela">
-                <div class="art-caption serif">
-                    <h3>Sussurros da Savana</h3>
-                    <p>Aguarela sobre papel algodão, 2023</p>
-                </div>
+            <!-- 1. Pinturas ao Ar Livre -->
+            <div class="expo-card hover-target" data-title="Pinturas ao Ar Livre" data-desc="Em contacto direto com a natureza e as gentes de Mangualde, esta foi uma experiência de criação em tempo real, onde a inspiração nasce e ganha forma no próprio local, mostrando a técnica e a dedicação por trás de cada pincelada." data-imgs="imagem_9.jpeg,imagem_10.jpeg">
+                <img src="imagem_9.jpeg" alt="Pinturas ao ar livre">
+                <div class="expo-overlay">Pinturas ao Ar Livre</div>
             </div>
 
-            <div class="art-panel hover-target">
-                <img src="https://placehold.co/1200x1600/C09F52/2F241F?text=Obra+Principal+2" alt="Óleo">
-                <div class="art-caption serif">
-                    <h3>Raízes Profundas</h3>
-                    <p>Óleo sobre tela, 2022</p>
-                </div>
+            <!-- 2. Capela de Fagilde (Print 1) -->
+            <div class="expo-card hover-target" data-title="Capela de Fagilde" data-desc="Obra mural inspirada numa cena bíblica na Capela de Fagilde, no concelho de Mangualde, unindo a arte à fé e à comunidade local." data-imgs="image_2024408208_12.jpg,image_2024408208_13.jpg">
+                <img src="image_2024408208_12.jpg" alt="Capela de Fagilde">
+                <div class="expo-overlay">Capela de Fagilde</div>
             </div>
 
-            <div class="art-panel hover-target">
-                <img src="https://placehold.co/1200x1600/E8DFD3/2F241F?text=Artesanato+Bonecas" alt="Artesanato">
-                <div class="art-caption serif">
-                    <h3>Coleção Tecidos Antigos</h3>
-                    <p>Artesanato Têxtil, 2023</p>
-                </div>
+            <!-- 3. Exposição na Biblioteca Municipal de Aguiar da Beira -->
+            <div class="expo-card hover-target" data-title="Exposição na Biblioteca de Aguiar da Beira" data-desc="Esta galeria retrata a exposição realizada na Biblioteca Municipal de Aguiar da Beira, um dia de grande honra que contou com a presença e o prestígio do então Primeiro-Ministro, Dr. José Manuel Durão Barroso." data-imgs="imagem_16.jpeg,imagem_11.jpeg,imagem_12.jpeg,imagem_13.jpeg,imagem_14.jpeg,imagem_15.jpeg,imagem_17.jpeg">
+                <img src="imagem_16.jpeg" alt="Exposição Biblioteca Aguiar da Beira">
+                <div class="expo-overlay">Exposição na Biblioteca de Aguiar da Beira</div>
+            </div>
+
+            <!-- 4. Capela da Roda (Print 2) -->
+            <div class="expo-card hover-target" data-title="Capela da Roda – Mangualde" data-desc="Registo de três obras de temática sacra concebidas em exclusivo para a Capela da Roda." data-imgs="image_2024408208_14.jpg,image_2024408208_15.jpg,image_2024408208_16.jpg">
+                <img src="image_2024408208_15.jpg" alt="Capela da Roda">
+                <div class="expo-overlay">Capela da Roda – Mangualde</div>
+            </div>
+
+            <!-- 5. Mural Bíblico (Print 3 - Fornos Maceira Dão) -->
+            <div class="expo-card hover-target" data-title="Mural Bíblico" data-desc="Execução e processo criativo da pintura mural com cena bíblica na Igreja de Fornos de Maceira Dão." data-imgs="image_2024408208_17.jpg,image_2024408208_18.jpg">
+                <img src="image_2024408208_17.jpg" alt="Mural Bíblico">
+                <div class="expo-overlay">Mural Bíblico</div>
+            </div>
+
+            <!-- 6. Igreja de Gradiz (Print 4) -->
+            <div class="expo-card hover-target" data-title="Igreja de Gradiz - Aguiar da Beira" data-desc="Criação de uma pintura personalizada de Jesus que culminou na enorme concretização de a pintar diretamente no teto da capela, lá do alto dos andaimes." data-imgs="image_2024408208_20.jpg,image_2024408208_19.jpg">
+                <img src="image_2024408208_20.jpg" alt="Igreja de Gradiz">
+                <div class="expo-overlay">Igreja de Gradiz - Aguiar da Beira</div>
+            </div>
+
+            <!-- 7. Murais efeito azulejo (Print 5) -->
+            <div class="expo-card hover-target" data-title="Pintura de Murais Realistas" data-desc="Registo fotográfico de murais realistas pintados à mão diretamente em paredes de casas de clientes, simulando com grande detalhe painéis de azulejo tradicionais." data-imgs="imagem_6.jpeg,image_2024408208_9.jpg,image_2024408208_10.jpg,image_2024408208_11.jpg">
+                <img src="imagem_6.jpeg" alt="Murais efeito azulejo">
+                <div class="expo-overlay">Pintura de Murais Realistas</div>
             </div>
         </div>
     </section>
 
-    <!-- Loja -->
+    <!-- Galeria de Obras -->
     <section id="shop" class="shop-section">
-        <h2 class="section-header serif">Obras Disponíveis</h2>
+        <h2 class="section-header serif">Galeria<br><span>de Obras</span></h2>
         
-        <div class="shop-grid">
-            <div class="shop-item">
-                <div class="shop-image-wrapper hover-target">
-                    <img src="https://placehold.co/600x800/E8DFD3/2F241F?text=Pintura+1" alt="Pintura à venda">
-                </div>
-                <div class="shop-details">
-                    <div>
-                        <h3>Luz Quente</h3>
-                        <p style="font-size: 0.9rem; opacity: 0.7;">Grafite e Aguarela</p>
-                    </div>
-                    <span class="price">€250</span>
-                </div>
+        <div class="gallery-filters">
+            <button class="filter-btn hover-target active" data-filter="all">Todas as Obras</button>
+            <button class="filter-btn hover-target" data-filter="disponivel">Disponíveis</button>
+            <button class="filter-btn hover-target" data-filter="indisponivel">Indisponíveis</button>
+        </div>
+
+        <div class="shop-grid" id="mainShopGrid"></div>
+        <div class="shop-hidden-grid" id="shopHiddenGrid"></div>
+
+        <div class="gallery-expand-container" id="expandBtnContainer">
+            <button class="gallery-expand-btn hover-target" id="galleryExpandBtn">
+                <span id="galleryBtnText">Ver todas as obras</span>
+                <span class="arrow">↓</span>
+            </button>
+        </div>
+    </section>
+
+    <!-- Biografia (Sobre) -->
+    <section id="bio" class="bio-section">
+        <div class="bio-text">
+            <h2 class="bio-text-title serif">
+                Antes da obra,<br>
+                <span>existe uma história.</span>
+            </h2>
+            <p>
+                Tinha apenas cinco ou seis anos quando, numa noite de São João, Maria da Graça se cruzou pela primeira vez com fotografias de artistas de teatro. A expressividade daquelas imagens despertou nela um fascínio que, embora ainda sem saber, viria a acompanhá-la ao longo de toda a vida. Pouco tempo depois, descobriu na dispensa da avó uma coleção de postais com reproduções de obras de arte. Encantaram-na as cores, as formas e, sobretudo, a diversidade de quem as criava. Entre pintores tradicionais e artistas que pintavam com a boca ou com os pés, começou a perceber que a arte não tinha limites nem uma única forma de existir.
+            </p>
+            
+            <div class="bio-more-content" id="bioMore">
+                <p>A minha formação artística teve início na Escola Industrial Oliveira Salazar, em Luanda, onde frequentei o curso de Pintura Decorativa. Foi aí que consolidei as bases técnicas e desenvolvi uma visão estética própria, que mais tarde se refletiria em todo o meu percurso artístico.</p>
+                <p>Ao longo da minha carreira, participei em diversas exposições. A minha primeira exposição individual realizou-se em 1989, na Galeria da Fundação Lar do Imigrante, em Santo Tirso. Foi um momento marcante, onde pude apresentar ao público obras que traduzem a minha sensibilidade e criatividade. Posteriormente, participei em exposições coletivas em espaços como o Hotel D. Henrique, no Porto (1991), a Galeria do Fórum da Câmara Municipal da Maia (1992) e a Casa Beira Alta, em Santa Catarina, Porto (1993), entre outros.</p>
+                <p>Também participei em vários concursos de pintura ao ar livre, em localidades como Vouzela, Santa Comba Dão, Mangualde, Oliveira de Frades e Penalva do Castelo. Nessas ocasiões, tive a honra de receber menções honrosas e prémios distintos, reconhecimento que reforçou a minha dedicação e motivação artística.</p>
+                <p>O meu trabalho estende-se igualmente à realização de murais e intervenções artísticas em instituições religiosas e espaços públicos. Em 2002, executei uma obra mural inspirada numa cena bíblica na Capela de Fagilde, no concelho de Mangualde. Em 2003, apresentei uma exposição na Biblioteca Municipal de Aguiar da Beira e desenvolvi um projeto artístico para a inovuração do Lar de Idosos de Fornos de Maceira Dão, concretizado no ano seguinte.</p>
+                <p>Em 2004, tive a honra de ver o meu trabalho integrado num momento solene, numa missa celebrada no Salão Principal do Lar de Idosos, com a presença do Bispo de Viseu, D. Ilídio Pinto Leandro, e de várias entidades municipais.</p>
+                <p>Continuei a realizar intervenções artísticas em igrejas e capelas, como na Igreja da Roda, em Mangualde (2007), e na Capela Rainha Santa Isabel, na Quinta da Estrada, em Vale de Távora, Aguiar da Beira (2008). Em 2013, criei um mural com uma cena bíblica para a Igreja de Fornos de Maceira Dão e, em 2014, desenvolvi uma obra para a Igreja de Gradiz, em Aguiar da Beira.</p>
+                <p>O meu percurso é profundamente marcado pela união entre arte e espiritualidade. Em cada obra que realizo, procuro transmitir emoção, fé e beleza, deixando um contributo artístico que reflita não só a minha paixão pela pintura, mas também o meu compromisso com a cultura e a comunidade.</p>
             </div>
 
-            <div class="shop-item">
-                <div class="shop-image-wrapper hover-target">
-                    <img src="https://placehold.co/600x800/D35400/F4EFE6?text=Pintura+2" alt="Pintura à venda">
-                </div>
-                <div class="shop-details">
-                    <div>
-                        <h3>Terra Vermelha</h3>
-                        <p style="font-size: 0.9rem; opacity: 0.7;">Óleo s/ Tela (30x40cm)</p>
-                    </div>
-                    <span class="price">€420</span>
+            <button class="read-more-btn hover-target" id="readMoreBtn">
+                <span id="btnText">Ler biografia completa</span>
+                <span class="arrow">↓</span>
+            </button>
+        </div>
+        <div class="bio-images-col">
+            <div class="bio-image hover-target"></div>
+            <div class="bio-image-extra" id="bioImageExtra"></div>
+        </div>
+    </section>
+
+    <!-- LAYOUT CONTACTO -->
+    <section id="contact" class="contact-section">
+        <div class="contact-container">
+            <div class="contact-left">
+                <h2 class="contact-slogan serif">Vamos<br><span>conversar?</span></h2>
+                <p class="contact-sub-slogan">"Algumas obras começam numa tela, outras começam numa conversa."</p>
+            </div>
+            
+            <div class="contact-right">
+                <a href="https://api.whatsapp.com/send?phone=351932444844&text=Olá%20Maria%20da%20Graça!%20Gostaria%20de%20falar%20sobre%20um%20trabalho%20artístico%20personalizado." target="_blank" class="contact-email serif hover-target">WhatsApp: +351 932 444 844</a>
+                
+                <a href="mailto:ateliermariadagraca@sapo.pt" class="contact-email serif hover-target">ateliermariadagraca@sapo.pt</a>
+                
+                <p class="terms-note">Nota: Antes de encomendar, por favor consulte os <a href="#" id="openTermsBtn" class="hover-target">[Termos e Condições]</a>.</p>
+
+                <div class="social-links">
+                    <a href="https://www.facebook.com/pintarular" target="_blank" class="hover-target">Facebook</a>
+                    <a href="https://www.tiktok.com/@maria.da.graa.alb4?is_from_webapp=1&sender_device=pc" target="_blank" class="hover-target">TikTok</a>
                 </div>
             </div>
+        </div>
+        <footer>© 2026 Maria da Graça Silva. Todos os direitos reservados.</footer>
+    </section>
 
-            <div class="shop-item">
-                <div class="shop-image-wrapper hover-target">
-                    <img src="https://placehold.co/600x800/E8DFD3/2F241F?text=Artesanato+1" alt="Presépio à venda">
+    <!-- Painel de Ações Fixas -->
+    <div class="action-panel" id="actionPanel">
+        <div class="action-panel-header">
+            <div><span id="selectedCount">0</span> Obras selecionadas</div>
+            <button id="clearSelectionBtn" class="clear-selection-btn hover-target">Limpar</button>
+        </div>
+        <button class="action-btn hover-target" data-action="informacoes">
+            Pedir Informações <span>+</span>
+        </button>
+        <button class="action-btn hover-target" data-action="semelhante">
+            Pedir Semelhante <span>+</span>
+        </button>
+        <button class="action-btn btn-buy hover-target" data-action="comprar">
+            Comprar Seleção <span>→</span>
+        </button>
+    </div>
+
+    <!-- Modal Universal com Carousel / Slider -->
+    <div class="modal-overlay" id="modalUniversal">
+        <div class="modal-content" id="modalBox">
+            <button class="modal-close hover-target" id="closeUniversalModal">×</button>
+            
+            <div class="modal-image" id="modalImgContainer">
+                <button class="slider-btn prev-btn hover-target" id="modalPrevBtn">&#10094;</button>
+                <div class="slider-wrapper" id="modalSliderWrapper">
+                    <!-- As imagens entram aqui -->
                 </div>
-                <div class="shop-details">
-                    <div>
-                        <h3>Presépio Tradicional</h3>
-                        <p style="font-size: 0.9rem; opacity: 0.7;">Madeira e Tecido</p>
-                    </div>
-                    <span class="price">€180</span>
+                <button class="slider-btn next-btn hover-target" id="modalNextBtn">&#10095;</button>
+                <div class="slider-dots" id="modalSliderDots">
+                    <!-- Os pontos entram aqui -->
                 </div>
             </div>
             
-            <div class="shop-item">
-                <div class="shop-image-wrapper hover-target">
-                    <img src="https://placehold.co/600x800/4A5D23/F4EFE6?text=Boneca+Tecido" alt="Boneca de tecido">
-                </div>
-                <div class="shop-details">
-                    <div>
-                        <h3>Boneca "Amélia"</h3>
-                        <p style="font-size: 0.9rem; opacity: 0.7;">Artesanato Têxtil</p>
-                    </div>
-                    <span class="price">€85</span>
-                </div>
+            <div class="modal-text" id="modalTextContainer">
+                <h3 class="serif" id="univModalTitle">Título</h3>
+                <p id="univModalDesc">Descrição</p>
             </div>
         </div>
-    </section>
+    </div>
 
-    <!-- Contactos -->
-    <section id="contact" class="contact-section">
-        <h2 class="serif" style="margin-bottom: 2rem;">Interessado numa obra?</h2>
-        <p>Para comissões, aquisições ou simplesmente para dizer olá.</p>
-        <a href="mailto:ola@artista.com" class="contact-email serif hover-target">ola@artista.com</a>
-        
-        <div style="margin-top: 3rem; display: flex; gap: 2rem;">
-            <a href="#" class="hover-target">Instagram</a>
-            <a href="#" class="hover-target">Facebook</a>
-            <a href="#" class="hover-target">Pinterest</a>
+    <!-- MODAL: Termos e Condições -->
+    <div class="modal-overlay" id="termsModal">
+        <div class="modal-content text-only-mode" id="termsModalBox">
+            <button class="modal-close hover-target" id="closeTermsModal">×</button>
+            
+            <h3>Termos e Condições</h3>
+            
+            <h4>Envios e Entregas</h4>
+            <p><strong>Custos de Envio:</strong> Devido à grande variação de dimensões, peso e fragilidade das obras, os custos de embalamento e envio são calculados individualmente e comunicados ao cliente antes da finalização da compra.</p>
+            <p><strong>Prazos de Expedição:</strong> As obras disponíveis em galeria são cuidadosamente embaladas e expedidas num prazo de 3 a 5 dias úteis após a confirmação do pagamento.</p>
+            <p><strong>Levantamento em Mãos:</strong> Para clientes da região, é possível o levantamento presencial da obra, mediante marcação prévia em Albergaria-A-Velha.</p>
+
+            <h4>Política de Trocas e Devoluções</h4>
+            <p><strong>Vendas Finais:</strong> Dada a natureza única, artesanal e delicada de cada peça, não se efetuam trocas nem devoluções de qualquer obra, quadro ou artigo de artesanato. Todas as vendas são finais.</p>
+            <p><strong>Danos no Transporte:</strong> Caso uma obra chegue com danos decorrentes do transporte, o cliente deve reportar a situation imediatamente no dia da entrega (acompanhada de fotografias da embalagem e da peça) para análise.</p>
+
+            <h4>Trabalhos Personalizados</h4>
+            <p><strong>Sinal de Adjudicação:</strong> A realização de retratos, murais, pinturas ou artesanato sob medida requer o pagamento prévio de um sinal (habitualmente 50% do valor total) para garantir a reserva de tempo e a aquisição de materiais.</p>
+            <p><strong>Exclusão Total de Devolução:</strong> Em circunstância alguma se aceitam cancelamentos, trocas ou devoluções de obras personalizadas ou feitas por encomenda, uma vez que estas são criadas especificamente ao gosto e medida do cliente.</p>
+
+            <h4>Direitos de Autor e Propriedade Intelectual</h4>
+            <p><strong>Autoria:</strong> A aquisição de uma obra física (tela, escultura ou artesanato) garante a posse do objeto, mas não transfere os seus direitos de autor.</p>
+            <p><strong>Reprodução:</strong> É expressamente proibida a reprodução, cópia, impressão ou utilização comercial da imagem das obras sem a autorização prévia e por escrito de Maria da Graça Silva.</p>
         </div>
-
-        <footer>
-            &copy; 2024 Nome da Artista. Todos os direitos reservados.
-        </footer>
-    </section>
+    </div>
 
     <script>
         gsap.registerPlugin(ScrollTrigger);
 
-        const canvas = document.getElementById('art-canvas');
-        const ctx = canvas.getContext('2d');
+        const SPACE_ID = '0cd9i55j5q7t';
+        const ACCESS_TOKEN = '2K29NZMhiiq39_S2HyugtkNG_Owb7G46ArH8KSgApI4';
+
+        async function loadArtworks() {
+            try {
+                const res = await fetch(`https://cdn.contentful.com/spaces/${SPACE_ID}/environments/master/entries?access_token=${ACCESS_TOKEN}`);
+                const data = await res.json();
+                
+                const assets = {};
+                if(data.includes && data.includes.Asset) {
+                    data.includes.Asset.forEach(a => assets[a.sys.id] = a.fields.file.url);
+                }
+                
+                const mainGrid = document.querySelector('#mainShopGrid');
+                const hiddenGrid = document.querySelector('#shopHiddenGrid');
+                const newsSection = document.getElementById('news-section');
+                const newsContent = document.getElementById('news-content');
+                const floatingEventBtn = document.getElementById('floating-event-btn');
+                
+                mainGrid.innerHTML = '';
+                hiddenGrid.innerHTML = '';
+                let indexObra = 0;
+                
+                data.items.forEach((item) => {
+                    const f = item.fields;
+                    
+                    const contentTypeId = item.sys.contentType.sys.id.toLowerCase();
+                    if (contentTypeId === 'evento' || f.mensagem || f.Mensagem) {
+                        const textoEvento = f.mensagem || f.Mensagem || f.texto;
+                        if (textoEvento) {
+                            newsContent.innerHTML = textoEvento;
+                            newsSection.style.display = 'block'; 
+                            floatingEventBtn.classList.add('visible'); 
+                        }
+                        return; 
+                    }
+
+                    const title = f.titulo || 'Obra Sem Título';
+                    const isDisponivel = f.estado === true || String(f.estado).toLowerCase() === 'true' || String(f.estado).toLowerCase() === 'disponível';
+                    
+                    const statusStr = isDisponivel ? 'Disponível' : 'Indisponível';
+                    const statusClass = isDisponivel ? 'status-disp' : 'status-indisp';
+                    const statusData = isDisponivel ? 'disponivel' : 'indisponivel';
+                    
+                    // Lógica para referência numérica simples
+                    const refNum = indexObra + 1;
+                    const refCode = String(refNum);
+                    
+                    let imgUrl = 'https://placehold.co/600x800'; 
+                    if(f.imagem && f.imagem.sys && assets[f.imagem.sys.id]) {
+                        imgUrl = 'https:' + assets[f.imagem.sys.id];
+                    }
+                    
+                    const html = `
+                    <div class="shop-item" data-status="${statusData}" data-code="${refCode}" data-title="${title}">
+                        <div class="shop-image-wrapper">
+                            <img src="${imgUrl}" alt="${title}" class="preview-trigger hover-target">
+                            <div class="preview-icon">👁️</div>
+                            <div class="select-checkbox hover-target"></div>
+                        </div>
+                        <div class="shop-details">
+                            <div>
+                                <span class="artwork-code">Referência: ${refCode}</span>
+                                <h3>${title}</h3>
+                            </div>
+                            <span class="status-badge ${statusClass}">${statusStr}</span>
+                        </div>
+                    </div>
+                    `;
+                    
+                    if (indexObra < 8) {
+                        mainGrid.innerHTML += html;
+                    } else {
+                        hiddenGrid.innerHTML += html;
+                    }
+                    indexObra++;
+                });
+
+                const expandBtnContainer = document.getElementById('expandBtnContainer');
+                if (indexObra <= 8) {
+                    expandBtnContainer.style.display = 'none';
+                } else {
+                    expandBtnContainer.style.display = 'block';
+                }
+
+                refreshCursors();
+                bindGalleryEvents();
+                
+                gsap.to('.shop-item', { scrollTrigger: { trigger: '.shop-section', start: "top 80%" }, y: 0, opacity: 1, duration: 0.8, stagger: 0.1, ease: "power3.out" });
+                
+                setTimeout(() => { ScrollTrigger.refresh(); updateFloatingButton(); }, 500);
+
+            } catch (error) {
+                console.error("Erro ao comunicar com o Contentful:", error);
+            }
+        }
+
+        loadArtworks();
+
+        // --- SCROLL INTELIGENTE DO SELO FLUTUANTE ---
+        function updateFloatingButton() {
+            const floatBtn = document.getElementById('floating-event-btn');
+            const newsSec = document.getElementById('news-section');
+            
+            if (!floatBtn || !newsSec || newsSec.style.display === 'none') return;
+
+            const rect = newsSec.getBoundingClientRect();
+            const vh = window.innerHeight;
+            
+            const secCenterScreenY = rect.top + (rect.height / 2);
+            const isMobile = window.matchMedia('(max-width: 768px)').matches;
+            const bottomOffset = isMobile ? 120 : 60;
+            const topOffset = isMobile ? 80 : 100;
+            const floatHeightHalf = floatBtn.offsetHeight / 2;
+
+            if (secCenterScreenY > vh - bottomOffset) {
+                floatBtn.style.position = 'fixed';
+                floatBtn.style.top = 'auto';
+                floatBtn.style.bottom = bottomOffset + 'px';
+            } 
+            else if (secCenterScreenY < topOffset) {
+                floatBtn.style.position = 'fixed';
+                floatBtn.style.top = topOffset + 'px';
+                floatBtn.style.bottom = 'auto';
+            } 
+            else {
+                floatBtn.style.position = 'absolute';
+                floatBtn.style.top = (window.scrollY + secCenterScreenY - floatHeightHalf) + 'px';
+                floatBtn.style.bottom = 'auto';
+            }
+        }
+
+        window.addEventListener('scroll', updateFloatingButton);
+        window.addEventListener('resize', updateFloatingButton);
+
+        // NAVEGAÇÃO SUAVE
+        document.querySelectorAll('nav a, #floating-event-btn').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                const targetId = this.getAttribute('href');
+                if (targetId.startsWith('#')) {
+                    e.preventDefault();
+                    const targetSection = document.querySelector(targetId);
+                    if (targetSection) {
+                        const st = ScrollTrigger.getAll().find(t => t.trigger === targetSection && t.pin);
+                        if (st) { 
+                            window.scrollTo({ top: st.start, behavior: 'smooth' }); 
+                        } else if (targetId === '#news-section') {
+                            const offsetTop = targetSection.offsetTop - (window.innerHeight / 2) + (targetSection.offsetHeight / 2);
+                            window.scrollTo({ top: offsetTop, behavior: 'smooth' }); 
+                        } else { 
+                            targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' }); 
+                        }
+                    }
+                }
+            });
+        });
+
+        const heroSlides = document.querySelectorAll('.hero-slide');
+        let currentSlide = 0;
+        if(heroSlides.length > 0) {
+            setInterval(() => {
+                heroSlides[currentSlide].classList.remove('active');
+                currentSlide = (currentSlide + 1) % heroSlides.length;
+                heroSlides[currentSlide].classList.add('active');
+            }, 5000);
+        }
+
+        // --- LÓGICA MODAIS E SLIDER HORIZONTAL ---
+        const modalUniversal = document.getElementById('modalUniversal');
+        const modalBox = document.getElementById('modalBox');
+        const closeUniversalModal = document.getElementById('closeUniversalModal');
+        const univModalTitle = document.getElementById('univModalTitle');
+        const univModalDesc = document.getElementById('univModalDesc');
+        const modalTextContainer = document.getElementById('modalTextContainer');
+        const modalImgContainer = document.getElementById('modalImgContainer');
         
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
+        // Elementos do Slider
+        const modalSliderWrapper = document.getElementById('modalSliderWrapper');
+        const modalPrevBtn = document.getElementById('modalPrevBtn');
+        const modalNextBtn = document.getElementById('modalNextBtn');
+        const modalSliderDots = document.getElementById('modalSliderDots');
+        
+        let modalImageArray = [];
+        let currentModalImageIndex = 0;
+
+        function updateSliderPosition() {
+            modalSliderWrapper.style.transform = `translateX(-${currentModalImageIndex * 100}%)`;
+            const dots = modalSliderDots.querySelectorAll('.dot');
+            dots.forEach((dot, index) => {
+                dot.classList.toggle('active', index === currentModalImageIndex);
+            });
+        }
+
+        function nextModalSlide() {
+            if (currentModalImageIndex < modalImageArray.length - 1) {
+                currentModalImageIndex++;
+            } else {
+                currentModalImageIndex = 0; // Volta ao início
+            }
+            updateSliderPosition();
+        }
+
+        function prevModalSlide() {
+            if (currentModalImageIndex > 0) {
+                currentModalImageIndex--;
+            } else {
+                currentModalImageIndex = modalImageArray.length - 1; // Vai para o fim
+            }
+            updateSliderPosition();
+        }
+
+        function goToSlide(index) {
+            currentModalImageIndex = index;
+            updateSliderPosition();
+        }
+
+        modalNextBtn.addEventListener('click', (e) => { e.stopPropagation(); nextModalSlide(); });
+        modalPrevBtn.addEventListener('click', (e) => { e.stopPropagation(); prevModalSlide(); });
+
+        function openModal(imgSrc, title, desc, isPreviewMode = false) {
+            modalImageArray = imgSrc.split(',');
+            currentModalImageIndex = 0;
+            
+            modalSliderWrapper.innerHTML = '';
+            modalSliderDots.innerHTML = '';
+            
+            modalImageArray.forEach((src, index) => {
+                const img = document.createElement('img');
+                img.src = src;
+                modalSliderWrapper.appendChild(img);
+                
+                // Cria os pontinhos apenas se houver mais de uma imagem
+                if (modalImageArray.length > 1) {
+                    const dot = document.createElement('div');
+                    dot.className = `dot hover-target ${index === 0 ? 'active' : ''}`;
+                    dot.addEventListener('click', (e) => { e.stopPropagation(); goToSlide(index); });
+                    modalSliderDots.appendChild(dot);
+                }
+            });
+            
+            // Mostra ou esconde botões dependendo da quantidade de imagens
+            if (modalImageArray.length > 1) {
+                modalPrevBtn.style.display = 'flex';
+                modalNextBtn.style.display = 'flex';
+            } else {
+                modalPrevBtn.style.display = 'none';
+                modalNextBtn.style.display = 'none';
+            }
+            
+            updateSliderPosition();
+            
+            if(isPreviewMode) {
+                modalBox.classList.add('preview-mode');
+                modalTextContainer.style.display = 'none';
+                modalImgContainer.style.width = '100%';
+            } else {
+                modalBox.classList.remove('preview-mode');
+                modalTextContainer.style.display = 'flex';
+                modalImgContainer.style.width = window.innerWidth <= 768 ? '100%' : '65%';
+                univModalTitle.textContent = title;
+                univModalDesc.textContent = desc;
+            }
+            modalUniversal.classList.add('active');
+        }
+
+        closeUniversalModal.addEventListener('click', () => modalUniversal.classList.remove('active'));
+        modalUniversal.addEventListener('click', (e) => {
+            if (e.target === modalUniversal) modalUniversal.classList.remove('active');
+        });
+
+        document.querySelectorAll('.expo-card').forEach(card => {
+            card.addEventListener('click', () => {
+                const imgs = card.getAttribute('data-imgs') || card.querySelector('img').src;
+                openModal(imgs, card.getAttribute('data-title'), card.getAttribute('data-desc'), false);
+            });
+        });
+
+        const termsModal = document.getElementById('termsModal');
+        const openTermsBtn = document.getElementById('openTermsBtn');
+        const closeTermsModal = document.getElementById('closeTermsModal');
+
+        openTermsBtn.addEventListener('click', (e) => { e.preventDefault(); termsModal.classList.add('active'); });
+        closeTermsModal.addEventListener('click', () => { termsModal.classList.remove('active'); });
+        termsModal.addEventListener('click', (e) => { if (e.target === termsModal) termsModal.classList.remove('active'); });
+
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const galleryExpandBtn = document.getElementById('galleryExpandBtn');
+        const galleryBtnText = document.getElementById('galleryBtnText');
+
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                filterBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                
+                const filterValue = btn.getAttribute('data-filter');
+                const currentShopItems = document.querySelectorAll('.shop-item'); 
+                const expandBtnContainer = document.getElementById('expandBtnContainer');
+                const shopHiddenGrid = document.getElementById('shopHiddenGrid');
+                
+                if(filterValue === 'all') {
+                    currentShopItems.forEach(item => item.classList.remove('hidden-by-filter'));
+                    if(currentShopItems.length > 8) { expandBtnContainer.style.display = 'block'; }
+                    if(!galleryExpandBtn.classList.contains('active')) { shopHiddenGrid.style.maxHeight = "0px"; }
+                } else {
+                    expandBtnContainer.style.display = 'none';
+                    shopHiddenGrid.style.maxHeight = shopHiddenGrid.scrollHeight + 1000 + "px"; 
+                    currentShopItems.forEach(item => {
+                        if(item.getAttribute('data-status') === filterValue) { item.classList.remove('hidden-by-filter'); } 
+                        else { item.classList.add('hidden-by-filter'); }
+                    });
+                }
+                setTimeout(() => { ScrollTrigger.refresh(); }, 500);
+            });
+        });
+
+        galleryExpandBtn.addEventListener('click', () => {
+            galleryExpandBtn.classList.toggle('active');
+            const shopHiddenGrid = document.getElementById('shopHiddenGrid');
+            if (galleryExpandBtn.classList.contains('active')) {
+                shopHiddenGrid.style.maxHeight = shopHiddenGrid.scrollHeight + "px";
+                galleryBtnText.textContent = "Mostrar menos obras";
+            } else {
+                shopHiddenGrid.style.maxHeight = "0px";
+                galleryBtnText.textContent = "Ver todas as obras";
+            }
+            setTimeout(() => { ScrollTrigger.refresh(); }, 1000);
+        });
+
+        const readMoreBtn = document.getElementById('readMoreBtn');
+        const bioMore = document.getElementById('bioMore');
+        const btnText = document.getElementById('btnText');
+        const bioImageExtra = document.getElementById('bioImageExtra');
+
+        readMoreBtn.addEventListener('click', () => {
+            readMoreBtn.classList.toggle('active');
+            if (readMoreBtn.classList.contains('active')) {
+                bioMore.style.maxHeight = bioMore.scrollHeight + "px";
+                bioImageExtra.style.maxHeight = "40vh";
+                bioImageExtra.style.opacity = "1";
+                btnText.textContent = "Mostrar menos";
+            } else {
+                bioMore.style.maxHeight = "0px";
+                bioImageExtra.style.maxHeight = "0px";
+                bioImageExtra.style.opacity = "0";
+                btnText.textContent = "Ler biografia completa";
+            }
+            setTimeout(() => { ScrollTrigger.refresh(); }, 800);
+        });
+
+        let selectedArtworks = [];
+        const actionPanel = document.getElementById('actionPanel');
+        const selectedCountEl = document.getElementById('selectedCount');
+
+        function bindGalleryEvents() {
+            document.querySelectorAll('.preview-trigger').forEach(trigger => {
+                trigger.addEventListener('click', (e) => { openModal(trigger.src, '', '', true); });
+            });
+
+            document.querySelectorAll('.select-checkbox').forEach(checkbox => {
+                checkbox.addEventListener('click', (e) => {
+                    e.stopPropagation(); 
+                    const item = checkbox.closest('.shop-item');
+                    const code = item.getAttribute('data-code');
+                    const title = item.getAttribute('data-title');
+                    
+                    const status = item.getAttribute('data-status');
+                    const tagInfo = status === 'disponivel' ? '[Disponível]' : '[Indisponível]';
+                    
+                    item.classList.toggle('selected');
+                    
+                    if (item.classList.contains('selected')) {
+                        selectedArtworks.push({ code, title, status: tagInfo });
+                    } else {
+                        selectedArtworks = selectedArtworks.filter(art => art.code !== code);
+                    }
+
+                    selectedCountEl.textContent = selectedArtworks.length;
+                    if (selectedArtworks.length > 0) { actionPanel.classList.add('visible'); } 
+                    else { actionPanel.classList.remove('visible'); }
+                });
+            });
+        }
+
+        document.getElementById('clearSelectionBtn').addEventListener('click', () => {
+            selectedArtworks = [];
+            selectedCountEl.textContent = 0;
+            document.querySelectorAll('.shop-item.selected').forEach(item => { item.classList.remove('selected'); });
+            actionPanel.classList.remove('visible');
+        });
+
+        const WHATSAPP_NUMBER = "351932444844";
+        function sanitizeForWhatsApp(str) {
+            if (!str) return "";
+            return str.replace(/[\u00A0\u1680\u180e\u2000-\u2009\u200a\u202f\u205f\u3000]/g, " ").replace(/[\u2013\u2014]/g, "-").replace(/[\x00-\x1F\x7F]/g, "");
+        }
+
+        document.querySelectorAll('.action-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const actionType = btn.getAttribute('data-action');
+                let messageStart = "";
+
+                if (actionType === "informacoes") messageStart = "Olá Maria da Graça! Gostaria de obter mais informações sobre a(s) seguinte(s) obra(s):";
+                else if (actionType === "semelhante") messageStart = "Olá Maria da Graça! Gostaria de encomendar uma obra semelhante à(s) seguinte(s) referência(s):";
+                else if (actionType === "comprar") messageStart = "Olá Maria da Graça! Tenho interesse na(s) seguinte(s) obra(s):";
+
+                let worksListArray = selectedArtworks.map(art => `• Obra: ${sanitizeForWhatsApp(art.title)} (Referência: ${sanitizeForWhatsApp(art.code)}) - ${art.status}`);
+                
+                let fullText = messageStart + "\n\n" + worksListArray.join("\n");
+                let finalUrl = "https://api.whatsapp.com/send?phone=" + WHATSAPP_NUMBER + "&text=" + encodeURIComponent(fullText);
+                window.open(finalUrl, "_blank");
+            });
+        });
+
+        const bgCanvas = document.getElementById('bg-canvas');
+        const bgCtx = bgCanvas.getContext('2d');
+
+        function resizeCanvases() {
+            bgCanvas.width = window.innerWidth;
+            bgCanvas.height = window.innerHeight;
+        }
+        resizeCanvases();
+        window.addEventListener('resize', resizeCanvases);
 
         let backgroundStrokes = [];
-        let mouseTrail = [];
-        let mouse = { x: null, y: null, lastX: null, lastY: null };
+        const palette = ['138, 42, 34', '192, 159, 82', '74, 93, 35', '183, 93, 63', '47, 36, 31']; 
 
-        // Paleta Africana RGB
-        const palette = [
-            '211, 84, 0',   // Terracota
-            '192, 159, 82', // Ocre / Mostarda
-            '74, 93, 35',   // Verde Oliva
-            '183, 93, 63',  // Argila
-            '47, 36, 31'    // Cacau Escuro
-        ];
+        function getPointOnQuadraticBezier(p0, p1, p2, t) {
+            return { x: (1 - t) * (1 - t) * p0.x + 2 * (1 - t) * t * p1.x + t * t * p2.x, y: (1 - t) * (1 - t) * p0.y + 2 * (1 - t) * t * p1.y + t * t * p2.y };
+        }
 
-        // --- 1. Efeito Fundo: Pinceladas Orgânicas Irregulares ---
         class OrganicStroke {
             constructor() {
-                this.points = [];
-                let currentX = Math.random() * canvas.width;
-                let currentY = Math.random() * canvas.height;
+                let rawPoints = [];
+                let currentX = Math.random() * bgCanvas.width;
+                let currentY = Math.random() * bgCanvas.height;
                 let currentAngle = Math.random() * Math.PI * 2;
-                
-                let segments = Math.floor(Math.random() * 30) + 20;
-                
+                let segments = Math.floor(Math.random() * 20) + 15;
+
                 for (let i = 0; i < segments; i++) {
-                    this.points.push({ x: currentX, y: currentY });
-                    currentAngle += (Math.random() - 0.5) * 1.2; 
-                    let stepLength = Math.random() * 30 + 15; 
+                    rawPoints.push({ x: currentX, y: currentY });
+                    currentAngle += (Math.random() - 0.5) * 1.5; 
+                    let stepLength = Math.random() * 60 + 30;
                     currentX += Math.cos(currentAngle) * stepLength;
                     currentY += Math.sin(currentAngle) * stepLength;
                 }
-                
-                this.lineWidth = Math.random() * 20 + 5; 
+
+                this.curves = [];
+                let lastPoint = rawPoints[0];
+                for (let i = 1; i < segments - 1; i++) {
+                    let xc = (rawPoints[i].x + rawPoints[i + 1].x) / 2;
+                    let yc = (rawPoints[i].y + rawPoints[i + 1].y) / 2;
+                    this.curves.push({ p0: lastPoint, p1: rawPoints[i], p2: { x: xc, y: yc } });
+                    lastPoint = { x: xc, y: yc };
+                }
+
+                this.lineWidth = Math.random() * 5 + 2; 
                 this.color = palette[Math.floor(Math.random() * palette.length)];
                 this.progress = 0; 
-                this.drawSpeed = Math.random() * 0.015 + 0.005;
-                this.maxOpacity = Math.random() * 0.2 + 0.1;
+                this.drawSpeed = Math.random() * 0.0015 + 0.0008; 
+                this.maxOpacity = Math.random() * 0.25 + 0.1;
                 this.fade = 1; 
+                this.fadeSpeed = Math.random() * 0.0008 + 0.0004;
                 this.state = 'drawing'; 
             }
-
+            
             update() {
                 if (this.state === 'drawing') {
                     this.progress += this.drawSpeed;
-                    if (this.progress >= 1) {
-                        this.progress = 1;
-                        this.state = 'fading';
-                    }
-                } else {
-                    this.fade -= 0.003;
-                }
+                    if (this.progress >= 1) { this.progress = 1; this.state = 'fading_out'; }
+                } else if (this.state === 'fading_out') { this.fade -= this.fadeSpeed; } 
             }
-
+            
             draw() {
                 if (this.fade <= 0) return;
-                
-                ctx.save();
-                ctx.globalAlpha = this.maxOpacity * this.fade;
-                ctx.lineCap = 'round';
-                ctx.lineJoin = 'round';
-                ctx.lineWidth = this.lineWidth;
-                ctx.strokeStyle = `rgb(${this.color})`;
+                bgCtx.save();
+                const baseAlpha = this.maxOpacity * this.fade;
+                bgCtx.lineCap = 'round'; bgCtx.lineJoin = 'round';
+                let totalCurves = this.curves.length;
+                let currentProgress = this.progress * totalCurves;
+                let currentCurveIndex = Math.floor(currentProgress);
+                let t = currentProgress - currentCurveIndex; 
 
-                ctx.beginPath();
-                ctx.moveTo(this.points[0].x, this.points[0].y);
+                if (currentCurveIndex >= totalCurves) { currentCurveIndex = totalCurves - 1; t = 1; }
 
-                let drawCount = Math.floor(this.progress * (this.points.length - 1)) + 1;
+                let startPt = this.curves[0].p0;
+                let fadeEndPt = this.curves[Math.min(3, this.curves.length - 1)].p2;
+                let grad = bgCtx.createLinearGradient(startPt.x, startPt.y, fadeEndPt.x, fadeEndPt.y);
+                grad.addColorStop(0, `rgba(${this.color}, 0)`);
+                grad.addColorStop(0.8, `rgba(${this.color}, 1)`);
+                grad.addColorStop(1, `rgba(${this.color}, 1)`);
                 
-                for (let i = 1; i < drawCount - 1; i++) {
-                    let xc = (this.points[i].x + this.points[i + 1].x) / 2;
-                    let yc = (this.points[i].y + this.points[i + 1].y) / 2;
-                    ctx.quadraticCurveTo(this.points[i].x, this.points[i].y, xc, yc);
+                for (let j = 0; j < 3; j++) {
+                    bgCtx.beginPath();
+                    if(j === 0) { bgCtx.lineWidth = this.lineWidth * 1.8; bgCtx.globalAlpha = baseAlpha * 0.15; }
+                    else if (j === 1) { bgCtx.lineWidth = this.lineWidth * 1.2; bgCtx.globalAlpha = baseAlpha * 0.3; }
+                    else { bgCtx.lineWidth = this.lineWidth * 0.6; bgCtx.globalAlpha = baseAlpha * 0.6; }
+
+                    const offsetX = (j - 1) * (this.lineWidth * 0.15);
+                    const offsetY = (j - 1) * (this.lineWidth * 0.15);
+
+                    bgCtx.strokeStyle = grad; 
+                    bgCtx.moveTo(this.curves[0].p0.x + offsetX, this.curves[0].p0.y + offsetY);
+                    
+                    for (let i = 0; i < currentCurveIndex; i++) {
+                        let c = this.curves[i];
+                        bgCtx.quadraticCurveTo(c.p1.x + offsetX, c.p1.y + offsetY, c.p2.x + offsetX, c.p2.y + offsetY);
+                    }
+                    
+                    if (t > 0) {
+                        let c = this.curves[currentCurveIndex];
+                        let currentPos = getPointOnQuadraticBezier(c.p0, c.p1, c.p2, t);
+                        let p1_prime = { x: c.p0.x + (c.p1.x - c.p0.x) * t, y: c.p0.y + (c.p1.y - c.p0.y) * t };
+                        bgCtx.quadraticCurveTo(p1_prime.x + offsetX, p1_prime.y + offsetY, currentPos.x + offsetX, currentPos.y + offsetY);
+                    }
+                    bgCtx.stroke();
                 }
-                
-                if (drawCount > 1) {
-                    ctx.lineTo(this.points[drawCount - 1].x, this.points[drawCount - 1].y);
-                }
-
-                ctx.stroke();
-                ctx.restore();
+                bgCtx.restore();
             }
         }
 
-        // --- 2. Efeito Mouse: Rasto Contínuo Multicor ---
-        class TrailSegment {
-            constructor(x1, y1, x2, y2, color) {
-                this.x1 = x1;
-                this.y1 = y1;
-                this.x2 = x2;
-                this.y2 = y2;
-                this.size = 12; // Espessura do traço do rato
-                this.opacity = 0.8;
-                this.color = color;
-            }
-            update() {
-                this.opacity -= 0.03; // Desvanece suavemente
-            }
-            draw() {
-                if (this.opacity <= 0) return;
-                ctx.save();
-                ctx.globalAlpha = this.opacity;
-                ctx.beginPath();
-                ctx.lineCap = 'round';
-                ctx.lineJoin = 'round';
-                ctx.lineWidth = this.size * this.opacity;
-                ctx.strokeStyle = `rgb(${this.color})`;
-                ctx.moveTo(this.x1, this.y1);
-                ctx.lineTo(this.x2, this.y2);
-                ctx.stroke();
-                ctx.restore();
-            }
-        }
-
-        window.addEventListener('mousemove', (e) => {
-            if (mouse.x === null) {
-                mouse.lastX = e.clientX;
-                mouse.lastY = e.clientY;
-            } else {
-                mouse.lastX = mouse.x;
-                mouse.lastY = mouse.y;
-            }
-            mouse.x = e.clientX;
-            mouse.y = e.clientY;
-
-            // Escolhe uma cor aleatória da paleta para este segmento do rasto
-            let randomColor = palette[Math.floor(Math.random() * palette.length)];
-            mouseTrail.push(new TrailSegment(mouse.lastX, mouse.lastY, mouse.x, mouse.y, randomColor));
-        });
-
-        window.addEventListener('mouseout', () => {
-            mouse.x = null;
-            mouse.y = null;
-        });
-
-        // --- Loop Principal da Animação ---
         function animateCanvas() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height); 
-            
-            if (Math.random() < 0.02) { 
-                backgroundStrokes.push(new OrganicStroke());
-            }
-            
+            bgCtx.clearRect(0, 0, bgCanvas.width, bgCanvas.height); 
+            if (Math.random() < 0.01 && backgroundStrokes.length < 12) backgroundStrokes.push(new OrganicStroke()); 
             for (let i = 0; i < backgroundStrokes.length; i++) {
-                backgroundStrokes[i].update();
-                backgroundStrokes[i].draw();
-                
-                if (backgroundStrokes[i].fade <= 0) {
-                    backgroundStrokes.splice(i, 1);
-                    i--;
-                }
+                backgroundStrokes[i].update(); backgroundStrokes[i].draw();
+                if (backgroundStrokes[i].fade <= 0) { backgroundStrokes.splice(i, 1); i--; }
             }
-
-            for (let j = 0; j < mouseTrail.length; j++) {
-                mouseTrail[j].update();
-                mouseTrail[j].draw();
-                
-                if (mouseTrail[j].opacity <= 0) {
-                    mouseTrail.splice(j, 1);
-                    j--;
-                }
-            }
-
             requestAnimationFrame(animateCanvas);
         }
         animateCanvas();
 
-        window.addEventListener('resize', () => {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        });
-
-        // --- 3. Cursor Customizado Multicor ---
         const customCursor = document.getElementById('cursor');
-        const hoverTargets = document.querySelectorAll('.hover-target, a');
+        const cursorFollower = document.getElementById('cursor-follower');
 
         document.addEventListener('mousemove', (e) => {
-            gsap.to(customCursor, {
-                x: e.clientX,
-                y: e.clientY,
-                duration: 0.1,
-                ease: "power2.out"
+            gsap.to(customCursor, { x: e.clientX, y: e.clientY, duration: 0, ease: "none" });
+            gsap.to(cursorFollower, { x: e.clientX, y: e.clientY, duration: 0.15, ease: "power2.out" });
+        });
+
+        const addHover = () => { customCursor.classList.add('hovering'); cursorFollower.classList.add('hovering'); };
+        const removeHover = () => { customCursor.classList.remove('hovering'); cursorFollower.classList.remove('hovering'); };
+
+        function refreshCursors() {
+            document.querySelectorAll('.hover-target, a, button, .expo-card, .shop-image-wrapper img, .clear-selection-btn, .slider-btn, .dot').forEach(target => {
+                target.removeEventListener('mouseenter', addHover);
+                target.removeEventListener('mouseleave', removeHover);
+                target.addEventListener('mouseenter', addHover);
+                target.addEventListener('mouseleave', removeHover);
             });
-        });
+        }
+        refreshCursors();
 
-        setInterval(() => {
-            const randomColor = palette[Math.floor(Math.random() * palette.length)];
-            customCursor.style.backgroundColor = `rgb(${randomColor})`;
-        }, 1500);
-
-        hoverTargets.forEach(target => {
-            target.addEventListener('mouseenter', () => customCursor.classList.add('hovering'));
-            target.addEventListener('mouseleave', () => customCursor.classList.remove('hovering'));
-        });
-
-        // --- 4. Animações GSAP ---
         const tl = gsap.timeline();
-        
-        tl.to('.title-line', {
-            y: 0,
-            duration: 1.2,
-            stagger: 0.2,
-            ease: "power4.out",
-            delay: 0.5
-        })
-        .to('.hero-subtitle', {
-            opacity: 1,
-            duration: 1,
-            ease: "power2.out"
-        }, "-=0.5");
+        tl.to('.title-line', { y: 0, duration: 1.2, stagger: 0.2, ease: "power4.out", delay: 0.5 })
+          .to('.hero-subtitle', { opacity: 1, duration: 1, ease: "power2.out" }, "-=0.5");
 
-        gsap.from('.bio-text', {
-            scrollTrigger: { trigger: '.bio-section', start: "top 70%" },
-            y: 50,
-            opacity: 0,
-            duration: 1,
-            ease: "power3.out"
-        });
+        gsap.from('.bio-text', { scrollTrigger: { trigger: '.bio-section', start: "top 70%" }, y: 50, opacity: 0, duration: 1, ease: "power3.out" });
 
         const exhibitionContainer = document.querySelector('.exhibition-container');
-        
         gsap.to(exhibitionContainer, {
             x: () => -(exhibitionContainer.scrollWidth - window.innerWidth),
             ease: "none",
             scrollTrigger: {
-                trigger: ".exhibition-wrapper",
-                start: "top top",
-                end: () => "+=" + exhibitionContainer.scrollWidth,
-                pin: true,
-                scrub: 1,
-                invalidateOnRefresh: true
+                trigger: ".exhibition-wrapper", start: "top top", end: () => "+=" + exhibitionContainer.scrollWidth,
+                pin: true, scrub: 1, invalidateOnRefresh: true,
             }
-        });
-
-        gsap.to('.shop-item', {
-            scrollTrigger: { trigger: '.shop-section', start: "top 60%" },
-            y: 0,
-            opacity: 1,
-            duration: 0.8,
-            stagger: 0.2,
-            ease: "power3.out"
         });
     </script>
 </body>
