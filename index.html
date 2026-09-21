@@ -138,7 +138,7 @@
 
         /* --- Exposição & Percurso --- */
         .exhibition-wrapper { overflow: hidden; background-color: var(--bg-alt); }
-        .exhibition-container { width: 550vw; display: flex; height: 100vh; align-items: center; padding-left: 10vw; gap: 5vw; }
+        .exhibition-container { width: max-content; display: flex; height: 100vh; align-items: center; padding-left: 10vw; padding-right: 10vw; gap: 5vw; }
         .exhibition-intro { width: 40vw; flex-shrink: 0; font-size: clamp(2.5rem, 4vw, 3.5rem); line-height: 1.1; color: var(--text-color); }
         .expo-card { width: 45vw; height: 65vh; background: rgba(244, 239, 230, 0.95); border-radius: 12px; display: flex; flex-direction: column; justify-content: center; box-shadow: 0 15px 35px rgba(0,0,0,0.05); flex-shrink: 0; overflow: hidden; position: relative; }
         .expo-card img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
@@ -184,15 +184,23 @@
 
         /* --- Galeria de Obras --- */
         .shop-section { padding: 10rem 5vw; background-color: transparent; position: relative; }
-        .section-header { text-align: center; font-size: clamp(2.5rem, 5vw, 3.5rem); line-height: 1.1; margin-bottom: 1.5rem; }
-        .gallery-filters { display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; margin-bottom: 4rem; }
+        .section-header { text-align: center; font-size: clamp(2.5rem, 5vw, 3.5rem); line-height: 1.1; margin-bottom: 1.5rem; color: var(--text-color); }
+        
+        .gallery-filters-container { display: flex; justify-content: center; align-items: center; gap: 1.5rem; margin-bottom: 4rem; flex-wrap: wrap; }
+        .filter-group { display: flex; gap: 0.5rem; flex-wrap: wrap; justify-content: center; }
+        .filter-divider { color: var(--text-color); opacity: 0.3; font-size: 1.5rem; }
+        
         .filter-btn { background: transparent; border: 1px solid var(--text-color); padding: 0.5rem 1.5rem; border-radius: 30px; font-family: 'Inter', sans-serif; color: var(--text-color); transition: all 0.3s; }
         .filter-btn.active, .filter-btn:hover { background: var(--accent-color); border-color: var(--accent-color); color: #fff; }
-        .shop-grid, .shop-hidden-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2.5rem; }
-        .shop-hidden-grid { max-height: 0; overflow: hidden; transition: max-height 1s cubic-bezier(0.4, 0, 0.2, 1); margin-top: 0; }
+        
+        .shop-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2.5rem; }
         
         .shop-item { position: relative; display: flex; flex-direction: column; gap: 1rem; opacity: 0; transform: translateY(50px); background: rgba(244, 239, 230, 0.8); padding: 1rem; border-radius: 12px; transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 0.3s ease; }
+        
+        /* Classes essenciais para o novo sistema de filtros funcionar corretamente */
+        .shop-item.hidden-by-expand { display: none !important; }
         .shop-item.hidden-by-filter { display: none !important; }
+
         .shop-item:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
         .shop-image-wrapper { width: 100%; aspect-ratio: 4/5; overflow: hidden; border-radius: 8px; position: relative; border: 3px solid transparent; transition: border-color 0.3s ease; }
         .shop-image-wrapper img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease, filter 0.3s ease; }
@@ -205,24 +213,29 @@
         .preview-icon { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.8); background: rgba(47, 36, 31, 0.6); backdrop-filter: blur(4px); color: #fff; padding: 1rem; border-radius: 50%; opacity: 0; pointer-events: none; transition: all 0.3s ease; }
         .shop-image-wrapper:hover .preview-icon { opacity: 1; transform: translate(-50%, -50%) scale(1); }
         .shop-details { display: flex; justify-content: space-between; align-items: baseline; font-family: 'Playfair Display', serif; pointer-events: none; }
-        .artwork-code { font-size: 0.75rem; font-family: 'Inter', sans-serif; background: var(--bg-alt); padding: 0.2rem 0.5rem; border-radius: 4px; font-weight: 600; display: inline-block; margin-bottom: 0.3rem; opacity: 0.8; }
+        .artwork-code { font-size: 0.75rem; font-family: 'Inter', sans-serif; background: var(--bg-alt); padding: 0.2rem 0.5rem; border-radius: 4px; color: var(--text-color); font-weight: 600; display: inline-block; margin-bottom: 0.3rem; opacity: 0.8; }
         .status-badge { font-family: 'Inter', sans-serif; font-size: 0.75rem; padding: 0.3rem 0.8rem; border-radius: 20px; font-weight: 600; }
         .status-disp { background: rgba(37, 211, 102, 0.15); color: #1e8745; }
         .status-indisp { background: rgba(138, 42, 34, 0.1); color: var(--accent-color); }
+        
         .gallery-expand-container { text-align: center; margin-top: 5rem; }
-        .gallery-expand-btn { display: inline-flex; align-items: center; gap: 0.8rem; background: var(--text-color); color: var(--bg-color); border: none; padding: 1rem 2.5rem; border-radius: 30px; font-size: 1rem; font-weight: 500; transition: background 0.3s ease; }
+        .gallery-expand-btn { display: inline-flex; align-items: center; gap: 0.8rem; background: var(--text-color); color: var(--bg-color); border: none; padding: 1rem 2.5rem; border-radius: 30px; font-family: 'Inter', sans-serif; font-size: 1rem; font-weight: 500; cursor: none; transition: background 0.3s ease; }
         .gallery-expand-btn:hover { background: var(--accent-color); }
 
         /* --- Biografia (Sobre) --- */
-        .bio-section { padding: 10rem 5vw; display: flex; justify-content: space-between; align-items: flex-start; gap: 4rem; background-color: transparent; }
-        .bio-text { width: 50%; background: rgba(244, 239, 230, 0.9); padding: 3rem; border-radius: 12px; backdrop-filter: blur(8px); box-shadow: 0 10px 30px rgba(47, 36, 31, 0.05); }
-        .bio-text-title { font-size: clamp(2.5rem, 4vw, 3.5rem); line-height: 1.1; margin-bottom: 2rem; }
-        .bio-more-content { max-height: 0; overflow: hidden; transition: max-height 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
-        .bio-text p { font-size: 1rem; line-height: 1.8; margin-bottom: 1.5rem; }
-        .bio-images-col { width: 40%; display: flex; flex-direction: column; gap: 2rem; }
-        .bio-image { width: 100%; height: 60vh; background-image: url('Imagem_retrato_bio.png'); background-size: cover; background-position: center; border-radius: 12px; box-shadow: 0 20px 40px rgba(47, 36, 31, 0.15); }
-        .bio-image-extra { width: 100%; height: 40vh; background-image: url('imagem_14.jpeg'); background-size: cover; background-position: center; border-radius: 12px; box-shadow: 0 20px 40px rgba(47, 36, 31, 0.15); max-height: 0; opacity: 0; transition: max-height 0.8s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.8s ease; }
-        .read-more-btn { display: inline-flex; align-items: center; gap: 0.8rem; margin-top: 2rem; background: none; border: none; font-family: 'Playfair Display', serif; font-size: 1.4rem; font-style: italic; color: var(--accent-color); transition: opacity 0.3s ease; }
+        .bio-section { padding: 10rem 5vw; background-color: transparent; }
+        .bio-container { background: rgba(244, 239, 230, 0.9); padding: 3rem; border-radius: 12px; backdrop-filter: blur(8px); box-shadow: 0 10px 30px rgba(47, 36, 31, 0.05); width: 100%; max-width: 1400px; margin: 0 auto; }
+        .bio-text-title { font-family: 'Playfair Display', serif; font-size: 3.5rem; line-height: 1.1; margin-bottom: 2rem; color: var(--text-color); }
+        
+        .bio-image { float: right; width: 320px; height: 390px; background-image: url('Imagem_retrato_bio.png'); background-size: cover; background-position: center; border-radius: 12px; box-shadow: 0 20px 40px rgba(47, 36, 31, 0.15); margin-left: 2rem; margin-bottom: 1.5rem; }
+        
+        .bio-content p { font-family: 'Inter', sans-serif; font-size: 1rem; line-height: 1.8; margin-bottom: 1.5rem; text-align: justify; }
+        
+        /* Parágrafos extras que são escondidos pelo botão ler mais */
+        .bio-more-paragraphs { display: none; }
+        .bio-more-paragraphs.visible { display: block; }
+        
+        .read-more-btn { display: inline-flex; align-items: center; gap: 0.8rem; margin-top: 1rem; background: none; border: none; font-family: 'Playfair Display', serif; font-size: 1.4rem; font-style: italic; font-weight: 400; color: var(--accent-color); cursor: none; padding: 0; transition: opacity 0.3s ease; clear: both; }
         .read-more-btn:hover { opacity: 0.7; }
         .read-more-btn .arrow { display: inline-block; transition: transform 0.4s ease; font-style: normal; font-size: 1.2rem; }
         .read-more-btn.active .arrow { transform: rotate(180deg); }
@@ -232,8 +245,8 @@
         .contact-container { display: flex; justify-content: space-between; align-items: center; width: 100%; max-width: 1200px; margin-bottom: 5rem; gap: 4rem; }
         .contact-left { flex: 1; text-align: left; }
         .contact-right { flex: 1; display: flex; flex-direction: column; align-items: flex-start; gap: 1.5rem; text-align: left; }
-        .contact-slogan { font-size: clamp(2.5rem, 5vw, 4.5rem); line-height: 1.1; margin-bottom: 1rem; }
-        .contact-sub-slogan { font-size: 1.1rem; opacity: 0.8; max-width: 400px; }
+        .contact-slogan { font-family: 'Playfair Display', serif; font-size: clamp(2.5rem, 5vw, 4.5rem); line-height: 1.1; color: var(--text-color); margin-bottom: 0.5rem; }
+        .contact-sub-slogan { font-family: 'Inter', sans-serif; font-size: 1.1rem; margin-bottom: 4rem; opacity: 0.8; max-width: 600px; }
         
         .contact-email { font-size: clamp(1.2rem, 2.5vw, 2rem); position: relative; display: inline-block; word-break: break-all; }
         .contact-email::after { content: ''; position: absolute; width: 100%; height: 2px; bottom: 0; left: 0; background-color: var(--accent-color); transform: scaleX(0); transform-origin: bottom right; transition: transform 0.4s ease; }
@@ -244,26 +257,24 @@
         .terms-note a:hover { opacity: 0.7; }
         
         .social-links { display: flex; gap: 2rem; flex-wrap: wrap; margin-top: 1rem; }
-        .social-links a { font-size: 1rem; text-transform: uppercase; letter-spacing: 1px; font-weight: 500; opacity: 0.7; transition: opacity 0.3s, color 0.3s; }
+        .social-links a { font-family: 'Inter', sans-serif; font-size: 1rem; text-transform: uppercase; letter-spacing: 1px; font-weight: 500; opacity: 0.7; transition: opacity 0.3s, color 0.3s; }
         .social-links a:hover { opacity: 1; color: var(--accent-color); }
         
-        footer { font-size: 0.9rem; opacity: 0.5; text-align: center; width: 100%; }
+        footer { margin-top: 5rem; font-size: 0.9rem; opacity: 0.5; text-align: center; width: 100%; }
 
         /* --- Painel de Ações Fixas --- */
         .action-panel { position: fixed; bottom: 30px; right: 30px; background: var(--text-color); color: var(--bg-color); padding: 1.5rem; border-radius: 12px; box-shadow: 0 15px 40px rgba(0,0,0,0.3); z-index: 1000; display: flex; flex-direction: column; gap: 1rem; opacity: 0; pointer-events: none; transform: translateY(20px); transition: opacity 0.4s ease, transform 0.4s ease; }
         .action-panel.visible { opacity: 1; pointer-events: all; transform: translateY(0); }
         .action-panel-header { font-family: 'Playfair Display', serif; font-size: 1.2rem; border-bottom: 1px solid rgba(244, 239, 230, 0.2); padding-bottom: 0.5rem; display: flex; justify-content: space-between; align-items: center; }
-        .clear-selection-btn { background: none; border: none; color: var(--bg-alt); font-size: 0.8rem; text-decoration: underline; opacity: 0.7; padding: 0.2rem; transition: opacity 0.3s ease; }
+        .clear-selection-btn { background: none; border: none; color: var(--bg-alt); font-family: 'Inter', sans-serif; font-size: 0.8rem; text-decoration: underline; opacity: 0.7; padding: 0.2rem; transition: opacity 0.3s ease; cursor: none; }
         .clear-selection-btn:hover { opacity: 1; }
-        .action-btn { background: transparent; color: var(--bg-color); border: 1px solid var(--bg-color); padding: 0.8rem 1rem; border-radius: 6px; font-size: 0.9rem; text-align: left; transition: all 0.3s ease; display: flex; justify-content: space-between; align-items: center; }
+        .action-btn { background: transparent; color: var(--bg-color); border: 1px solid var(--bg-color); padding: 0.8rem 1rem; border-radius: 6px; font-family: 'Inter', sans-serif; font-size: 0.9rem; text-align: left; transition: all 0.3s ease; display: flex; justify-content: space-between; align-items: center; }
         .action-btn:hover { background: var(--bg-color); color: var(--text-color); }
         .action-btn.btn-buy:hover { background: var(--accent-color); border-color: var(--accent-color); color: #fff; }
 
         /* --- MEDIA QUERIES (Responsividade) --- */
         @media (max-width: 1024px) {
-            .shop-grid, .shop-hidden-grid { grid-template-columns: repeat(2, 1fr); }
-            .bio-section { flex-direction: column; gap: 3rem; }
-            .bio-text, .bio-images-col { width: 100%; }
+            .shop-grid { grid-template-columns: repeat(2, 1fr); }
             .modal-content.text-only-mode { width: 85vw; padding: 3rem; }
         }
 
@@ -278,10 +289,12 @@
             .exhibition-container { width: 750vw; gap: 5vw; padding-left: 5vw; }
             .exhibition-intro { width: 85vw; font-size: 2.5rem; }
             .expo-card { width: 80vw; height: 50vh; }
-            .shop-grid, .shop-hidden-grid { grid-template-columns: 1fr; gap: 1.5rem; }
-            .bio-text { padding: 1.5rem; }
-            .bio-text-title { font-size: 2.2rem; }
-            .bio-image { height: 40vh; }
+            
+            .gallery-filters-container { flex-direction: column; gap: 1rem; }
+            .filter-group { flex-wrap: wrap; justify-content: center; gap: 0.5rem; }
+            .filter-divider { display: none; }
+            
+            .shop-grid { grid-template-columns: 1fr; gap: 1.5rem; }
             .action-panel { bottom: 0; right: 0; width: 100%; border-radius: 20px 20px 0 0; }
             
             .modal-content { flex-direction: column; height: 90vh; width: 95vw; }
@@ -294,6 +307,9 @@
             .news-section { padding: 4rem 5vw; }
             .floating-event-btn { width: 50px; height: 50px; left: 20px; }
             .event-icon { font-size: 1.5rem; }
+            
+            .bio-image { float: none; width: 100%; height: 350px; margin-left: 0; margin-bottom: 2rem; }
+            .bio-content p { text-align: left; }
         }
     </style>
 </head>
@@ -355,46 +371,45 @@
                 <p style="font-size: 1.1rem; font-family: 'Inter', sans-serif; opacity: 0.8; margin-top: 1.5rem; line-height: 1.6; font-weight: 300;">Alguns registos fotográficos que marcam o meu percurso</p>
             </div>
             
-            <!-- 1. Pinturas ao Ar Livre -->
             <div class="expo-card hover-target" data-title="Pinturas ao Ar Livre" data-desc="Em contacto direto com a natureza e as gentes de Mangualde, esta foi uma experiência de criação em tempo real, onde a inspiração nasce e ganha forma no próprio local, mostrando a técnica e a dedicação por trás de cada pincelada." data-imgs="imagem_9.jpeg,imagem_10.jpeg">
                 <img src="imagem_9.jpeg" alt="Pinturas ao ar livre">
                 <div class="expo-overlay">Pinturas ao Ar Livre</div>
             </div>
 
-            <!-- 2. Capela de Fagilde (Print 1) -->
             <div class="expo-card hover-target" data-title="Capela de Fagilde" data-desc="Obra mural inspirada numa cena bíblica na Capela de Fagilde, no concelho de Mangualde, unindo a arte à fé e à comunidade local." data-imgs="image_2024408208_12.jpg,image_2024408208_13.jpg">
                 <img src="image_2024408208_12.jpg" alt="Capela de Fagilde">
                 <div class="expo-overlay">Capela de Fagilde</div>
             </div>
 
-            <!-- 3. Exposição na Biblioteca Municipal de Aguiar da Beira -->
             <div class="expo-card hover-target" data-title="Exposição na Biblioteca de Aguiar da Beira" data-desc="Esta galeria retrata a exposição realizada na Biblioteca Municipal de Aguiar da Beira, um dia de grande honra que contou com a presença e o prestígio do então Primeiro-Ministro, Dr. José Manuel Durão Barroso." data-imgs="imagem_16.jpeg,imagem_11.jpeg,imagem_12.jpeg,imagem_13.jpeg,imagem_14.jpeg,imagem_15.jpeg,imagem_17.jpeg">
                 <img src="imagem_16.jpeg" alt="Exposição Biblioteca Aguiar da Beira">
                 <div class="expo-overlay">Exposição na Biblioteca de Aguiar da Beira</div>
             </div>
 
-            <!-- 4. Capela da Roda (Print 2) -->
             <div class="expo-card hover-target" data-title="Capela da Roda – Mangualde" data-desc="Registo de três obras de temática sacra concebidas em exclusivo para a Capela da Roda." data-imgs="image_2024408208_14.jpg,image_2024408208_15.jpg,image_2024408208_16.jpg">
                 <img src="image_2024408208_15.jpg" alt="Capela da Roda">
                 <div class="expo-overlay">Capela da Roda – Mangualde</div>
             </div>
 
-            <!-- 5. Mural Bíblico (Print 3 - Fornos Maceira Dão) -->
             <div class="expo-card hover-target" data-title="Mural Bíblico" data-desc="Execução e processo criativo da pintura mural com cena bíblica na Igreja de Fornos de Maceira Dão." data-imgs="image_2024408208_17.jpg,image_2024408208_18.jpg">
                 <img src="image_2024408208_17.jpg" alt="Mural Bíblico">
                 <div class="expo-overlay">Mural Bíblico</div>
             </div>
 
-            <!-- 6. Igreja de Gradiz (Print 4) -->
             <div class="expo-card hover-target" data-title="Igreja de Gradiz - Aguiar da Beira" data-desc="Criação de uma pintura personalizada de Jesus que culminou na enorme concretização de a pintar diretamente no teto da capela, lá do alto dos andaimes." data-imgs="image_2024408208_20.jpg,image_2024408208_19.jpg">
                 <img src="image_2024408208_20.jpg" alt="Igreja de Gradiz">
                 <div class="expo-overlay">Igreja de Gradiz - Aguiar da Beira</div>
             </div>
 
-            <!-- 7. Murais efeito azulejo (Print 5) -->
-            <div class="expo-card hover-target" data-title="Pintura de Murais Realistas" data-desc="Registo fotográfico de murais realistas pintados à mão diretamente em paredes de casas de clientes, simulando com grande detalhe painéis de azulejo tradicionais." data-imgs="imagem_6.jpeg,image_2024408208_9.jpg,image_2024408208_10.jpg,image_2024408208_11.jpg">
+            <div class="expo-card hover-target" data-title="Pintura de Murais Realistas" data-desc="Registo fotográfico de murais realistas pintados à mão diretamente em paredes de casas de clientes, simulando com grande detalhe painéis de azulejo tradicionais." data-imgs="imagem_6.jpeg,image_2024408208_9.jpg,image_2024408208_10.jpg">
                 <img src="imagem_6.jpeg" alt="Murais efeito azulejo">
                 <div class="expo-overlay">Pintura de Murais Realistas</div>
+            </div>
+
+            <!-- NOVA ETAPA: Presépio em Tamanho Real -->
+            <div class="expo-card hover-target" data-title="Presépio em Tamanho Real" data-desc="Presépio em tamanho real composto por vários materiais: Papel kraft, madeira para a manjedoura do menino Jesus, estrados, palhinhas do mesmo papel, cajado, bola de esferovite dividida para o rosto de Nossa Senhora e S. José, estruturas em madeira para sustentar as vestimentas, tinta de spray prata e Menino Jesus em porcelana. Esteve exposto na Diocese de Viseu (2018) até 6 de janeiro." data-imgs="presépio.jpeg">
+                <img src="presépio.jpg" alt="Presépio em Tamanho Real">
+                <div class="expo-overlay">Presépio em Tamanho Real (Diocese de Viseu)</div>
             </div>
         </div>
     </section>
@@ -403,14 +418,25 @@
     <section id="shop" class="shop-section">
         <h2 class="section-header serif">Galeria<br><span>de Obras</span></h2>
         
-        <div class="gallery-filters">
-            <button class="filter-btn hover-target active" data-filter="all">Todas as Obras</button>
-            <button class="filter-btn hover-target" data-filter="disponivel">Disponíveis</button>
-            <button class="filter-btn hover-target" data-filter="indisponivel">Indisponíveis</button>
+        <div class="gallery-filters-container">
+            <!-- Grupo de Categoria (Tipo) -->
+            <div class="filter-group">
+                <button class="filter-btn filter-type-btn hover-target active" data-type="all">Todas as Categorias</button>
+                <button class="filter-btn filter-type-btn hover-target" data-type="quadro">Quadros</button>
+                <button class="filter-btn filter-type-btn hover-target" data-type="artesanato">Artesanato</button>
+            </div>
+            
+            <span class="filter-divider">|</span>
+            
+            <!-- Grupo de Disponibilidade -->
+            <div class="filter-group">
+                <button class="filter-btn filter-status-btn hover-target active" data-status="all">Qualquer Estado</button>
+                <button class="filter-btn filter-status-btn hover-target" data-status="disponivel">Disponíveis</button>
+                <button class="filter-btn filter-status-btn hover-target" data-status="indisponivel">Indisponíveis</button>
+            </div>
         </div>
 
         <div class="shop-grid" id="mainShopGrid"></div>
-        <div class="shop-hidden-grid" id="shopHiddenGrid"></div>
 
         <div class="gallery-expand-container" id="expandBtnContainer">
             <button class="gallery-expand-btn hover-target" id="galleryExpandBtn">
@@ -422,33 +448,36 @@
 
     <!-- Biografia (Sobre) -->
     <section id="bio" class="bio-section">
-        <div class="bio-text">
+        <div class="bio-container">
             <h2 class="bio-text-title serif">
                 Antes da obra,<br>
                 <span>existe uma história.</span>
             </h2>
-            <p>
-                Tinha apenas cinco ou seis anos quando, numa noite de São João, Maria da Graça se cruzou pela primeira vez com fotografias de artistas de teatro. A expressividade daquelas imagens despertou nela um fascínio que, embora ainda sem saber, viria a acompanhá-la ao longo de toda a vida. Pouco tempo depois, descobriu na dispensa da avó uma coleção de postais com reproduções de obras de arte. Encantaram-na as cores, as formas e, sobretudo, a diversidade de quem as criava. Entre pintores tradicionais e artistas que pintavam com a boca ou com os pés, começou a perceber que a arte não tinha limites nem uma única forma de existir.
-            </p>
             
-            <div class="bio-more-content" id="bioMore">
+            <div class="bio-content">
+                <div class="bio-image hover-target"></div>
+                
+                <p>
+                    Tinha apenas cinco ou seis anos quando, numa noite de São João, Maria da Graça se cruzou pela primeira vez com fotografias de artistas de teatro. A expressividade daquelas imagens despertou nela um fascínio que, embora ainda sem saber, viria a acompanhá-la ao longo de toda a vida. Pouco tempo depois, descobriu na dispensa da avó uma coleção de postais com reproduções de obras de arte. Encantaram-na as cores, as formas e, sobretudo, a diversidade de quem as criava. Entre pintores tradicionais e artistas que pintavam com a boca ou com os pés, começou a perceber que a arte não tinha limites nem uma única forma de existir.
+                </p>
                 <p>A minha formação artística teve início na Escola Industrial Oliveira Salazar, em Luanda, onde frequentei o curso de Pintura Decorativa. Foi aí que consolidei as bases técnicas e desenvolvi uma visão estética própria, que mais tarde se refletiria em todo o meu percurso artístico.</p>
-                <p>Ao longo da minha carreira, participei em diversas exposições. A minha primeira exposição individual realizou-se em 1989, na Galeria da Fundação Lar do Imigrante, em Santo Tirso. Foi um momento marcante, onde pude apresentar ao público obras que traduzem a minha sensibilidade e criatividade. Posteriormente, participei em exposições coletivas em espaços como o Hotel D. Henrique, no Porto (1991), a Galeria do Fórum da Câmara Municipal da Maia (1992) e a Casa Beira Alta, em Santa Catarina, Porto (1993), entre outros.</p>
-                <p>Também participei em vários concursos de pintura ao ar livre, em localidades como Vouzela, Santa Comba Dão, Mangualde, Oliveira de Frades e Penalva do Castelo. Nessas ocasiões, tive a honra de receber menções honrosas e prémios distintos, reconhecimento que reforçou a minha dedicação e motivação artística.</p>
-                <p>O meu trabalho estende-se igualmente à realização de murais e intervenções artísticas em instituições religiosas e espaços públicos. Em 2002, executei uma obra mural inspirada numa cena bíblica na Capela de Fagilde, no concelho de Mangualde. Em 2003, apresentei uma exposição na Biblioteca Municipal de Aguiar da Beira e desenvolvi um projeto artístico para a inovuração do Lar de Idosos de Fornos de Maceira Dão, concretizado no ano seguinte.</p>
-                <p>Em 2004, tive a honra de ver o meu trabalho integrado num momento solene, numa missa celebrada no Salão Principal do Lar de Idosos, com a presença do Bispo de Viseu, D. Ilídio Pinto Leandro, e de várias entidades municipais.</p>
-                <p>Continuei a realizar intervenções artísticas em igrejas e capelas, como na Igreja da Roda, em Mangualde (2007), e na Capela Rainha Santa Isabel, na Quinta da Estrada, em Vale de Távora, Aguiar da Beira (2008). Em 2013, criei um mural com uma cena bíblica para a Igreja de Fornos de Maceira Dão e, em 2014, desenvolvi uma obra para a Igreja de Gradiz, em Aguiar da Beira.</p>
-                <p>O meu percurso é profundamente marcado pela união entre arte e espiritualidade. Em cada obra que realizo, procuro transmitir emoção, fé e beleza, deixando um contributo artístico que reflita não só a minha paixão pela pintura, mas também o meu compromisso com a cultura e a comunidade.</p>
+                <p>Ao longo da minha carreira, participei em diversas exposições. A minha primeira exposição individual realizou-se em 1989, na Galeria da Fundação Lar do Imigrante, em Santo Tirso. Foi um momento marcante, onde pude apresentar ao público obras que traduzem a minha sensibilidade e criatividade.</p>
+                
+                <!-- Parágrafos extra para o botão Ler Mais -->
+                <div class="bio-more-paragraphs" id="bioMore">
+                    <p>Posteriormente, participei em exposições coletivas em espaços como o Hotel D. Henrique, no Porto (1991), a Galeria do Fórum da Câmara Municipal da Maia (1992) e a Casa Beira Alta, em Santa Catarina, Porto (1993), entre outros.</p>
+                    <p>Também participei em vários concursos de pintura ao ar livre, em localidades como Vouzela, Santa Comba Dão, Mangualde, Oliveira de Frades e Penalva do Castelo. Nessas ocasiões, tive a honra de receber menções honrosas e prémios distintos, reconhecimento que reforçou a minha dedicação e motivação artística.</p>
+                    <p>O meu trabalho estende-se igualmente à realização de murais e intervenções artísticas em instituições religiosas e espaços públicos. Em 2002, executei uma obra mural inspirada numa cena bíblica na Capela de Fagilde, no concelho de Mangualde. Em 2003, apresentei uma exposição na Biblioteca Municipal de Aguiar da Beira e desenvolvi um projeto artístico para a inovuração do Lar de Idosos de Fornos de Maceira Dão, concretizado no ano seguinte.</p>
+                    <p>Em 2004, tive a honra de ver o meu trabalho integrado num momento solene, numa missa celebrada no Salão Principal do Lar de Idosos, com a presença do Bispo de Viseu, D. Ilídio Pinto Leandro, e de várias entidades municipais.</p>
+                    <p>Continuei a realizar intervenções artísticas em igrejas e capelas, como na Igreja da Roda, em Mangualde (2007), e na Capela Rainha Santa Isabel, na Quinta da Estrada, em Vale de Távora, Aguiar da Beira (2008). Em 2013, criei um mural com uma cena bíblica para a Igreja de Fornos de Maceira Dão e, em 2014, desenvolvi uma obra para a Igreja de Gradiz, em Aguiar da Beira.</p>
+                    <p>O meu percurso é profundamente marcado pela união entre arte e espiritualidade. Em cada obra que realizo, procuro transmitir emoção, fé e beleza, deixando um contributo artístico que reflita não só a minha paixão pela pintura, mas também o meu compromisso com a cultura e a comunidade.</p>
+                </div>
             </div>
 
             <button class="read-more-btn hover-target" id="readMoreBtn">
                 <span id="btnText">Ler biografia completa</span>
                 <span class="arrow">↓</span>
             </button>
-        </div>
-        <div class="bio-images-col">
-            <div class="bio-image hover-target"></div>
-            <div class="bio-image-extra" id="bioImageExtra"></div>
         </div>
     </section>
 
@@ -559,13 +588,11 @@
                 }
                 
                 const mainGrid = document.querySelector('#mainShopGrid');
-                const hiddenGrid = document.querySelector('#shopHiddenGrid');
                 const newsSection = document.getElementById('news-section');
                 const newsContent = document.getElementById('news-content');
                 const floatingEventBtn = document.getElementById('floating-event-btn');
                 
                 mainGrid.innerHTML = '';
-                hiddenGrid.innerHTML = '';
                 let indexObra = 0;
                 
                 data.items.forEach((item) => {
@@ -585,11 +612,13 @@
                     const title = f.titulo || 'Obra Sem Título';
                     const isDisponivel = f.estado === true || String(f.estado).toLowerCase() === 'true' || String(f.estado).toLowerCase() === 'disponível';
                     
+                    const isArtesanato = f.categoria === false || String(f.categoria).toLowerCase() === 'false';
+                    const typeData = isArtesanato ? 'artesanato' : 'quadro';
+
                     const statusStr = isDisponivel ? 'Disponível' : 'Indisponível';
                     const statusClass = isDisponivel ? 'status-disp' : 'status-indisp';
                     const statusData = isDisponivel ? 'disponivel' : 'indisponivel';
                     
-                    // Lógica para referência numérica simples
                     const refNum = indexObra + 1;
                     const refCode = String(refNum);
                     
@@ -599,7 +628,7 @@
                     }
                     
                     const html = `
-                    <div class="shop-item" data-status="${statusData}" data-code="${refCode}" data-title="${title}">
+                    <div class="shop-item" data-status="${statusData}" data-type="${typeData}" data-code="${refCode}" data-title="${title}">
                         <div class="shop-image-wrapper">
                             <img src="${imgUrl}" alt="${title}" class="preview-trigger hover-target">
                             <div class="preview-icon">👁️</div>
@@ -615,26 +644,18 @@
                     </div>
                     `;
                     
-                    if (indexObra < 8) {
-                        mainGrid.innerHTML += html;
-                    } else {
-                        hiddenGrid.innerHTML += html;
-                    }
+                    mainGrid.innerHTML += html;
                     indexObra++;
                 });
 
                 const expandBtnContainer = document.getElementById('expandBtnContainer');
-                if (indexObra <= 8) {
-                    expandBtnContainer.style.display = 'none';
-                } else {
-                    expandBtnContainer.style.display = 'block';
-                }
+                expandBtnContainer.style.display = indexObra > 8 ? 'block' : 'none';
 
                 refreshCursors();
                 bindGalleryEvents();
+                applyFilters(); 
                 
                 gsap.to('.shop-item', { scrollTrigger: { trigger: '.shop-section', start: "top 80%" }, y: 0, opacity: 1, duration: 0.8, stagger: 0.1, ease: "power3.out" });
-                
                 setTimeout(() => { ScrollTrigger.refresh(); updateFloatingButton(); }, 500);
 
             } catch (error) {
@@ -643,6 +664,70 @@
         }
 
         loadArtworks();
+
+        // --- FILTROS DUPLOS (TIPO & ESTADO) ---
+        const typeBtns = document.querySelectorAll('.filter-type-btn');
+        const statusBtns = document.querySelectorAll('.filter-status-btn');
+        const expandBtnContainer = document.getElementById('expandBtnContainer');
+        const galleryExpandBtn = document.getElementById('galleryExpandBtn');
+
+        let currentType = 'all';
+        let currentStatus = 'all';
+
+        function applyFilters() {
+            const allItems = document.querySelectorAll('.shop-item');
+            const isExpanded = galleryExpandBtn.classList.contains('active');
+            
+            if (currentType === 'all' && currentStatus === 'all') {
+                expandBtnContainer.style.display = allItems.length > 8 ? 'block' : 'none';
+                
+                allItems.forEach((item, index) => {
+                    item.classList.remove('hidden-by-filter');
+                    if (!isExpanded && index >= 8) {
+                        item.classList.add('hidden-by-expand');
+                    } else {
+                        item.classList.remove('hidden-by-expand');
+                    }
+                });
+            } else {
+                expandBtnContainer.style.display = 'none';
+                
+                allItems.forEach(item => {
+                    item.classList.remove('hidden-by-expand'); 
+                    
+                    const itemType = item.getAttribute('data-type');
+                    const itemStatus = item.getAttribute('data-status');
+                    
+                    const matchType = (currentType === 'all' || itemType === currentType);
+                    const matchStatus = (currentStatus === 'all' || itemStatus === currentStatus);
+                    
+                    if (matchType && matchStatus) {
+                        item.classList.remove('hidden-by-filter');
+                    } else {
+                        item.classList.add('hidden-by-filter');
+                    }
+                });
+            }
+            setTimeout(() => { ScrollTrigger.refresh(); }, 200);
+        }
+
+        typeBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                typeBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentType = btn.getAttribute('data-type');
+                applyFilters();
+            });
+        });
+
+        statusBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                statusBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentStatus = btn.getAttribute('data-status');
+                applyFilters();
+            });
+        });
 
         // --- SCROLL INTELIGENTE DO SELO FLUTUANTE ---
         function updateFloatingButton() {
@@ -721,7 +806,6 @@
         const modalTextContainer = document.getElementById('modalTextContainer');
         const modalImgContainer = document.getElementById('modalImgContainer');
         
-        // Elementos do Slider
         const modalSliderWrapper = document.getElementById('modalSliderWrapper');
         const modalPrevBtn = document.getElementById('modalPrevBtn');
         const modalNextBtn = document.getElementById('modalNextBtn');
@@ -742,7 +826,7 @@
             if (currentModalImageIndex < modalImageArray.length - 1) {
                 currentModalImageIndex++;
             } else {
-                currentModalImageIndex = 0; // Volta ao início
+                currentModalImageIndex = 0;
             }
             updateSliderPosition();
         }
@@ -751,7 +835,7 @@
             if (currentModalImageIndex > 0) {
                 currentModalImageIndex--;
             } else {
-                currentModalImageIndex = modalImageArray.length - 1; // Vai para o fim
+                currentModalImageIndex = modalImageArray.length - 1;
             }
             updateSliderPosition();
         }
@@ -776,7 +860,6 @@
                 img.src = src;
                 modalSliderWrapper.appendChild(img);
                 
-                // Cria os pontinhos apenas se houver mais de uma imagem
                 if (modalImageArray.length > 1) {
                     const dot = document.createElement('div');
                     dot.className = `dot hover-target ${index === 0 ? 'active' : ''}`;
@@ -785,7 +868,6 @@
                 }
             });
             
-            // Mostra ou esconde botões dependendo da quantidade de imagens
             if (modalImageArray.length > 1) {
                 modalPrevBtn.style.display = 'flex';
                 modalNextBtn.style.display = 'flex';
@@ -830,68 +912,33 @@
         closeTermsModal.addEventListener('click', () => { termsModal.classList.remove('active'); });
         termsModal.addEventListener('click', (e) => { if (e.target === termsModal) termsModal.classList.remove('active'); });
 
-        const filterBtns = document.querySelectorAll('.filter-btn');
-        const galleryExpandBtn = document.getElementById('galleryExpandBtn');
         const galleryBtnText = document.getElementById('galleryBtnText');
-
-        filterBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                filterBtns.forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                
-                const filterValue = btn.getAttribute('data-filter');
-                const currentShopItems = document.querySelectorAll('.shop-item'); 
-                const expandBtnContainer = document.getElementById('expandBtnContainer');
-                const shopHiddenGrid = document.getElementById('shopHiddenGrid');
-                
-                if(filterValue === 'all') {
-                    currentShopItems.forEach(item => item.classList.remove('hidden-by-filter'));
-                    if(currentShopItems.length > 8) { expandBtnContainer.style.display = 'block'; }
-                    if(!galleryExpandBtn.classList.contains('active')) { shopHiddenGrid.style.maxHeight = "0px"; }
-                } else {
-                    expandBtnContainer.style.display = 'none';
-                    shopHiddenGrid.style.maxHeight = shopHiddenGrid.scrollHeight + 1000 + "px"; 
-                    currentShopItems.forEach(item => {
-                        if(item.getAttribute('data-status') === filterValue) { item.classList.remove('hidden-by-filter'); } 
-                        else { item.classList.add('hidden-by-filter'); }
-                    });
-                }
-                setTimeout(() => { ScrollTrigger.refresh(); }, 500);
-            });
-        });
 
         galleryExpandBtn.addEventListener('click', () => {
             galleryExpandBtn.classList.toggle('active');
-            const shopHiddenGrid = document.getElementById('shopHiddenGrid');
+            applyFilters();
+            
             if (galleryExpandBtn.classList.contains('active')) {
-                shopHiddenGrid.style.maxHeight = shopHiddenGrid.scrollHeight + "px";
                 galleryBtnText.textContent = "Mostrar menos obras";
             } else {
-                shopHiddenGrid.style.maxHeight = "0px";
                 galleryBtnText.textContent = "Ver todas as obras";
             }
-            setTimeout(() => { ScrollTrigger.refresh(); }, 1000);
         });
 
         const readMoreBtn = document.getElementById('readMoreBtn');
         const bioMore = document.getElementById('bioMore');
         const btnText = document.getElementById('btnText');
-        const bioImageExtra = document.getElementById('bioImageExtra');
 
         readMoreBtn.addEventListener('click', () => {
             readMoreBtn.classList.toggle('active');
             if (readMoreBtn.classList.contains('active')) {
-                bioMore.style.maxHeight = bioMore.scrollHeight + "px";
-                bioImageExtra.style.maxHeight = "40vh";
-                bioImageExtra.style.opacity = "1";
+                bioMore.classList.add('visible');
                 btnText.textContent = "Mostrar menos";
             } else {
-                bioMore.style.maxHeight = "0px";
-                bioImageExtra.style.maxHeight = "0px";
-                bioImageExtra.style.opacity = "0";
+                bioMore.classList.remove('visible');
                 btnText.textContent = "Ler biografia completa";
             }
-            setTimeout(() => { ScrollTrigger.refresh(); }, 800);
+            setTimeout(() => { ScrollTrigger.refresh(); }, 100);
         });
 
         let selectedArtworks = [];
@@ -1101,14 +1148,14 @@
         tl.to('.title-line', { y: 0, duration: 1.2, stagger: 0.2, ease: "power4.out", delay: 0.5 })
           .to('.hero-subtitle', { opacity: 1, duration: 1, ease: "power2.out" }, "-=0.5");
 
-        gsap.from('.bio-text', { scrollTrigger: { trigger: '.bio-section', start: "top 70%" }, y: 50, opacity: 0, duration: 1, ease: "power3.out" });
+        gsap.from('.bio-container', { scrollTrigger: { trigger: '.bio-section', start: "top 70%" }, y: 50, opacity: 0, duration: 1, ease: "power3.out" });
 
         const exhibitionContainer = document.querySelector('.exhibition-container');
         gsap.to(exhibitionContainer, {
             x: () => -(exhibitionContainer.scrollWidth - window.innerWidth),
             ease: "none",
             scrollTrigger: {
-                trigger: ".exhibition-wrapper", start: "top top", end: () => "+=" + exhibitionContainer.scrollWidth,
+                trigger: ".exhibition-wrapper", start: "top top", end: () => "+=" + (exhibitionContainer.scrollWidth - window.innerWidth),
                 pin: true, scrub: 1, invalidateOnRefresh: true,
             }
         });
