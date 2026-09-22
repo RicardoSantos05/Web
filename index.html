@@ -28,6 +28,7 @@
             --bg-alt: #E8DFD3;        /* Pó de argila / Bege escuro */
             --text-color: #2F241F;    /* Preto/Cacau muito escuro */
             --accent-color: #8a2a22;  /* Bordeaux requintado */
+            --accent-dark: #651c16;   /* Bordeaux mais escurecido e profundo */
             --accent-alt: #C09F52;    /* Ocre / Dourado mostarda */
             --success-color: #25D366; 
         }
@@ -100,9 +101,9 @@
         .hero-slide { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-size: cover; background-position: center; opacity: 0; transition: opacity 1.5s ease-in-out; }
         .hero-slide.active { opacity: 1; }
         .hero-slider::after { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(47, 36, 31, 0.4); z-index: 1; }
-        .hero-title { font-size: clamp(2.5rem, 8vw, 10rem); line-height: 1; margin-bottom: 1rem; overflow: hidden; z-index: 2; text-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .hero-title { font-size: clamp(2.5rem, 8vw, 10rem); line-height: 1; margin-bottom: 1rem; overflow: hidden; z-index: 2; text-shadow: 0 10px 40px rgba(0,0,0,0.85); }
         .hero-title span { display: block; transform: translateY(100%); }
-        .hero-subtitle { font-size: clamp(0.9rem, 3vw, 1.2rem); letter-spacing: 2px; text-transform: uppercase; opacity: 0; z-index: 2; text-shadow: 0 5px 15px rgba(0,0,0,0.5); }
+        .hero-subtitle { font-size: clamp(0.9rem, 3vw, 1.2rem); letter-spacing: 2px; text-transform: uppercase; opacity: 0; z-index: 2; text-shadow: 0 5px 15px rgba(0,0,0,0.85); }
 
         .exhibition-intro span, .section-header span, .bio-text-title span, .contact-slogan span { color: var(--accent-color); font-style: italic; }
 
@@ -110,7 +111,7 @@
         .news-section {
             display: none; 
             position: relative;
-            background: linear-gradient(135deg, var(--text-color), #402f27, var(--text-color));
+            background: linear-gradient(135deg, var(--accent-dark), #42110d, var(--accent-dark));
             background-size: 200% 200%;
             color: var(--bg-color);
             padding: 7rem 5vw; 
@@ -280,6 +281,7 @@
         .action-btn { background: transparent; color: var(--bg-color); border: 1px solid var(--bg-color); padding: 0.8rem 1rem; border-radius: 6px; font-family: 'Inter', sans-serif; font-size: 0.9rem; text-align: left; transition: all 0.3s ease; display: flex; justify-content: space-between; align-items: center; }
         .action-btn:hover { background: var(--bg-color); color: var(--text-color); }
         .action-btn.btn-buy:hover { background: var(--accent-color); border-color: var(--accent-color); color: #fff; }
+        .btn-buy.hidden { display: none; } /* Nova classe para ocultar o botão */
 
         /* --- MEDIA QUERIES (Responsividade) --- */
         @media (max-width: 1024px) {
@@ -299,11 +301,45 @@
             .exhibition-intro { width: 85vw; font-size: 2.5rem; }
             .expo-card { width: 80vw; height: 50vh; }
             
-            .gallery-filters-container { flex-direction: column; gap: 1rem; }
-            .filter-group { flex-wrap: wrap; justify-content: center; gap: 0.5rem; }
-            .filter-divider { display: none; }
+            /* --- FILTROS (EM DUAS LINHAS CENTRADAS) --- */
+            .gallery-filters-container { 
+                flex-direction: column; 
+                align-items: center;
+                gap: 1rem; 
+                overflow-x: hidden;
+                padding-bottom: 0;
+            }
+            .filter-group { 
+                display: flex;
+                flex-wrap: wrap; 
+                justify-content: center; 
+                gap: 0.6rem; 
+            }
+            .filter-divider { 
+                display: block; 
+                color: transparent;
+                background-color: var(--text-color); 
+                width: 40px; 
+                height: 2px; 
+                opacity: 0.2; 
+                border-radius: 2px;
+                margin: 0.2rem 0;
+            }
+            .filter-btn { white-space: normal; font-size: 0.85rem; padding: 0.4rem 1rem; }
             
-            .shop-grid { grid-template-columns: 1fr; gap: 1.5rem; }
+            /* --- GALERIA EM 2 COLUNAS (FIM DA CLAUSTROFOBIA) --- */
+            .shop-grid { grid-template-columns: repeat(2, 1fr); gap: 0.8rem; }
+            
+            /* Ajustes para os cartões caberem na perfeição nas 2 colunas */
+            .shop-item { padding: 0.5rem; gap: 0.5rem; border-radius: 8px; }
+            .shop-details { flex-direction: column; gap: 0.4rem; align-items: flex-start; }
+            .shop-details h3 { font-size: 0.85rem; line-height: 1.2; margin-bottom: 0.2rem; }
+            .artwork-code { font-size: 0.6rem; padding: 0.1rem 0.3rem; margin-bottom: 0.1rem; }
+            .status-badge { font-size: 0.65rem; padding: 0.2rem 0.5rem; align-self: flex-start; }
+            
+            /* Ajuste da caixa de seleção do WhatsApp */
+            .select-checkbox { top: 8px; right: 8px; width: 22px; height: 22px; }
+            
             .action-panel { bottom: 0; right: 0; width: 100%; border-radius: 20px 20px 0 0; }
             
             .modal-content { flex-direction: column; height: 90vh; width: 95vw; }
@@ -380,29 +416,29 @@
                 <div class="expo-overlay">Pinturas ao Ar Livre</div>
             </div>
 
-            <div class="expo-card hover-target" data-title="Capela de Fagilde" data-desc="Obra mural inspirada numa cena bíblica na Capela de Fagilde, no concelho de Mangualde, unindo a arte à fé e à comunidade local." data-imgs="image_2024408208_12.jpg,image_2024408208_13.jpg">
+            <div class="expo-card hover-target" data-title="2002 - Capela de Fagilde" data-desc="Obra mural inspirada numa cena bíblica na Capela de Fagilde, no concelho de Mangualde, unindo a arte à fé e à comunidade local." data-imgs="image_2024408208_12.jpg,image_2024408208_13.jpg">
                 <img src="image_2024408208_12.jpg" alt="Capela de Fagilde">
-                <div class="expo-overlay">Capela de Fagilde</div>
+                <div class="expo-overlay">2002 - Capela de Fagilde</div>
             </div>
 
-            <div class="expo-card hover-target" data-title="Exposição na Biblioteca de Aguiar da Beira" data-desc="Esta galeria retrata a exposição realizada na Biblioteca Municipal de Aguiar da Beira, um dia de grande honra que contou com a presença e o prestígio do então Primeiro-Ministro, Dr. José Manuel Durão Barroso." data-imgs="imagem_16.jpeg,imagem_11.jpeg,imagem_12.jpeg,imagem_13.jpeg,imagem_14.jpeg,imagem_15.jpeg,imagem_17.jpeg">
+            <div class="expo-card hover-target" data-title="2003 - Exposição na Biblioteca de Aguiar da Beira" data-desc="Esta galeria retrata a exposição realizada na Biblioteca Municipal de Aguiar da Beira, um dia de grande honra que contou com a presença e o prestígio do então Primeiro-Ministro, Dr. José Manuel Durão Barroso." data-imgs="imagem_16.jpeg,imagem_11.jpeg,imagem_12.jpeg,imagem_13.jpeg,imagem_14.jpeg,imagem_15.jpeg,imagem_17.jpeg">
                 <img src="imagem_16.jpeg" alt="Exposição Biblioteca Aguiar da Beira">
-                <div class="expo-overlay">Exposição na Biblioteca de Aguiar da Beira</div>
+                <div class="expo-overlay">2003 - Exposição na Biblioteca de Aguiar da Beira</div>
             </div>
 
-            <div class="expo-card hover-target" data-title="Capela da Roda – Mangualde" data-desc="Registo de três obras de temática sacra concebidas em exclusivo para a Capela da Roda." data-imgs="image_2024408208_14.jpg,image_2024408208_15.jpg,image_2024408208_16.jpg">
+            <div class="expo-card hover-target" data-title="2007 - Capela da Roda – Mangualde" data-desc="Registo de três obras de temática sacra concebidas em exclusivo para a Capela da Roda." data-imgs="image_2024408208_14.jpg,image_2024408208_15.jpg,image_2024408208_16.jpg">
                 <img src="image_2024408208_15.jpg" alt="Capela da Roda">
-                <div class="expo-overlay">Capela da Roda – Mangualde</div>
+                <div class="expo-overlay">2007 - Capela da Roda – Mangualde</div>
             </div>
 
-            <div class="expo-card hover-target" data-title="Mural Bíblico" data-desc="Execução e processo criativo da pintura mural com cena bíblica na Igreja de Fornos de Maceira Dão." data-imgs="image_2024408208_17.jpg,image_2024408208_18.jpg">
+            <div class="expo-card hover-target" data-title="2013 - Mural Bíblico" data-desc="Execução e processo criativo da pintura mural com cena bíblica na Igreja de Fornos de Maceira Dão." data-imgs="image_2024408208_17.jpg,image_2024408208_18.jpg">
                 <img src="image_2024408208_17.jpg" alt="Mural Bíblico">
-                <div class="expo-overlay">Mural Bíblico</div>
+                <div class="expo-overlay">2013 - Mural Bíblico</div>
             </div>
 
-            <div class="expo-card hover-target" data-title="Igreja de Gradiz - Aguiar da Beira" data-desc="Criação de uma pintura personalizada de Jesus que culminou na enorme concretização de a pintar diretamente no teto da capela, lá do alto dos andaimes." data-imgs="image_2024408208_20.jpg,image_2024408208_19.jpg">
+            <div class="expo-card hover-target" data-title="2014 - Igreja de Gradiz - Aguiar da Beira" data-desc="Criação de uma pintura personalizada de Jesus que culminou na enorme concretização de a pintar diretamente no teto da capela, lá do alto dos andaimes." data-imgs="image_2024408208_20.jpg,image_2024408208_19.jpg">
                 <img src="image_2024408208_20.jpg" alt="Igreja de Gradiz">
-                <div class="expo-overlay">Igreja de Gradiz - Aguiar da Beira</div>
+                <div class="expo-overlay">2014 - Igreja de Gradiz - Aguiar da Beira</div>
             </div>
 
             <div class="expo-card hover-target" data-title="Pintura de Murais Realistas" data-desc="Registo fotográfico de murais realistas pintados à mão diretamente em paredes de casas de clientes, simulando com grande detalhe painéis de azulejo tradicionais." data-imgs="imagem_6.jpeg,image_2024408208_9.jpg,image_2024408208_10.jpg">
@@ -410,9 +446,9 @@
                 <div class="expo-overlay">Pintura de Murais Realistas</div>
             </div>
 
-            <div class="expo-card hover-target" data-title="Presépio em Tamanho Real" data-desc="Presépio em tamanho real composto por vários materiais: Papel kraft, madeira para a manjedoura do menino Jesus, estrados, palhinhas do mesmo papel, cajado, bola de esferovite dividida em duas partes paras fazer de rosto da Nª Senhora e S.José, 2 estruturas em madeira, para sustentar as vestimentas da Nª. Senhora e S.José , tinta de spray prata para pulverizar todo o presépio e por fim o Menino Jesus em porcelana . Esteve exposto na Diocese de Viseu (2018) até 6 de Janeiro." data-imgs="presépio.jpeg">
+            <div class="expo-card hover-target" data-title="2018 - Presépio em Tamanho Real" data-desc="Presépio em tamanho real totalmente artesanal. Produzido com materiais reutilizados e adaptados, como papel kraft e estruturas de madeira para construir as figuras principais à escala humana. A obra esteve em exposição na Diocese de Viseu durante a quadra natalícia." data-imgs="presépio.jpeg">
                 <img src="presépio.jpeg" alt="Presépio em Tamanho Real">
-                <div class="expo-overlay">Presépio em Tamanho Real</div>
+                <div class="expo-overlay">2018 - Presépio em Tamanho Real</div>
             </div>
         </div>
     </section>
@@ -513,7 +549,7 @@
         <button class="action-btn hover-target" data-action="semelhante">
             Pedir Semelhante <span>+</span>
         </button>
-        <button class="action-btn btn-buy hover-target" data-action="comprar">
+        <button class="action-btn btn-buy hover-target" id="btnBuySelection" data-action="comprar">
             Comprar Seleção <span>→</span>
         </button>
     </div>
@@ -622,7 +658,7 @@
                     const html = `
                     <div class="shop-item" data-status="${statusData}" data-type="${typeData}" data-code="${refCode}" data-title="${title}">
                         <div class="shop-image-wrapper">
-                            <img src="${imgUrl}" alt="${title}" class="preview-trigger hover-target">
+                            <img src="${imgUrl}" alt="${title}" loading="lazy" class="preview-trigger hover-target">
                             <div class="preview-icon">👁️</div>
                             <div class="select-checkbox hover-target"></div>
                         </div>
@@ -936,6 +972,7 @@
         let selectedArtworks = [];
         const actionPanel = document.getElementById('actionPanel');
         const selectedCountEl = document.getElementById('selectedCount');
+        const btnBuySelection = document.getElementById('btnBuySelection');
 
         function bindGalleryEvents() {
             document.querySelectorAll('.preview-trigger').forEach(trigger => {
@@ -963,6 +1000,14 @@
                     selectedCountEl.textContent = selectedArtworks.length;
                     if (selectedArtworks.length > 0) { actionPanel.classList.add('visible'); } 
                     else { actionPanel.classList.remove('visible'); }
+
+                    // Verifica se TODAS as obras selecionadas estão disponíveis (nenhuma indisponível)
+                    const allAvailable = selectedArtworks.length > 0 && selectedArtworks.every(art => art.status === '[Disponível]');
+                    if(allAvailable) {
+                        btnBuySelection.classList.remove('hidden');
+                    } else {
+                        btnBuySelection.classList.add('hidden');
+                    }
                 });
             });
         }
