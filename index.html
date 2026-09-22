@@ -34,10 +34,24 @@
         h1, h2, h3, .serif { font-family: 'Playfair Display', serif; font-weight: 400; }
         a { text-decoration: none; color: inherit; }
 
-        /* --- Cursor Magnético --- */
-        .cursor { width: 8px; height: 8px; background-color: var(--accent-color); border-radius: 50%; position: fixed; top: 0; left: 0; pointer-events: none; z-index: 9999; transform: translate(-50%, -50%); transition: background-color 0.3s ease; }
+        /* --- Cursor Magnético com Contraste Aprimorado --- */
+        .cursor { 
+            width: 8px; 
+            height: 8px; 
+            background-color: #ffffff; 
+            border: 1px solid var(--text-color); 
+            border-radius: 50%; 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            pointer-events: none; 
+            z-index: 9999; 
+            transform: translate(-50%, -50%); 
+            box-shadow: 0 0 4px rgba(47, 36, 31, 0.5);
+            transition: background-color 0.3s ease, border-color 0.3s ease; 
+        }
         .cursor-follower { width: 45px; height: 45px; border: 1px solid var(--accent-color); border-radius: 50%; position: fixed; top: 0; left: 0; pointer-events: none; z-index: 9998; transform: translate(-50%, -50%); transition: width 0.3s cubic-bezier(0.2, 0, 0, 1), height 0.3s cubic-bezier(0.2, 0, 0, 1), border-color 0.3s ease, background-color 0.3s ease; }
-        .cursor.hovering { background-color: var(--text-color); }
+        .cursor.hovering { background-color: var(--text-color); border-color: #ffffff; }
         .cursor-follower.hovering { width: 20px; height: 20px; border-color: var(--text-color); background-color: rgba(47, 36, 31, 0.05); }
 
         @media (hover: none) and (pointer: coarse) { * { cursor: auto !important; } .cursor, .cursor-follower { display: none !important; } }
@@ -334,12 +348,10 @@
         </div>
     </nav>
     
-    <!-- SELO DE EVENTO INTELIGENTE -->
     <a href="#news-section" id="floating-event-btn" class="floating-event-btn hover-target">
         <span class="event-icon">★</span>
     </a>
 
-    <!-- Hero com Slider -->
     <section class="hero" id="home">
         <div class="hero-slider">
             <div class="hero-slide active" style="background-image: url('WhatsApp Image 2026-08-18 at 20.00.54.jpeg')"></div>
@@ -352,18 +364,15 @@
         <h1 class="hero-title">
             <span class="title-line">SILVA</span>
         </h1>
-        <div class="hero-subtitle">Aguarela • Óleo • Acrílico • Artesanato</div>
+        <div class="hero-subtitle">Aguarela • Óleo • Artesanato</div>
     </section>
 
-    <!-- SECÇÃO: Notícias / Eventos -->
     <section id="news-section" class="news-section">
         <h2 class="news-title">Avisos & Novidades</h2>
         <div class="news-content" id="news-content">
-            <!-- A mensagem injetada pelo Contentful aparece aqui -->
-        </div>
+            </div>
     </section>
 
-    <!-- Exposições -->
     <section id="exhibition" class="exhibition-wrapper">
         <div class="exhibition-container">
             <div class="exhibition-intro">
@@ -405,21 +414,13 @@
                 <img src="imagem_6.jpeg" alt="Murais efeito azulejo">
                 <div class="expo-overlay">Pintura de Murais Realistas</div>
             </div>
-
-            <!-- NOVA ETAPA: Presépio em Tamanho Real -->
-            <div class="expo-card hover-target" data-title="Presépio em Tamanho Real" data-desc="Presépio em tamanho real composto por vários materiais: Papel kraft, madeira para a manjedoura do menino Jesus, estrados, palhinhas do mesmo papel, cajado, bola de esferovite dividida para o rosto de Nossa Senhora e S. José, estruturas em madeira para sustentar as vestimentas, tinta de spray prata e Menino Jesus em porcelana. Esteve exposto na Diocese de Viseu (2018) até 6 de janeiro." data-imgs="presépio.jpeg">
-                <img src="presépio.jpg" alt="Presépio em Tamanho Real">
-                <div class="expo-overlay">Presépio em Tamanho Real (Diocese de Viseu)</div>
-            </div>
         </div>
     </section>
 
-    <!-- Galeria de Obras -->
     <section id="shop" class="shop-section">
         <h2 class="section-header serif">Galeria<br><span>de Obras</span></h2>
         
         <div class="gallery-filters-container">
-            <!-- Grupo de Categoria (Tipo) -->
             <div class="filter-group">
                 <button class="filter-btn filter-type-btn hover-target active" data-type="all">Todas as Categorias</button>
                 <button class="filter-btn filter-type-btn hover-target" data-type="quadro">Quadros</button>
@@ -428,7 +429,6 @@
             
             <span class="filter-divider">|</span>
             
-            <!-- Grupo de Disponibilidade -->
             <div class="filter-group">
                 <button class="filter-btn filter-status-btn hover-target active" data-status="all">Qualquer Estado</button>
                 <button class="filter-btn filter-status-btn hover-target" data-status="disponivel">Disponíveis</button>
@@ -446,7 +446,6 @@
         </div>
     </section>
 
-    <!-- Biografia (Sobre) -->
     <section id="bio" class="bio-section">
         <div class="bio-container">
             <h2 class="bio-text-title serif">
@@ -463,7 +462,6 @@
                 <p>A minha formação artística teve início na Escola Industrial Oliveira Salazar, em Luanda, onde frequentei o curso de Pintura Decorativa. Foi aí que consolidei as bases técnicas e desenvolvi uma visão estética própria, que mais tarde se refletiria em todo o meu percurso artístico.</p>
                 <p>Ao longo da minha carreira, participei em diversas exposições. A minha primeira exposição individual realizou-se em 1989, na Galeria da Fundação Lar do Imigrante, em Santo Tirso. Foi um momento marcante, onde pude apresentar ao público obras que traduzem a minha sensibilidade e criatividade.</p>
                 
-                <!-- Parágrafos extra para o botão Ler Mais -->
                 <div class="bio-more-paragraphs" id="bioMore">
                     <p>Posteriormente, participei em exposições coletivas em espaços como o Hotel D. Henrique, no Porto (1991), a Galeria do Fórum da Câmara Municipal da Maia (1992) e a Casa Beira Alta, em Santa Catarina, Porto (1993), entre outros.</p>
                     <p>Também participei em vários concursos de pintura ao ar livre, em localidades como Vouzela, Santa Comba Dão, Mangualde, Oliveira de Frades e Penalva do Castelo. Nessas ocasiões, tive a honra de receber menções honrosas e prémios distintos, reconhecimento que reforçou a minha dedicação e motivação artística.</p>
@@ -481,7 +479,6 @@
         </div>
     </section>
 
-    <!-- LAYOUT CONTACTO -->
     <section id="contact" class="contact-section">
         <div class="contact-container">
             <div class="contact-left">
@@ -505,7 +502,6 @@
         <footer>© 2026 Maria da Graça Silva. Todos os direitos reservados.</footer>
     </section>
 
-    <!-- Painel de Ações Fixas -->
     <div class="action-panel" id="actionPanel">
         <div class="action-panel-header">
             <div><span id="selectedCount">0</span> Obras selecionadas</div>
@@ -522,7 +518,6 @@
         </button>
     </div>
 
-    <!-- Modal Universal com Carousel / Slider -->
     <div class="modal-overlay" id="modalUniversal">
         <div class="modal-content" id="modalBox">
             <button class="modal-close hover-target" id="closeUniversalModal">×</button>
@@ -530,12 +525,10 @@
             <div class="modal-image" id="modalImgContainer">
                 <button class="slider-btn prev-btn hover-target" id="modalPrevBtn">&#10094;</button>
                 <div class="slider-wrapper" id="modalSliderWrapper">
-                    <!-- As imagens entram aqui -->
-                </div>
+                    </div>
                 <button class="slider-btn next-btn hover-target" id="modalNextBtn">&#10095;</button>
                 <div class="slider-dots" id="modalSliderDots">
-                    <!-- Os pontos entram aqui -->
-                </div>
+                    </div>
             </div>
             
             <div class="modal-text" id="modalTextContainer">
@@ -545,7 +538,6 @@
         </div>
     </div>
 
-    <!-- MODAL: Termos e Condições -->
     <div class="modal-overlay" id="termsModal">
         <div class="modal-content text-only-mode" id="termsModalBox">
             <button class="modal-close hover-target" id="closeTermsModal">×</button>
