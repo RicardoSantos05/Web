@@ -5,6 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Maria da Graça Silva | Portfólio de Arte</title>
     
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9JSFG2QC9X"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-9JSFG2QC9X');
+    </script>
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
@@ -34,25 +43,11 @@
         h1, h2, h3, .serif { font-family: 'Playfair Display', serif; font-weight: 400; }
         a { text-decoration: none; color: inherit; }
 
-        /* --- Cursor Magnético com Contraste Aprimorado --- */
-        .cursor { 
-            width: 8px; 
-            height: 8px; 
-            background-color: #ffffff; 
-            border: 1px solid var(--text-color); 
-            border-radius: 50%; 
-            position: fixed; 
-            top: 0; 
-            left: 0; 
-            pointer-events: none; 
-            z-index: 9999; 
-            transform: translate(-50%, -50%); 
-            box-shadow: 0 0 4px rgba(47, 36, 31, 0.5);
-            transition: background-color 0.3s ease, border-color 0.3s ease; 
-        }
-        .cursor-follower { width: 45px; height: 45px; border: 1px solid var(--accent-color); border-radius: 50%; position: fixed; top: 0; left: 0; pointer-events: none; z-index: 9998; transform: translate(-50%, -50%); transition: width 0.3s cubic-bezier(0.2, 0, 0, 1), height 0.3s cubic-bezier(0.2, 0, 0, 1), border-color 0.3s ease, background-color 0.3s ease; }
-        .cursor.hovering { background-color: var(--text-color); border-color: #ffffff; }
-        .cursor-follower.hovering { width: 20px; height: 20px; border-color: var(--text-color); background-color: rgba(47, 36, 31, 0.05); }
+        /* --- Cursor Magnético com Alto Contraste --- */
+        .cursor { width: 10px; height: 10px; background-color: #FFFFFF; border: 1.5px solid var(--text-color); border-radius: 50%; position: fixed; top: 0; left: 0; pointer-events: none; z-index: 9999; transform: translate(-50%, -50%); transition: background-color 0.3s ease, border-color 0.3s ease; box-shadow: 0 0 4px rgba(0,0,0,0.3); }
+        .cursor-follower { width: 45px; height: 45px; border: 1.5px solid var(--accent-color); border-radius: 50%; position: fixed; top: 0; left: 0; pointer-events: none; z-index: 9998; transform: translate(-50%, -50%); transition: width 0.3s cubic-bezier(0.2, 0, 0, 1), height 0.3s cubic-bezier(0.2, 0, 0, 1), border-color 0.3s ease, background-color 0.3s ease; box-shadow: 0 0 6px rgba(0,0,0,0.15); }
+        .cursor.hovering { background-color: var(--accent-color); border-color: #FFFFFF; }
+        .cursor-follower.hovering { width: 20px; height: 20px; border-color: var(--text-color); background-color: rgba(47, 36, 31, 0.1); }
 
         @media (hover: none) and (pointer: coarse) { * { cursor: auto !important; } .cursor, .cursor-follower { display: none !important; } }
 
@@ -364,7 +359,7 @@
         <h1 class="hero-title">
             <span class="title-line">SILVA</span>
         </h1>
-        <div class="hero-subtitle">Aguarela • Óleo • Artesanato</div>
+        <div class="hero-subtitle">Aguarela • Óleo • Acrílico • Artesanato</div>
     </section>
 
     <section id="news-section" class="news-section">
@@ -413,6 +408,11 @@
             <div class="expo-card hover-target" data-title="Pintura de Murais Realistas" data-desc="Registo fotográfico de murais realistas pintados à mão diretamente em paredes de casas de clientes, simulando com grande detalhe painéis de azulejo tradicionais." data-imgs="imagem_6.jpeg,image_2024408208_9.jpg,image_2024408208_10.jpg">
                 <img src="imagem_6.jpeg" alt="Murais efeito azulejo">
                 <div class="expo-overlay">Pintura de Murais Realistas</div>
+            </div>
+
+            <div class="expo-card hover-target" data-title="Presépio em Tamanho Real" data-desc="Presépio em tamanho real composto por vários materiais: Papel kraft, madeira para a manjedoura do menino Jesus, estrados, palhinhas do mesmo papel, cajado, bola de esferovite dividida em duas partes paras fazer de rosto da Nª Senhora e S.José, 2 estruturas em madeira, para sustentar as vestimentas da Nª. Senhora e S.José , tinta de spray prata para pulverizar todo o presépio e por fim o Menino Jesus em porcelana . Esteve exposto na Diocese de Viseu (2018) até 6 de Janeiro." data-imgs="presépio.jpeg">
+                <img src="presépio.jpeg" alt="Presépio em Tamanho Real">
+                <div class="expo-overlay">Presépio em Tamanho Real</div>
             </div>
         </div>
     </section>
@@ -547,7 +547,7 @@
             <h4>Envios e Entregas</h4>
             <p><strong>Custos de Envio:</strong> Devido à grande variação de dimensões, peso e fragilidade das obras, os custos de embalamento e envio são calculados individualmente e comunicados ao cliente antes da finalização da compra.</p>
             <p><strong>Prazos de Expedição:</strong> As obras disponíveis em galeria são cuidadosamente embaladas e expedidas num prazo de 3 a 5 dias úteis após a confirmação do pagamento.</p>
-            <p><strong>Levantamento em Mãos:</strong> Para clientes da região, é possível o levantamento presencial da obra, mediante marcação prévia em Albergaria-A-Velha.</p>
+            <p><strong>Levantamento em Mãos:</strong> Para clientes da região,, é possível o levantamento presencial da obra, mediante marcação prévia em Albergaria-A-Velha.</p>
 
             <h4>Política de Trocas e Devoluções</h4>
             <p><strong>Vendas Finais:</strong> Dada a natureza única, artesanal e delicada de cada peça, não se efetuam trocas nem devoluções de qualquer obra, quadro ou artigo de artesanato. Todas as vendas são finais.</p>
