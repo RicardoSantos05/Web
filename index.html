@@ -80,7 +80,7 @@
         /* =========================================================
            NAVEGAÇÃO
         ========================================================= */
-        nav { position: fixed; top: 0; width: 100%; padding: 0.9rem 4rem; display: flex; justify-content: space-between; align-items: center; z-index: 100; background-color: rgba(244, 239, 230, 0.95); backdrop-filter: blur(10px); box-shadow: 0 4px 30px rgba(47, 36, 31, 0.08); }
+        nav { position: fixed; top: 0; width: 100%; padding: 0.9rem 4rem; display: flex; justify-content: space-between; align-items: center; z-index: 100; background-color: rgba(244, 239, 230, 0.985); box-shadow: 0 4px 30px rgba(47, 36, 31, 0.08); }
         .logo-img { height: 50px; width: auto; transition: transform 0.3s ease; }
         .logo a:hover .logo-img { transform: scale(1.05); }
         .nav-links { display: flex; gap: 2.4rem; }
@@ -106,16 +106,16 @@
         /* =========================================================
            FAIXA "EM BREVE" + ABA DO EVENTO
         ========================================================= */
-        .event-ribbon { position: fixed; left: 18px; top: 0; z-index: 1550; visibility: hidden; transform-origin: 50% 55%; filter: drop-shadow(0 10px 14px rgba(47,36,31,0.3)); }
+        .event-ribbon { position: fixed; left: 18px; top: 0; z-index: 1550; visibility: hidden; transform-origin: 50% 55%; will-change: transform; filter: drop-shadow(0 10px 14px rgba(47,36,31,0.3)); }
         .palette-badge { position: relative; display: block; width: 88px; }
         .palette-svg { display: block; width: 88px; height: auto; overflow: visible; }
         .palette-label { position: absolute; left: 50%; bottom: -12px; transform: translateX(-50%) rotate(-4deg); background: var(--accent-color); color: #fff; font-size: 0.62rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; white-space: nowrap; padding: 0.32rem 0.75rem; border-radius: 20px; box-shadow: 0 6px 12px -4px rgba(101,28,22,0.6); }
         .event-ribbon:hover .palette-label { background: var(--accent-dark); }
 
-        .event-veil { position: fixed; inset: 0; z-index: 1500; background: rgba(255,255,255,0.62); backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px); opacity: 0; visibility: hidden; }
+        .event-veil { position: fixed; inset: 0; z-index: 1500; background: rgba(244,239,230,0.78); opacity: 0; visibility: hidden; }
         .event-panel { position: fixed; left: 0; top: 50%; z-index: 1600; width: min(780px, 92vw); max-height: min(78vh, 620px); display: flex; background: var(--bg-color);
             border-left: 6px solid var(--accent-color); border-radius: 0 18px 18px 0; box-shadow: 30px 30px 80px rgba(47,36,31,0.25); overflow: hidden; visibility: hidden; }
-        .event-panel-media { flex: 0 0 42%; background: #1a1411; }
+        .event-panel-media { position: relative; flex: 0 0 42%; min-height: 0; background: #1a1411; overflow: hidden; }
         .event-panel-media img { width: 100%; height: 100%; object-fit: cover; }
         .event-panel.no-media .event-panel-media { display: none; }
         .event-panel-body { flex: 1; padding: 3rem 3rem 2.6rem; overflow-y: auto; display: flex; flex-direction: column; gap: 1.1rem; }
@@ -124,6 +124,19 @@
         .event-meta { list-style: none; display: flex; flex-direction: column; gap: 0.45rem; font-size: 0.95rem; }
         .event-meta strong { display: inline-block; min-width: 70px; font-size: 0.7rem; letter-spacing: 2px; text-transform: uppercase; opacity: 0.55; font-weight: 600; }
         .event-text { line-height: 1.75; opacity: 0.85; }
+        .event-text p + p { margin-top: 0.9rem; }
+        /* Pré-visualização: texto cortado em 4 linhas com um esbatido */
+        .event-panel:not(.is-expanded) .event-text { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 4; line-clamp: 4; overflow: hidden; }
+        .event-gallery { display: none; gap: 0.6rem; flex-wrap: wrap; margin-top: 0.4rem; }
+        .event-panel.is-expanded .event-gallery.has-items { display: flex; }
+        .event-thumb { width: 64px; height: 64px; border-radius: 8px; overflow: hidden; opacity: 0.55; outline: 2px solid transparent; outline-offset: 2px; transition: opacity 0.3s, outline-color 0.3s; }
+        .event-thumb img { width: 100%; height: 100%; object-fit: cover; }
+        .event-thumb:hover { opacity: 0.85; }
+        .event-thumb.active { opacity: 1; outline-color: var(--accent-alt); }
+        .event-panel.is-expanded .event-panel-media { flex-basis: 55%; }
+        .event-panel.is-expanded .event-title { font-size: clamp(2.3rem, 3.6vw, 3.4rem); }
+        .event-panel.is-expanded .event-text { font-size: 1.05rem; }
+        .event-more .arrow { display: inline-block; }
         .event-cta { margin-top: auto; align-self: flex-start; display: inline-flex; align-items: center; gap: 0.6rem; background: var(--text-color); color: var(--bg-color); padding: 0.9rem 1.6rem; border-radius: 30px; font-weight: 500; transition: background 0.3s ease; }
         .event-cta:hover { background: var(--accent-color); }
         .event-close { position: absolute; top: 14px; right: 14px; width: 42px; height: 42px; border-radius: 50%; background: var(--bg-alt); font-size: 1.4rem; display: flex; align-items: center; justify-content: center; transition: background 0.3s, color 0.3s; z-index: 2; }
@@ -164,7 +177,7 @@
         /* =========================================================
            MODAL UNIVERSAL (EXPOSIÇÕES + OBRAS)
         ========================================================= */
-        .modal-overlay { position: fixed; inset: 0; background: rgba(47, 36, 31, 0.9); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); z-index: 2000; display: flex; align-items: center; justify-content: center; opacity: 0; visibility: hidden; }
+        .modal-overlay { position: fixed; inset: 0; background: rgba(33, 25, 21, 0.94); z-index: 2000; display: flex; align-items: center; justify-content: center; opacity: 0; visibility: hidden; }
         #termsModal { z-index: 2100; }
         .modal-content { background: var(--bg-color); width: 90vw; height: 85vh; max-width: 1400px; border-radius: 12px; display: flex; overflow: hidden; position: relative; box-shadow: 0 25px 60px rgba(0,0,0,0.5); }
 
@@ -189,7 +202,7 @@
         .zoom-hint { position: absolute; top: 1.35rem; right: 1.5rem; z-index: 5; font-size: 0.66rem; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.5); pointer-events: none; }
         @media (hover: none), (pointer: coarse) { .zoom-hint { display: none; } }
 
-        .slider-btn { position: absolute; top: calc(50% - 1.6rem); transform: translateY(-50%); z-index: 6; width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; color: #fff; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.25); backdrop-filter: blur(6px); transition: background 0.3s ease, border-color 0.3s ease; }
+        .slider-btn { position: absolute; top: calc(50% - 1.6rem); transform: translateY(-50%); z-index: 6; width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; color: #fff; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.25); transition: background 0.3s ease, border-color 0.3s ease; }
         .slider-btn:hover { background: var(--accent-color); border-color: var(--accent-color); }
         .prev-btn { left: 1.4rem; }
         .next-btn { right: 1.4rem; }
@@ -258,7 +271,7 @@
         .shop-intro { max-width: 520px; margin: 0 auto; opacity: 0.75; line-height: 1.7; font-weight: 300; }
 
         /* Separadores com indicador deslizante */
-        .gallery-tabs { position: relative; display: flex; align-items: center; gap: 0.3rem; width: max-content; max-width: 100%; margin: 0 auto 4.5rem; padding: 0.4rem; background: rgba(232, 223, 211, 0.75); border: 1px solid var(--line); border-radius: 40px; backdrop-filter: blur(6px); }
+        .gallery-tabs { position: relative; display: flex; align-items: center; gap: 0.3rem; width: max-content; max-width: 100%; margin: 0 auto 4.5rem; padding: 0.4rem; background: rgba(232, 223, 211, 0.92); border: 1px solid var(--line); border-radius: 40px; }
         .tab-indicator { position: absolute; top: 0.4rem; left: 0; width: 0; height: calc(100% - 0.8rem); background: var(--accent-color); border-radius: 30px; box-shadow: 0 8px 18px -8px rgba(138,42,34,0.7); z-index: 0; }
         .filter-btn { position: relative; z-index: 1; display: inline-flex; align-items: center; gap: 0.55rem; padding: 0.65rem 1.4rem; border-radius: 30px; font-weight: 500; transition: color 0.35s ease; }
         .filter-btn.active { color: #fff; }
@@ -277,7 +290,7 @@
 
         /* Quadros: moldura de madeira + passe-partout */
         .art-frame { position: relative; padding: 9px; border-radius: 2px; background: linear-gradient(145deg, #6b4f3a 0%, #3b2a1f 50%, #5c4331 100%);
-            box-shadow: inset 0 0 0 1px rgba(255,255,255,0.08), inset 0 0 0 3px rgba(192,159,82,0.28), 0 24px 36px -14px rgba(47,36,31,0.5), 0 6px 10px rgba(47,36,31,0.12); will-change: transform; }
+            box-shadow: inset 0 0 0 1px rgba(255,255,255,0.08), inset 0 0 0 3px rgba(192,159,82,0.28), 0 24px 36px -14px rgba(47,36,31,0.5), 0 6px 10px rgba(47,36,31,0.12); }
         .art-mat { position: relative; overflow: hidden; padding: 12px; background: #f8f4ec; box-shadow: inset 0 2px 6px rgba(0,0,0,0.25); }
         /* Artesanato: fotografia limpa, cantos suaves, sem moldura */
         .art-frame.is-craft { padding: 0; background: none; border-radius: 10px; overflow: hidden; box-shadow: 0 24px 36px -14px rgba(47,36,31,0.45), 0 6px 10px rgba(47,36,31,0.1); }
@@ -312,7 +325,7 @@
            BIOGRAFIA
         ========================================================= */
         .bio-section { padding: 3rem 5vw 8rem; }
-        .bio-container { background: rgba(244, 239, 230, 0.9); padding: 3rem; border-radius: 12px; backdrop-filter: blur(8px); box-shadow: 0 10px 30px rgba(47, 36, 31, 0.05); max-width: 1400px; margin: 0 auto; }
+        .bio-container { background: rgba(244, 239, 230, 0.94); padding: 3rem; border-radius: 12px; box-shadow: 0 10px 30px rgba(47, 36, 31, 0.05); max-width: 1400px; margin: 0 auto; }
         .bio-text-title { font-size: 3.5rem; line-height: 1.1; margin-bottom: 2rem; }
         .bio-quote { margin: 0 0 2.5rem; padding-left: 1.5rem; border-left: 3px solid var(--accent-color); max-width: 720px; }
         .bio-quote blockquote { font-family: 'Playfair Display', serif; font-style: italic; font-size: clamp(1.3rem, 2.2vw, 1.8rem); line-height: 1.4; }
@@ -370,7 +383,7 @@
            ACABAMENTOS
         ========================================================= */
         /* Textura subtil de papel sobre todo o site */
-        body::after { content: ''; position: fixed; inset: 0; z-index: 9000; pointer-events: none; opacity: 0.07; mix-blend-mode: multiply;
+        body::after { content: ''; position: fixed; inset: 0; z-index: 9000; pointer-events: none; opacity: 0.05; transform: translateZ(0);
             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.18 0 0 0 0 0.14 0 0 0 0 0.12 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
 
         /* Ecrã de entrada */
@@ -423,6 +436,8 @@
         .to-top:hover { background: var(--accent-color); border-color: var(--accent-color); color: #fff; }
 
         @media (prefers-reduced-motion: reduce) { .scroll-cue-line::after { animation: none; } }
+        html.lite body::after, html.lite #bg-canvas { display: none; }
+        html.lite .art-frame, html.lite .expo-card { box-shadow: 0 14px 24px -12px rgba(47,36,31,0.45); }
 
         /* =========================================================
            RESPONSIVIDADE
@@ -493,6 +508,7 @@
             .palette-badge, .palette-svg { width: 72px; }
             .event-panel { flex-direction: column; max-height: 84vh; }
             .event-panel-media { flex: 0 0 180px; }
+            .event-panel.is-expanded .event-panel-media { flex-basis: 38vh; }
             .event-panel-body { padding: 2rem 1.6rem; }
 
             .custom-work { padding: 6rem 6vw 5.5rem; }
@@ -574,7 +590,10 @@
             <h3 class="event-title event-anim" id="eventTitle">Novidades <em style="color: var(--accent-color);">a caminho</em></h3>
             <ul class="event-meta event-anim" id="eventMeta"></ul>
             <div class="event-text event-anim" id="eventText"></div>
-            <a class="event-cta event-anim" id="eventCta" target="_blank" rel="noopener">Quero saber mais <span>→</span></a>
+            <div class="event-gallery event-anim" id="eventGallery"></div>
+            <button class="event-cta event-more event-anim" id="eventMore" aria-expanded="false">
+                <span id="eventMoreText">Ver mais</span> <span class="arrow" id="eventMoreArrow">→</span>
+            </button>
         </div>
     </aside>
 
@@ -861,11 +880,39 @@
 
         const IS_FINE_POINTER = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
         const REDUCED_MOTION = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        let LITE = false;
+        try { LITE = sessionStorage.getItem('mgs-lite') === '1'; } catch (e) {}
+        function enableLite() {
+            if (LITE && document.documentElement.classList.contains('lite')) return;
+            LITE = true;
+            document.documentElement.classList.add('lite');
+            try { sessionStorage.setItem('mgs-lite', '1'); } catch (e) {}
+        }
+        if (LITE) document.documentElement.classList.add('lite');
+        // Mede ~2 s de animação depois da entrada; se ficar abaixo de ~45 fps, alivia os efeitos
+        window.addEventListener('load', () => {
+            if (LITE) return;
+            setTimeout(() => {
+                let frames = 0, start = performance.now();
+                (function probe(now) {
+                    frames++;
+                    if (now - start < 2000) return requestAnimationFrame(probe);
+                    const fps = frames * 1000 / (now - start);
+                    if (fps < 45) enableLite();
+                })(start);
+            }, 3500);
+        });
         const WHATSAPP_NUMBER = '351932444844';
         const PALETTE = ['138, 42, 34', '192, 159, 82', '74, 93, 35', '183, 93, 63', '47, 36, 31'];
 
         const SPACE_ID = '0cd9i55j5q7t';
         const ACCESS_TOKEN = '2K29NZMhiiq39_S2HyugtkNG_Owb7G46ArH8KSgApI4';
+
+        // Pede ao Contentful a imagem já reduzida e em WebP (muito mais leve)
+        function cfImg(url, w, q = 75) {
+            if (!url || url.indexOf('ctfassets.net') === -1) return url;
+            return url.split('?')[0] + '?w=' + w + '&fm=webp&q=' + q;
+        }
 
         function sanitizeForWhatsApp(str) {
             if (!str) return '';
@@ -938,7 +985,7 @@
                 slide.className = 'stage-slide';
                 slide.innerHTML = `<div class="stage-piece${framed ? ' is-framed' : ''}"><div class="stage-mat"><div class="stage-clip"><img alt="" draggable="false"></div></div></div>`;
                 const img = slide.querySelector('img');
-                img.src = src.trim();
+                img.src = cfImg(src.trim(), 2000, 82);
                 img.alt = title;
                 modalStage.appendChild(slide);
 
@@ -947,7 +994,7 @@
                     t.className = 'thumb';
                     t.setAttribute('aria-label', 'Imagem ' + (i + 1));
                     t.innerHTML = '<img alt="">';
-                    t.querySelector('img').src = src.trim();
+                    t.querySelector('img').src = cfImg(src.trim(), 160);
                     t.addEventListener('click', (e) => { e.stopPropagation(); goToSlide(i); });
                     modalThumbs.appendChild(t);
                 }
@@ -1213,30 +1260,60 @@
 
             document.getElementById('eventText').innerHTML = text;
 
-            if (f._imgUrl) {
-                document.getElementById('eventImg').src = f._imgUrl;
+            const evImgs = (f._imgs && f._imgs.length) ? f._imgs : (f._imgUrl ? [f._imgUrl] : []);
+            const eventImg = document.getElementById('eventImg');
+            if (evImgs.length) {
+                eventImg.src = cfImg(evImgs[0], 1400, 80);
+                eventImg.alt = title || 'Próximo evento';
                 eventPanel.classList.remove('no-media');
             }
 
-            const ctaText = 'Olá Maria da Graça! Vi no site que há um evento em breve' + (title ? ` ("${sanitizeForWhatsApp(title)}")` : '') + ' e gostaria de saber mais.';
-            document.getElementById('eventCta').href = waLink(ctaText);
+            // Miniaturas (só aparecem na vista expandida, quando há mais que uma imagem)
+            const gallery = document.getElementById('eventGallery');
+            gallery.innerHTML = '';
+            if (evImgs.length > 1) {
+                evImgs.forEach((src, i) => {
+                    const t = document.createElement('button');
+                    t.className = 'event-thumb' + (i === 0 ? ' active' : '');
+                    t.setAttribute('aria-label', 'Imagem ' + (i + 1));
+                    t.innerHTML = '<img alt="">';
+                    t.querySelector('img').src = cfImg(src, 160);
+                    t.addEventListener('click', () => {
+                        if (t.classList.contains('active')) return;
+                        gallery.querySelectorAll('.event-thumb').forEach(b => b.classList.toggle('active', b === t));
+                        gsap.to(eventImg, { autoAlpha: 0, scale: 1.04, duration: 0.25, ease: 'power2.in', onComplete: () => {
+                            eventImg.src = cfImg(src, 1400, 80);
+                            gsap.to(eventImg, { autoAlpha: 1, scale: 1, duration: 0.5, ease: 'power2.out' });
+                        } });
+                    });
+                    gallery.appendChild(t);
+                });
+                gallery.classList.add('has-items');
+            }
 
             // A faixa "estaciona" logo no início das Exposições, junto à passagem do Home.
             // Ao descer, quando chega ao canto superior esquerdo (por baixo do menu), fica presa e acompanha-nos.
             // Ao voltar para o Home, regressa ao seu lugar na secção e desce com ela.
             gsap.set(ribbon, { x: -170, rotation: -6, autoAlpha: 1 });
-            gsap.to(ribbon, { rotation: -2, duration: 1.6, yoyo: true, repeat: -1, ease: 'sine.inOut' });
-            // Os pingos de tinta "respiram" um a um
-            gsap.to('.paint-blob', { scale: 1.2, transformOrigin: '50% 50%', duration: 0.7, ease: 'sine.inOut', stagger: { each: 0.25, repeat: -1, yoyo: true } });
+            const ribbonSway = gsap.to(ribbon, { rotation: -2, duration: 1.6, yoyo: true, repeat: -1, ease: 'sine.inOut', paused: LITE });
+            // Os pingos de tinta "respiram" só quando se passa o rato na paleta
+            const blobs = gsap.to('.paint-blob', { scale: 1.2, transformOrigin: '50% 50%', duration: 0.5, ease: 'sine.inOut', stagger: { each: 0.12, repeat: 1, yoyo: true }, paused: true });
+            ribbon.addEventListener('mouseenter', () => blobs.restart());
 
             const expoSection = document.getElementById('exhibition');
-            const placeRibbon = () => {
-                const parkedY = expoSection.getBoundingClientRect().top + 28;          // lugar na secção
-                const stickyY = nav.getBoundingClientRect().height + 18;               // canto superior do ecrã
-                gsap.set(ribbon, { y: Math.max(parkedY, stickyY) });
+            let expoTop = 0, navH = 0;
+            const measureRibbon = () => {
+                expoTop = expoSection.getBoundingClientRect().top + window.scrollY;
+                navH = nav.offsetHeight;
             };
-            gsap.ticker.add(placeRibbon);
+            const setRibbonY = gsap.quickSetter(ribbon, 'y', 'px');
+            const placeRibbon = () => setRibbonY(Math.max(expoTop - window.scrollY + 28, navH + 18));
+            measureRibbon();
             placeRibbon();
+            window.addEventListener('scroll', placeRibbon, { passive: true });
+            ScrollTrigger.addEventListener('refresh', () => { measureRibbon(); placeRibbon(); });
+            if (window.ResizeObserver) new ResizeObserver(() => { navH = nav.offsetHeight; placeRibbon(); }).observe(nav);
+
 
             // Entra a deslizar da esquerda a primeira vez que a secção aparece
             ScrollTrigger.create({
@@ -1257,18 +1334,74 @@
                 { x: -24, autoAlpha: 0 },
                 { x: 0, autoAlpha: 1, duration: 0.55, stagger: 0.07, delay: 0.25, ease: 'power3.out' });
         }
+        /* Expandir / recolher a aba do evento */
+        let eventExpanded = false;
+        const eventMoreBtn = document.getElementById('eventMore');
+        const eventMoreText = document.getElementById('eventMoreText');
+        const eventBody = eventPanel.querySelector('.event-panel-body');
+
+        function eventTargetSize(expanded) {
+            const mobile = window.innerWidth <= 768;
+            if (expanded) return { width: Math.min(1180, window.innerWidth * (mobile ? 0.96 : 0.9)), height: window.innerHeight * (mobile ? 0.9 : 0.86) };
+            return { width: Math.min(780, window.innerWidth * 0.92), height: null };
+        }
+
+        function setEventExpanded(on, animate = true) {
+            if (on === eventExpanded) return;
+            eventExpanded = on;
+            clearTimeout(eventCloseTimer);
+            eventMoreBtn.setAttribute('aria-expanded', String(on));
+
+            const fromW = eventPanel.offsetWidth;
+            const fromH = eventPanel.offsetHeight;
+            eventPanel.classList.toggle('is-expanded', on);
+
+            // Mede o tamanho final
+            const target = eventTargetSize(on);
+            gsap.set(eventPanel, { width: target.width, height: target.height || 'auto', maxHeight: on ? 'none' : '' });
+            const toH = eventPanel.offsetHeight;
+            gsap.set(eventPanel, { width: fromW, height: fromH });
+
+            const dur = animate ? 0.8 : 0;
+            gsap.to(eventPanel, {
+                width: target.width, height: toH, duration: dur, ease: 'expo.inOut', overwrite: 'auto',
+                onComplete: () => { if (!on) gsap.set(eventPanel, { clearProps: 'width,height,maxHeight' }); }
+            });
+
+            eventMoreText.textContent = on ? 'Ver menos' : 'Ver mais';
+            gsap.to('#eventMoreArrow', { rotation: on ? 180 : 0, duration: 0.5, ease: 'power2.out' });
+            eventBody.scrollTop = 0;
+            if (animate) {
+                gsap.fromTo(eventBody.querySelectorAll('.event-anim:not([hidden])'),
+                    { y: 18, autoAlpha: 0 },
+                    { y: 0, autoAlpha: 1, duration: 0.55, stagger: 0.06, delay: 0.35, ease: 'power3.out' });
+                gsap.fromTo('#eventImg', { scale: 1.08 }, { scale: 1, duration: 1.2, ease: 'power3.out' });
+            }
+        }
+        eventMoreBtn.addEventListener('click', (e) => { e.stopPropagation(); setEventExpanded(!eventExpanded); });
+        window.addEventListener('resize', () => {
+            if (!eventExpanded) return;
+            const t = eventTargetSize(true);
+            gsap.set(eventPanel, { width: t.width, height: t.height });
+        });
+
         function closeEventPanel() {
             clearTimeout(eventCloseTimer);
             if (!eventPanelOpen) return;
             eventPanelOpen = false;
             ribbon.setAttribute('aria-expanded', 'false');
             gsap.killTweensOf([eventPanel, eventVeil]);
-            gsap.to(eventPanel, { xPercent: -105, duration: 0.55, ease: 'power3.in', onComplete: () => gsap.set(eventPanel, { autoAlpha: 0 }) });
+            gsap.to(eventPanel, { xPercent: -105, duration: 0.55, ease: 'power3.in', onComplete: () => {
+                gsap.set(eventPanel, { autoAlpha: 0 });
+                if (eventExpanded) setEventExpanded(false, false);
+            } });
             gsap.to(eventVeil, { autoAlpha: 0, duration: 0.45, delay: 0.1 });
         }
         function scheduleEventClose() {
             clearTimeout(eventCloseTimer);
+            if (eventExpanded) return;
             eventCloseTimer = setTimeout(() => {
+                if (eventExpanded) return;
                 if (!eventPanel.matches(':hover') && !ribbon.matches(':hover')) closeEventPanel();
             }, 450);
         }
@@ -1330,7 +1463,11 @@
 
                     if (contentTypeId === 'evento' || f.mensagem || f.Mensagem) {
                         if (!eventFields && (f.mensagem || f.Mensagem || f.texto || f.titulo)) {
-                            eventFields = Object.assign({}, f, { _imgUrl: assetUrl(f.imagem) });
+                            const evImgs = [];
+                            const evMain = assetUrl(f.imagem);
+                            if (evMain) evImgs.push(evMain);
+                            if (Array.isArray(f.imagens)) f.imagens.forEach(r => { const u = assetUrl(r); if (u && !evImgs.includes(u)) evImgs.push(u); });
+                            eventFields = Object.assign({}, f, { _imgUrl: evMain || evImgs[0] || null, _imgs: evImgs });
                         }
                         return;
                     }
@@ -1434,7 +1571,7 @@
                     </div>`;
                 const img = el.querySelector('img');
                 img.addEventListener('load', lateRefresh);
-                img.src = a.imgs[0];
+                img.src = cfImg(a.imgs[0], 700);
                 img.alt = a.title;
                 el.querySelector('.plaque-ref').textContent = 'Nº ' + a.ref + ' · ' + a.typeLabel;
                 el.querySelector('.plaque-title').textContent = a.title;
@@ -1472,6 +1609,7 @@
             const sheen = item.querySelector('.art-sheen');
             gsap.set(frame, { transformPerspective: 900 });
             item.addEventListener('mousemove', (e) => {
+                if (LITE) return;
                 const r = frame.getBoundingClientRect();
                 const px = (e.clientX - r.left) / r.width - 0.5;
                 const py = (e.clientY - r.top) / r.height - 0.5;
@@ -1624,8 +1762,10 @@
         measureCarousel();
         window.addEventListener('resize', measureCarousel);
 
+        let carouselVisible = false;
+        ScrollTrigger.create({ trigger: '#exhibition', start: 'top bottom', end: 'bottom top', onToggle: (self) => { carouselVisible = self.isActive; } });
         gsap.ticker.add(() => {
-            if (!carousel.period) return;
+            if (!carousel.period || (!carouselVisible && !carousel.dragging)) return;
             if (!carousel.dragging) {
                 carousel.x -= carousel.speed * gsap.ticker.deltaRatio();
                 carousel.x += carousel.velocity;
@@ -1731,6 +1871,7 @@
         }
         if (heroSlides.length > 1) {
             setInterval(() => {
+                if (window.scrollY > window.innerHeight || document.hidden) return;
                 const prev = heroSlides[heroIndex];
                 heroIndex = (heroIndex + 1) % heroSlides.length;
                 const next = heroSlides[heroIndex];
@@ -1813,8 +1954,10 @@
             measureMarquee();
             window.addEventListener('resize', measureMarquee);
             document.fonts && document.fonts.ready.then(measureMarquee);
+            let mqVisible = false;
+            ScrollTrigger.create({ trigger: '.marquee-wrap', start: 'top bottom', end: 'bottom top', onToggle: (self) => { mqVisible = self.isActive; } });
             gsap.ticker.add(() => {
-                if (!mq.width || REDUCED_MOTION) return;
+                if (!mq.width || REDUCED_MOTION || !mqVisible) return;
                 mq.x -= (0.6 + mq.boost) * gsap.ticker.deltaRatio();
                 if (mq.x <= -mq.width) mq.x += mq.width;
                 gsap.set(marqueeTrack, { x: mq.x });
@@ -1852,8 +1995,10 @@
         gsap.to('#customCircle', { scrollTrigger: { trigger: '.custom-work', start: 'top bottom', end: 'bottom top', scrub: 1 }, y: 120, scale: 1.1, ease: 'none' });
 
         /* Botão de fala (WhatsApp) */
-        gsap.to('.typing-dots span', { y: -4, duration: 0.4, ease: 'sine.inOut', stagger: { each: 0.15, repeat: -1, yoyo: true } });
-        gsap.to('.speech-wrap', { y: -6, duration: 2, yoyo: true, repeat: -1, ease: 'sine.inOut' });
+        const speechLoop = gsap.timeline({ paused: true });
+        speechLoop.to('.typing-dots span', { y: -4, duration: 0.4, ease: 'sine.inOut', stagger: { each: 0.15, repeat: -1, yoyo: true } }, 0)
+                  .to('.speech-wrap', { y: -6, duration: 2, yoyo: true, repeat: -1, ease: 'sine.inOut' }, 0);
+        ScrollTrigger.create({ trigger: '.custom-work', start: 'top bottom', end: 'bottom top', onToggle: (self) => self.isActive ? speechLoop.play() : speechLoop.pause() });
         const speechBtn = document.getElementById('speechBtn');
         speechBtn.addEventListener('mouseenter', () => gsap.to(speechBtn, { scale: 1.06, rotation: -2, duration: 0.4, ease: 'back.out(2)' }));
         speechBtn.addEventListener('mouseleave', () => gsap.to(speechBtn, { scale: 1, rotation: 0, duration: 0.4, ease: 'power2.out' }));
@@ -2038,17 +2183,26 @@
             }
         }
 
-        function animateCanvas() {
+        // O fundo só se vê atrás da Galeria e da Biografia (o resto tem fundo próprio)
+        let canvasVisible = false;
+        ScrollTrigger.create({ trigger: '#shop', endTrigger: '#bio', start: 'top bottom', end: 'bottom top', onToggle: (self) => { canvasVisible = self.isActive; } });
+
+        let lastCanvasFrame = 0;
+        function animateCanvas(now) {
+            requestAnimationFrame(animateCanvas);
+            if (LITE || !canvasVisible || document.hidden) return;
+            if (now - lastCanvasFrame < 32) return;           // ~30 fps chega para pinceladas lentas
+            lastCanvasFrame = now;
             bgCtx.clearRect(0, 0, bgCanvas.width, bgCanvas.height);
-            if (Math.random() < 0.01 && backgroundStrokes.length < 12) backgroundStrokes.push(new OrganicStroke());
+            if (Math.random() < 0.02 && backgroundStrokes.length < 9) backgroundStrokes.push(new OrganicStroke());
             for (let i = 0; i < backgroundStrokes.length; i++) {
                 backgroundStrokes[i].update();
+                backgroundStrokes[i].update();                  // compensa a metade dos frames
                 backgroundStrokes[i].draw();
                 if (backgroundStrokes[i].fade <= 0) { backgroundStrokes.splice(i, 1); i--; }
             }
-            requestAnimationFrame(animateCanvas);
         }
-        if (!REDUCED_MOTION) animateCanvas();
+        if (!REDUCED_MOTION) requestAnimationFrame(animateCanvas);
     </script>
 </body>
 </html>
