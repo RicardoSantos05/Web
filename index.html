@@ -389,9 +389,7 @@
         /* Ecrã de entrada */
         .loader { position: fixed; inset: 0; z-index: 9500; background: var(--bg-color); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1.1rem; }
         .loader-logo-wrap { position: relative; display: flex; justify-content: center; }
-        .loader-logo { display: block; height: clamp(70px, 13vw, 140px); width: auto; clip-path: inset(0 100% 0 0); }
-        .loader-stroke { width: min(300px, 58vw); height: 26px; overflow: visible; margin-top: -0.4rem; }
-        .loader-stroke path { fill: none; stroke: var(--accent-color); stroke-width: 4; stroke-linecap: round; }
+        .loader-logo { display: block; height: clamp(120px, 24vw, 260px); width: auto; max-width: 86vw; object-fit: contain; clip-path: inset(0 100% 0 0); }
         .loader-status { display: flex; align-items: baseline; gap: 0.15rem; margin-top: 0.8rem; font-size: 0.7rem; letter-spacing: 3px; text-transform: uppercase; opacity: 0; min-height: 1em; }
         .loader-dots { display: inline-flex; gap: 3px; margin-left: 0.3rem; }
         .loader-dots i { width: 4px; height: 4px; border-radius: 50%; background: var(--accent-color); animation: loader-dot 1.2s ease-in-out infinite; }
@@ -547,7 +545,6 @@
 
     <div class="loader" id="loader" aria-hidden="true">
         <div class="loader-logo-wrap"><img src="MariaIcon.png" alt="" class="loader-logo" id="loaderLogo"></div>
-        <svg class="loader-stroke" viewBox="0 0 320 28"><path d="M6 18 C 60 6, 110 26, 160 14 S 260 6, 314 16"/></svg>
         <div class="loader-status"><span id="loaderStatus">A preparar a galeria</span><span class="loader-dots"><i></i><i></i><i></i></span></div>
     </div>
     <div class="scroll-progress" id="scrollProgress"></div>
@@ -1069,12 +1066,10 @@
 
         // Logo ao abrir só se decide o Ultra (para nem arrancar a entrada animada);
         // os outros modos esperam por mais medições, para um "soluço" não enganar.
-        // O modo principal é decidido durante o ecrã de entrada (ver "ECRÃ DE ENTRADA").
-        // Na mesma visita, as páginas seguintes reutilizam o modo já calculado.
-        let STORED_TIER = null;
-        try { const v = sessionStorage.getItem('mgs-tier'); if (v !== null) STORED_TIER = Number(v); } catch (e) {}
+        // O modo principal é decidido de novo em cada entrada (também ao fazer refresh),
+        // durante o ecrã de entrada (ver "ECRÃ DE ENTRADA").
+        try { sessionStorage.removeItem('mgs-tier'); sessionStorage.removeItem('mgs-intro'); } catch (e) {}
         if (FORCED_TIER !== null) setTier(FORCED_TIER, false);
-        else if (STORED_TIER !== null) setTier(STORED_TIER, false);
         else if (CPU_SCORE > 40) setTier(3, false);   // PC muito fraco: nem arranca a entrada animada
 
         const WHATSAPP_NUMBER = '351932444844';
@@ -2076,9 +2071,9 @@
         }
 
         const loader = document.getElementById('loader');
+        if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+        window.scrollTo(0, 0);
         const loaderStatus = document.getElementById('loaderStatus');
-        let introShown = false;
-        try { introShown = !!sessionStorage.getItem('mgs-intro'); sessionStorage.setItem('mgs-intro', '1'); } catch (e) {}
 
         const waitForLoad = (maxMs) => new Promise(res => {
             if (document.readyState === 'complete') return res();
@@ -2111,24 +2106,18 @@
             return Math.max(tierFromWindow(frames.fps, frames.jank), tierFromCpu(b));
         }
 
-        function saveTier() { try { sessionStorage.setItem('mgs-tier', String(TIER)); } catch (e) {} }
 
-        if (introShown || REDUCED_MOTION) {
-            // Visita repetida nesta sessão: sem entrada; o monitor continua atento
+        if (REDUCED_MOTION) {
+            // Quem pediu ao sistema para reduzir movimento: sem entrada animada
             loader.remove();
             gsap.delayedCall(0.3, playHeroIntro);
             waitForLoad(7000).then(() => startSmoothnessMonitor());
         } else {
             document.body.classList.add('no-scroll');
-            const strokePath = loader.querySelector('.loader-stroke path');
-            const strokeLen = strokePath.getTotalLength();
-            gsap.set(strokePath, { strokeDasharray: strokeLen, strokeDashoffset: strokeLen });
-
-            // A assinatura "escreve-se" da esquerda para a direita, depois o risco por baixo
+            // A assinatura "escreve-se" da esquerda para a direita
             gsap.timeline()
-                .to('#loaderLogo', { clipPath: 'inset(0 0% 0 0)', duration: 1.5, ease: 'power2.inOut' })
-                .to(strokePath, { strokeDashoffset: 0, duration: 0.9, ease: 'power2.inOut' }, '-=0.5')
-                .to('.loader-status', { opacity: 0.65, duration: 0.5 }, '-=0.4');
+                .to('#loaderLogo', { clipPath: 'inset(0 0% 0 0)', duration: 1.8, ease: 'power2.inOut' })
+                .to('.loader-status', { opacity: 0.65, duration: 0.5 }, '-=0.5');
 
             // Texto "a pensar"
             const phrases = ['A preparar a galeria', 'A misturar as cores', 'A afinar os pincéis', 'Quase pronto'];
@@ -2147,7 +2136,6 @@
                 finished = true;
                 clearInterval(phraseTimer);
                 CALIBRATING = false;
-                saveTier();
                 gsap.timeline({ onComplete: () => { loader.remove(); unlockScrollIfFree(); } })
                     .to(loader, { yPercent: -100, duration: 1, ease: 'expo.inOut' })
                     .add(playHeroIntro, '-=0.45');
