@@ -387,12 +387,19 @@
             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.18 0 0 0 0 0.14 0 0 0 0 0.12 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
 
         /* Ecrã de entrada */
-        .loader { position: fixed; inset: 0; z-index: 9500; background: var(--bg-color); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1rem; }
-        .loader-name { font-family: 'Playfair Display', serif; font-style: italic; font-weight: 500; font-size: clamp(2.4rem, 6vw, 4.4rem); overflow: hidden; display: flex; padding: 0.2rem 0.4rem; }
-        .loader-name span { display: inline-block; }
-        .loader-stroke { width: min(320px, 60vw); height: 28px; overflow: visible; }
+        .loader { position: fixed; inset: 0; z-index: 9500; background: var(--bg-color); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1.1rem; }
+        .loader-logo-wrap { position: relative; display: flex; justify-content: center; }
+        .loader-logo { display: block; height: clamp(70px, 13vw, 140px); width: auto; clip-path: inset(0 100% 0 0); }
+        .loader-stroke { width: min(300px, 58vw); height: 26px; overflow: visible; margin-top: -0.4rem; }
         .loader-stroke path { fill: none; stroke: var(--accent-color); stroke-width: 4; stroke-linecap: round; }
-        .loader-sub { font-size: 0.72rem; letter-spacing: 4px; text-transform: uppercase; opacity: 0; }
+        .loader-status { display: flex; align-items: baseline; gap: 0.15rem; margin-top: 0.8rem; font-size: 0.7rem; letter-spacing: 3px; text-transform: uppercase; opacity: 0; min-height: 1em; }
+        .loader-dots { display: inline-flex; gap: 3px; margin-left: 0.3rem; }
+        .loader-dots i { width: 4px; height: 4px; border-radius: 50%; background: var(--accent-color); animation: loader-dot 1.2s ease-in-out infinite; }
+        .loader-dots i:nth-child(2) { animation-delay: 0.15s; }
+        .loader-dots i:nth-child(3) { animation-delay: 0.3s; }
+        @keyframes loader-dot { 0%, 60%, 100% { transform: translateY(0); opacity: 0.35; } 30% { transform: translateY(-4px); opacity: 1; } }
+        html.ultra .loader-logo { clip-path: none; }
+        html.ultra .loader-status { opacity: 0.6; }
 
         /* Barra de progresso de leitura */
         .scroll-progress { position: fixed; top: 0; left: 0; width: 100%; height: 3px; z-index: 101; background: linear-gradient(90deg, var(--accent-color), var(--accent-alt)); transform-origin: 0 50%; transform: scaleX(0); }
@@ -436,11 +443,23 @@
         .to-top:hover { background: var(--accent-color); border-color: var(--accent-color); color: #fff; }
 
         @media (prefers-reduced-motion: reduce) { .scroll-cue-line::after { animation: none; } }
-        .perf-badge { position: fixed; right: 12px; bottom: 12px; z-index: 9600; padding: 0.35rem 0.7rem; border-radius: 20px; font-size: 0.68rem; font-weight: 600; letter-spacing: 0.3px; background: rgba(47,36,31,0.82); color: #F4EFE6; opacity: 0.75; transition: opacity 0.3s; }
-        .perf-badge:hover { opacity: 1; }
-        .perf-badge.is-lite { background: var(--accent-color); }
+        .perf-badge { position: fixed; right: 10px; bottom: 8px; z-index: 9600; pointer-events: none; font-size: 0.58rem; font-weight: 500; letter-spacing: 1px; text-transform: uppercase; color: var(--text-color); opacity: 0; transition: opacity 0.6s ease; }
+        .perf-badge.show { opacity: 0.3; }
         html.lite body::after, html.lite #bg-canvas { display: none; }
-        html.lite .art-frame, html.lite .expo-card { box-shadow: 0 14px 24px -12px rgba(47,36,31,0.45); }
+        html.balanced .art-frame, html.balanced .expo-card { box-shadow: 0 14px 24px -12px rgba(47,36,31,0.45); }
+
+        /* ---- Modo Ultra Light: sem transições, sombras nem efeitos ---- */
+        html.ultra *, html.ultra *::before, html.ultra *::after { transition-duration: 0s !important; transition-delay: 0s !important; animation: none !important; }
+        html.ultra *, html.ultra *::before, html.ultra *::after { cursor: auto !important; }
+        html.ultra a, html.ultra button, html.ultra .shop-item, html.ultra .expo-card, html.ultra .stage-clip { cursor: pointer !important; }
+        html.ultra .cursor, html.ultra .splash-layer, html.ultra .scroll-progress, html.ultra .art-sheen, html.ultra .scroll-cue-line { display: none !important; }
+        html.ultra .art-frame, html.ultra .expo-card, html.ultra .art-plaque, html.ultra nav, html.ultra .marquee, html.ultra .stage-mat, html.ultra .stage-piece,
+        html.ultra .modal-content, html.ultra .event-panel, html.ultra .want-btn, html.ultra .speech-btn, html.ultra .bio-image, html.ultra .bio-container { box-shadow: none !important; }
+        html.ultra .event-ribbon, html.ultra .slider-wrapper img, html.ultra .cursor svg { filter: none !important; }
+        html.ultra .hero-slide, html.ultra .hero-inner, html.ultra .expo-track, html.ultra .marquee-track { will-change: auto !important; }
+        html.ultra .art-frame, html.ultra .expo-card { outline: 1px solid rgba(47,36,31,0.18); }
+        html.ultra .modal-image::before { display: none; }
+        html.ultra .expo-carousel::before, html.ultra .expo-carousel::after { display: none; }
 
         /* =========================================================
            RESPONSIVIDADE
@@ -527,9 +546,9 @@
 <body>
 
     <div class="loader" id="loader" aria-hidden="true">
-        <div class="loader-name" id="loaderName">Maria da Graça</div>
+        <div class="loader-logo-wrap"><img src="MariaIcon.png" alt="" class="loader-logo" id="loaderLogo"></div>
         <svg class="loader-stroke" viewBox="0 0 320 28"><path d="M6 18 C 60 6, 110 26, 160 14 S 260 6, 314 16"/></svg>
-        <div class="loader-sub">Silva · Artista</div>
+        <div class="loader-status"><span id="loaderStatus">A preparar a galeria</span><span class="loader-dots"><i></i><i></i><i></i></span></div>
     </div>
     <div class="scroll-progress" id="scrollProgress"></div>
 
@@ -884,60 +903,180 @@
         const IS_FINE_POINTER = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
         const REDUCED_MOTION = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         /* =========================================================
-           MODO LEVE AUTOMÁTICO
-           Mede a fluidez depois de o site abrir. Só liga o modo leve quando há
-           "engasgos" reais (frames muito demorados), e não quando o browser está
-           simplesmente limitado a 30 fps (ex.: poupança de energia do Chrome).
+           MODOS DE DESEMPENHO AUTOMÁTICOS
+           0 · Quality Mode           → tudo ligado (≈ 50+ fps, sem engasgos)
+           1 · Balanced Mode          → mesmo aspeto, efeitos mais caros aliviados (≈ 35-50 fps)
+           2 · Performance Mode       → sem pinceladas, textura nem 3D (≈ 20-35 fps)
+           3 · Ultra Performance Mode → praticamente estático (< 20 fps / PCs muito fracos)
+           O site começa em Quality e só desce de modo se precisar; nunca volta a subir
+           durante a visita, para não ficar a trocar de aspeto.
+           Para testar à força, junta ao endereço: ?quality · ?balanced · ?performance · ?ultra
         ========================================================= */
         const SHOW_PERF_BADGE = true;   // ← pôr "false" antes de publicar o site
-        let LITE = false;
-        let perfInfo = 'a medir…';
+        const TIER_NAMES = ['Quality Mode', 'Balanced Mode', 'Performance Mode', 'Ultra Performance Mode'];
+        const FORCED_TIER = (() => {
+            const q = location.search;
+            if (/[?&]ultra\b/.test(q)) return 3;
+            if (/[?&](performance|light)\b/.test(q)) return 2;
+            if (/[?&]balanced\b/.test(q)) return 1;
+            if (/[?&]quality\b/.test(q)) return 0;
+            return null;
+        })();
+        let TIER = 0;
+        let BALANCED = false;   // TIER >= 1
+        let LITE = false;       // TIER >= 2
+        let ULTRA = false;      // TIER >= 3
         try { sessionStorage.removeItem('mgs-lite'); } catch (e) {}
 
-        function setLite(on, reason) {
-            LITE = on;
-            document.documentElement.classList.toggle('lite', on);
-            if (reason) perfInfo = reason;
+        // Teste rápido de processador logo ao abrir (demora poucos milissegundos).
+        function cpuBench() {
+            let best = Infinity, acc = 0;
+            for (let r = 0; r < 4; r++) {
+                const t = performance.now();
+                for (let i = 0; i < 300000; i++) acc += Math.sin(i * 0.001) * Math.sqrt(i);
+                best = Math.min(best, performance.now() - t);
+            }
+            window.__benchSink = acc;
+            return best;
+        }
+        // Referência: PC normal ≈ 3-5 ms · 3-4× mais lento ≈ 10-14 ms · 6× ≈ 20 ms · 10× ≈ 35-55 ms · 20× ≈ 60-75 ms
+        const CPU_SCORE = cpuBench();
+        const tierFromCpu = (ms) => ms > 40 ? 3 : ms > 16 ? 2 : ms > 8 ? 1 : 0;
+
+        let CALIBRATING = false;          // durante o ecrã de entrada: força as animações a correr para medir
+        let heroSliderParallax = null;   // guardado mais abaixo, para o Balanced o poder desligar
+
+        function setTier(t, atRuntime) {
+            if (t <= TIER && !(atRuntime === 'force')) { updatePerfBadge(); return; }
+            const prev = TIER;
+            TIER = t;
+            BALANCED = t >= 1; LITE = t >= 2; ULTRA = t >= 3;
+            const root = document.documentElement;
+            root.classList.toggle('balanced', BALANCED);
+            root.classList.toggle('lite', LITE);
+            root.classList.toggle('ultra', ULTRA);
             updatePerfBadge();
+            if (typeof gsap === 'undefined') return;
+
+            if (BALANCED && heroSliderParallax) {           // Balanced: sem parallax nas fotos do Home
+                if (heroSliderParallax.scrollTrigger && typeof heroSliderParallax.scrollTrigger.kill === 'function') heroSliderParallax.scrollTrigger.kill();
+                heroSliderParallax.progress(0).kill();
+                heroSliderParallax = null;
+            }
+            if (LITE) {                                      // Performance: tira a inclinação que possa estar a meio
+                gsap.set('.art-frame', { clearProps: 'transform' });
+            }
+            if (ULTRA && prev < 3) {
+                gsap.globalTimeline.timeScale(8);            // o que ainda animar (janelas, filtros), anima quase instantâneo
+                if (atRuntime) {
+                    // Termina já as animações a correr (deixa tudo no estado final)
+                    ScrollTrigger.getAll().forEach(st => {
+                        if (!st.animation) return;
+                        st.animation.progress(st.vars.scrub ? 0 : 1);
+                        st.kill();
+                    });
+                    gsap.globalTimeline.getChildren(true, true, true).forEach(a => {
+                        if (a.repeat && a.repeat() === -1) a.progress(0).kill();
+                    });
+                    gsap.set('.hero-inner, .hero-slider', { clearProps: 'transform,opacity,visibility' });
+                    gsap.set('.scroll-progress', { display: 'none' });
+                    carousel.speed = carousel.baseSpeed = 0;
+                }
+            }
+        }
+        // Compatibilidade com o resto do código
+        function setLite(on) { if (on) setTier(Math.max(TIER, 2), true); }
+        function enableUltra(atRuntime) { setTier(3, atRuntime); }
+
+        /* ---------------------------------------------------------
+           MONITOR DE FLUIDEZ (sempre ligado, custa quase nada)
+           Só conta os momentos em que há algo a mexer — scroll, rato, carrossel,
+           faixa ou pinceladas à vista — porque é aí que se sente se o site engasga.
+           Em janelas de 2 s mede:
+             · fps reais
+             · "engasgos": frames que demoram mais de 50 ms (o olho nota-os como solavancos)
+           Só desce de modo se DUAS janelas seguidas estiverem más, para um soluço
+           isolado (ex.: uma imagem a carregar) não baixar a qualidade à toa.
+        --------------------------------------------------------- */
+        const ANIM_VISIBLE = { carousel: false, marquee: false, canvas: false };
+        let lastUserActivity = 0;
+        ['scroll', 'wheel', 'pointermove', 'touchmove', 'keydown'].forEach(ev =>
+            window.addEventListener(ev, () => { lastUserActivity = performance.now(); }, { passive: true }));
+
+        function tierFromWindow(fps, jank) {
+            if (fps >= 50 && jank <= 0.03) return 0;                    // fluido
+            if (fps >= 27 && fps < 36 && jank <= 0.03) return 1;        // ~30 fps certinhos (ex.: poupança de energia)
+            if (fps >= 36 && jank <= 0.10) return 1;                    // bom, com poucos engasgos
+            if (fps >= 20 && jank <= 0.25) return 2;                    // aguenta, mas engasga
+            return 3;                                                   // muito fraco
         }
 
-        function measurePerformance() {
-            if (document.hidden) { setTimeout(measurePerformance, 1500); return; }
-            const times = [];
+        let monitorStarted = false;
+        function startSmoothnessMonitor() {
+            if (monitorStarted || FORCED_TIER !== null || ULTRA) return;
+            monitorStarted = true;
             let last = performance.now();
-            const start = last;
-            (function probe(now) {
-                times.push(now - last);
+            let winTime = 0, winFrames = 0, winJank = 0;
+            let badStreak = 0, pendingTarget = 0;
+            let graceUntil = last + 3000;
+
+            (function tick(now) {
+                const dt = now - last;
                 last = now;
-                if (now - start < 3000) return requestAnimationFrame(probe);
-                if (document.hidden) { setTimeout(measurePerformance, 1500); return; }
-                times.shift();
-                const sorted = times.slice().sort((a, b) => a - b);
-                const median = sorted[Math.floor(sorted.length / 2)];
-                const slowShare = times.filter(t => t > 50).length / times.length;
-                const fps = Math.round(1000 / median);
-                const lite = median > 45 || slowShare > 0.12;
-                setLite(lite, `${fps} fps · ${Math.round(slowShare * 100)}% engasgos`);
+                if (ULTRA) return;                                        // já no mínimo: pára
+                requestAnimationFrame(tick);
+
+                const busy = (now - lastUserActivity < 1200) ||
+                             ANIM_VISIBLE.carousel || ANIM_VISIBLE.marquee || ANIM_VISIBLE.canvas;
+                if (document.hidden || dt > 1000 || !busy || now < graceUntil) return;
+
+                winTime += dt; winFrames++;
+                if (dt > 50) winJank++;
+                if (winTime < 2000) return;
+
+                const fps = winFrames * 1000 / winTime;
+                const target = tierFromWindow(fps, winJank / winFrames);
+                winTime = winFrames = winJank = 0;
+
+                if (target > TIER) {
+                    badStreak++;
+                    pendingTarget = badStreak === 1 ? target : Math.min(pendingTarget, target);
+                    if (badStreak >= 2) {
+                        setTier(Math.max(TIER + 1, pendingTarget), true);  // desce pelo menos um degrau
+                        badStreak = 0;
+                        graceUntil = now + 2000;                           // deixa assentar antes de voltar a julgar
+                    }
+                } else {
+                    badStreak = 0;
+                }
             })(last);
         }
-        window.addEventListener('load', () => setTimeout(measurePerformance, 4500));
 
-        // Pequeno aviso no canto (só para testes)
+        // Etiqueta discreta no canto com o modo atual
         let perfBadge = null;
         function updatePerfBadge() {
             if (!perfBadge) return;
-            perfBadge.textContent = (LITE ? '● Modo leve ativo' : '○ Modo completo') + ' — ' + perfInfo;
-            perfBadge.classList.toggle('is-lite', LITE);
+            perfBadge.textContent = TIER_NAMES[TIER];
+            perfBadge.classList.add('show');
         }
         if (SHOW_PERF_BADGE) {
-            perfBadge = document.createElement('button');
+            perfBadge = document.createElement('span');
             perfBadge.className = 'perf-badge';
-            perfBadge.title = 'Clique para alternar entre modo leve e completo (teste)';
-            perfBadge.addEventListener('click', () => setLite(!LITE, 'alterado à mão'));
-            document.addEventListener('DOMContentLoaded', () => document.body.appendChild(perfBadge));
-            if (document.body) document.body.appendChild(perfBadge);
-            updatePerfBadge();
+            perfBadge.setAttribute('aria-hidden', 'true');
+            const addBadge = () => { if (!perfBadge.isConnected) document.body.appendChild(perfBadge); updatePerfBadge(); };
+            if (document.body) addBadge(); else document.addEventListener('DOMContentLoaded', addBadge);
         }
+
+        // Logo ao abrir só se decide o Ultra (para nem arrancar a entrada animada);
+        // os outros modos esperam por mais medições, para um "soluço" não enganar.
+        // O modo principal é decidido durante o ecrã de entrada (ver "ECRÃ DE ENTRADA").
+        // Na mesma visita, as páginas seguintes reutilizam o modo já calculado.
+        let STORED_TIER = null;
+        try { const v = sessionStorage.getItem('mgs-tier'); if (v !== null) STORED_TIER = Number(v); } catch (e) {}
+        if (FORCED_TIER !== null) setTier(FORCED_TIER, false);
+        else if (STORED_TIER !== null) setTier(STORED_TIER, false);
+        else if (CPU_SCORE > 40) setTier(3, false);   // PC muito fraco: nem arranca a entrada animada
+
         const WHATSAPP_NUMBER = '351932444844';
         const PALETTE = ['138, 42, 34', '192, 159, 82', '74, 93, 35', '183, 93, 63', '47, 36, 31'];
 
@@ -1331,10 +1470,10 @@
             // Ao descer, quando chega ao canto superior esquerdo (por baixo do menu), fica presa e acompanha-nos.
             // Ao voltar para o Home, regressa ao seu lugar na secção e desce com ela.
             gsap.set(ribbon, { x: -170, rotation: -6, autoAlpha: 1 });
-            const ribbonSway = gsap.to(ribbon, { rotation: -2, duration: 1.6, yoyo: true, repeat: -1, ease: 'sine.inOut', paused: LITE });
+            const ribbonSway = ULTRA ? null : gsap.to(ribbon, { rotation: -2, duration: 1.6, yoyo: true, repeat: -1, ease: 'sine.inOut', paused: LITE });
             // Os pingos de tinta "respiram" só quando se passa o rato na paleta
             const blobs = gsap.to('.paint-blob', { scale: 1.2, transformOrigin: '50% 50%', duration: 0.5, ease: 'sine.inOut', stagger: { each: 0.12, repeat: 1, yoyo: true }, paused: true });
-            ribbon.addEventListener('mouseenter', () => blobs.restart());
+            ribbon.addEventListener('mouseenter', () => { if (!ULTRA) blobs.restart(); });
 
             const expoSection = document.getElementById('exhibition');
             let expoTop = 0, navH = 0;
@@ -1645,7 +1784,7 @@
             const sheen = item.querySelector('.art-sheen');
             gsap.set(frame, { transformPerspective: 900 });
             item.addEventListener('mousemove', (e) => {
-                if (LITE) return;
+                if (BALANCED) return;
                 const r = frame.getBoundingClientRect();
                 const px = (e.clientX - r.left) / r.width - 0.5;
                 const py = (e.clientY - r.top) / r.height - 0.5;
@@ -1789,7 +1928,7 @@
             expoTrack.appendChild(clone);
         });
 
-        const carousel = { x: 0, speed: REDUCED_MOTION ? 0 : 0.6, baseSpeed: REDUCED_MOTION ? 0 : 0.6, velocity: 0, period: 0, dragging: false, lastX: 0, moved: 0, downCard: null };
+        const carousel = { x: 0, speed: (REDUCED_MOTION || ULTRA) ? 0 : 0.6, baseSpeed: (REDUCED_MOTION || ULTRA) ? 0 : 0.6, velocity: 0, period: 0, dragging: false, lastX: 0, moved: 0, downCard: null };
 
         function measureCarousel() {
             const firstClone = expoTrack.children[expoOriginals.length];
@@ -1799,9 +1938,10 @@
         window.addEventListener('resize', measureCarousel);
 
         let carouselVisible = false;
-        ScrollTrigger.create({ trigger: '#exhibition', start: 'top bottom', end: 'bottom top', onToggle: (self) => { carouselVisible = self.isActive; } });
+        ScrollTrigger.create({ trigger: '#exhibition', start: 'top bottom', end: 'bottom top', onToggle: (self) => { carouselVisible = self.isActive; ANIM_VISIBLE.carousel = self.isActive; } });
         gsap.ticker.add(() => {
-            if (!carousel.period || (!carouselVisible && !carousel.dragging)) return;
+            if (!carousel.period || (!carouselVisible && !carousel.dragging && !CALIBRATING)) return;
+            if (ULTRA && !carousel.dragging && carousel.velocity === 0) return;
             if (!carousel.dragging) {
                 carousel.x -= carousel.speed * gsap.ticker.deltaRatio();
                 carousel.x += carousel.velocity;
@@ -1816,7 +1956,7 @@
         // Abranda até parar quando o rato está por cima (para ler o texto de hover)
         if (IS_FINE_POINTER) {
             expoCarousel.addEventListener('mouseenter', () => gsap.to(carousel, { speed: 0, duration: 0.8, ease: 'power2.out' }));
-            expoCarousel.addEventListener('mouseleave', () => gsap.to(carousel, { speed: carousel.baseSpeed, duration: 1.2, ease: 'power2.in' }));
+            expoCarousel.addEventListener('mouseleave', () => !ULTRA && gsap.to(carousel, { speed: carousel.baseSpeed, duration: 1.2, ease: 'power2.in' }));
         }
 
         expoCarousel.addEventListener('pointerdown', (e) => {
@@ -1902,19 +2042,25 @@
         let heroIndex = 0;
         if (heroSlides.length) {
             gsap.set(heroSlides, { autoAlpha: 0, zIndex: 1 });
-            gsap.set(heroSlides[0], { autoAlpha: 1, scale: 1.12, zIndex: 2 });
-            gsap.to(heroSlides[0], { scale: 1, duration: 7, ease: 'none' });
+            gsap.set(heroSlides[0], { autoAlpha: 1, scale: BALANCED ? 1 : 1.12, zIndex: 2 });
+            if (!BALANCED) gsap.to(heroSlides[0], { scale: 1, duration: 7, ease: 'none' });
         }
         if (heroSlides.length > 1) {
             setInterval(() => {
                 if (window.scrollY > window.innerHeight || document.hidden) return;
+                if (ULTRA) {   // troca simples, sem zoom nem fade
+                    gsap.set(heroSlides[heroIndex], { autoAlpha: 0 });
+                    heroIndex = (heroIndex + 1) % heroSlides.length;
+                    gsap.set(heroSlides[heroIndex], { autoAlpha: 1, scale: 1, zIndex: 2 });
+                    return;
+                }
                 const prev = heroSlides[heroIndex];
                 heroIndex = (heroIndex + 1) % heroSlides.length;
                 const next = heroSlides[heroIndex];
                 gsap.set(prev, { zIndex: 1 });
-                gsap.set(next, { zIndex: 2, autoAlpha: 0, scale: 1.12 });
+                gsap.set(next, { zIndex: 2, autoAlpha: 0, scale: BALANCED ? 1 : 1.12 });
                 gsap.to(next, { autoAlpha: 1, duration: 1.6, ease: 'power2.inOut' });
-                gsap.to(next, { scale: 1, duration: 7, ease: 'none' });
+                if (!BALANCED) gsap.to(next, { scale: 1, duration: 7, ease: 'none' });
                 gsap.to(prev, { autoAlpha: 0, duration: 1.6, delay: 0.3, ease: 'power2.inOut' });
             }, 5500);
         }
@@ -1930,32 +2076,97 @@
         }
 
         const loader = document.getElementById('loader');
-        let skipLoader = REDUCED_MOTION;
-        try {
-            if (sessionStorage.getItem('mgs-intro')) skipLoader = true;
-            sessionStorage.setItem('mgs-intro', '1');
-        } catch (e) { /* sem sessionStorage: mostra sempre */ }
+        const loaderStatus = document.getElementById('loaderStatus');
+        let introShown = false;
+        try { introShown = !!sessionStorage.getItem('mgs-intro'); sessionStorage.setItem('mgs-intro', '1'); } catch (e) {}
 
-        if (skipLoader) {
+        const waitForLoad = (maxMs) => new Promise(res => {
+            if (document.readyState === 'complete') return res();
+            const t = setTimeout(res, maxMs);
+            window.addEventListener('load', () => { clearTimeout(t); res(); }, { once: true });
+        });
+        const wait = (ms) => new Promise(r => setTimeout(r, ms));
+
+        // Mede fluidez real durante ms, com as animações do site a correr por trás do ecrã de entrada
+        function measureFrames(ms) {
+            return new Promise(res => {
+                let last = performance.now(), start = last, frames = 0, jank = 0, total = 0;
+                (function tick(now) {
+                    const dt = now - last; last = now;
+                    if (dt < 1000) { total += dt; frames++; if (dt > 50) jank++; }
+                    if (now - start < ms) return requestAnimationFrame(tick);
+                    res({ fps: frames * 1000 / Math.max(total, 1), jank: jank / Math.max(frames, 1) });
+                })(last);
+            });
+        }
+
+        async function calibrate() {
+            await waitForLoad(7000);          // espera que imagens e letras acabem de carregar
+            await wait(400);                  // deixa assentar
+            CALIBRATING = true;
+            for (let k = 0; k < 5; k++) backgroundStrokes.push(new OrganicStroke());   // carga parecida com a real
+            const frames = await measureFrames(2500);
+            CALIBRATING = false;
+            const b = [CPU_SCORE, cpuBench(), cpuBench()].sort((x, y) => x - y)[1];      // mediana de 3
+            return Math.max(tierFromWindow(frames.fps, frames.jank), tierFromCpu(b));
+        }
+
+        function saveTier() { try { sessionStorage.setItem('mgs-tier', String(TIER)); } catch (e) {} }
+
+        if (introShown || REDUCED_MOTION) {
+            // Visita repetida nesta sessão: sem entrada; o monitor continua atento
             loader.remove();
             gsap.delayedCall(0.3, playHeroIntro);
+            waitForLoad(7000).then(() => startSmoothnessMonitor());
         } else {
             document.body.classList.add('no-scroll');
-            const loaderName = document.getElementById('loaderName');
-            loaderName.innerHTML = [...loaderName.textContent].map(c => `<span>${c === ' ' ? '&nbsp;' : c}</span>`).join('');
             const strokePath = loader.querySelector('.loader-stroke path');
             const strokeLen = strokePath.getTotalLength();
             gsap.set(strokePath, { strokeDasharray: strokeLen, strokeDashoffset: strokeLen });
 
-            const finishLoader = () => { if (loader.isConnected) { loader.remove(); unlockScrollIfFree(); } };
-            setTimeout(finishLoader, 6000); // segurança
+            // A assinatura "escreve-se" da esquerda para a direita, depois o risco por baixo
+            gsap.timeline()
+                .to('#loaderLogo', { clipPath: 'inset(0 0% 0 0)', duration: 1.5, ease: 'power2.inOut' })
+                .to(strokePath, { strokeDashoffset: 0, duration: 0.9, ease: 'power2.inOut' }, '-=0.5')
+                .to('.loader-status', { opacity: 0.65, duration: 0.5 }, '-=0.4');
 
-            gsap.timeline({ onComplete: finishLoader })
-                .from(loaderName.children, { yPercent: 110, autoAlpha: 0, duration: 0.8, stagger: 0.035, ease: 'power3.out' })
-                .to(strokePath, { strokeDashoffset: 0, duration: 0.9, ease: 'power2.inOut' }, '-=0.4')
-                .to('.loader-sub', { opacity: 0.6, duration: 0.5 }, '-=0.5')
-                .to(loader, { yPercent: -100, duration: 1, ease: 'expo.inOut' }, '+=0.35')
-                .add(playHeroIntro, '-=0.45');
+            // Texto "a pensar"
+            const phrases = ['A preparar a galeria', 'A misturar as cores', 'A afinar os pincéis', 'Quase pronto'];
+            let phraseIdx = 0;
+            const phraseTimer = setInterval(() => {
+                phraseIdx = Math.min(phraseIdx + 1, phrases.length - 1);
+                gsap.to(loaderStatus, { opacity: 0, duration: 0.2, onComplete: () => {
+                    loaderStatus.textContent = phrases[phraseIdx];
+                    gsap.to(loaderStatus, { opacity: 1, duration: 0.3 });
+                } });
+            }, 1400);
+
+            let finished = false;
+            const finishIntro = () => {
+                if (finished) return;
+                finished = true;
+                clearInterval(phraseTimer);
+                CALIBRATING = false;
+                saveTier();
+                gsap.timeline({ onComplete: () => { loader.remove(); unlockScrollIfFree(); } })
+                    .to(loader, { yPercent: -100, duration: 1, ease: 'expo.inOut' })
+                    .add(playHeroIntro, '-=0.45');
+                startSmoothnessMonitor();
+            };
+            setTimeout(finishIntro, 11000);   // segurança: nunca fica mais de 11 s
+
+            const started = performance.now();
+            (async () => {
+                if (FORCED_TIER === null && !ULTRA) {
+                    const t = await calibrate();
+                    if (t > TIER) setTier(t, true);
+                } else {
+                    await waitForLoad(6000);
+                }
+                const minDuration = ULTRA ? 0 : 2800;          // tempo mínimo para a entrada se ver bem
+                await wait(Math.max(0, minDuration - (performance.now() - started)));
+                finishIntro();
+            })();
         }
 
         /* =========================================================
@@ -1975,11 +2186,11 @@
             }
         });
 
-        gsap.to('#scrollProgress', { scaleX: 1, ease: 'none', scrollTrigger: { start: 0, end: 'max', scrub: 0.3 } });
+        if (!ULTRA) gsap.to('#scrollProgress', { scaleX: 1, ease: 'none', scrollTrigger: { start: 0, end: 'max', scrub: 0.3 } });
 
-        if (!REDUCED_MOTION) {
+        if (!REDUCED_MOTION && !ULTRA) {
             gsap.to('.hero-inner', { yPercent: 35, autoAlpha: 0, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } });
-            gsap.to('.hero-slider', { yPercent: 18, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } });
+            if (!BALANCED) heroSliderParallax = gsap.to('.hero-slider', { yPercent: 18, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } });
         }
 
         const marqueeTrack = document.getElementById('marqueeTrack');
@@ -1991,9 +2202,9 @@
             window.addEventListener('resize', measureMarquee);
             document.fonts && document.fonts.ready.then(measureMarquee);
             let mqVisible = false;
-            ScrollTrigger.create({ trigger: '.marquee-wrap', start: 'top bottom', end: 'bottom top', onToggle: (self) => { mqVisible = self.isActive; } });
+            ScrollTrigger.create({ trigger: '.marquee-wrap', start: 'top bottom', end: 'bottom top', onToggle: (self) => { mqVisible = self.isActive; ANIM_VISIBLE.marquee = self.isActive; } });
             gsap.ticker.add(() => {
-                if (!mq.width || REDUCED_MOTION || !mqVisible) return;
+                if (!mq.width || REDUCED_MOTION || ULTRA || (!mqVisible && !CALIBRATING)) return;
                 mq.x -= (0.6 + mq.boost) * gsap.ticker.deltaRatio();
                 if (mq.x <= -mq.width) mq.x += mq.width;
                 gsap.set(marqueeTrack, { x: mq.x });
@@ -2002,6 +2213,7 @@
             ScrollTrigger.create({
                 start: 0, end: 'max',
                 onUpdate: (self) => {
+                    if (BALANCED) return;
                     mq.boost = Math.min(Math.abs(self.getVelocity()) / 250, 10);
                     gsap.to(mq, { boost: 0, duration: 0.9, ease: 'power2.out', overwrite: true });
                 }
@@ -2023,18 +2235,18 @@
         /* =========================================================
            REVELAÇÕES AO FAZER SCROLL
         ========================================================= */
-        gsap.utils.toArray('.reveal').forEach(el => {
+        if (!ULTRA) gsap.utils.toArray('.reveal').forEach(el => {
             gsap.from(el, { scrollTrigger: { trigger: el, start: 'top 88%' }, y: 40, autoAlpha: 0, duration: 1, ease: 'power3.out' });
         });
-        gsap.from('.bio-container', { scrollTrigger: { trigger: '.bio-section', start: 'top 75%' }, y: 50, autoAlpha: 0, duration: 1, ease: 'power3.out' });
-        gsap.from('.expo-card', { scrollTrigger: { trigger: '#exhibition', start: 'top 70%' }, y: 60, autoAlpha: 0, duration: 1, stagger: 0.08, ease: 'power3.out' });
-        gsap.to('#customCircle', { scrollTrigger: { trigger: '.custom-work', start: 'top bottom', end: 'bottom top', scrub: 1 }, y: 120, scale: 1.1, ease: 'none' });
+        if (!ULTRA) gsap.from('.bio-container', { scrollTrigger: { trigger: '.bio-section', start: 'top 75%' }, y: 50, autoAlpha: 0, duration: 1, ease: 'power3.out' });
+        if (!ULTRA) gsap.from('.expo-card', { scrollTrigger: { trigger: '#exhibition', start: 'top 70%' }, y: 60, autoAlpha: 0, duration: 1, stagger: 0.08, ease: 'power3.out' });
+        if (!ULTRA) gsap.to('#customCircle', { scrollTrigger: { trigger: '.custom-work', start: 'top bottom', end: 'bottom top', scrub: 1 }, y: 120, scale: 1.1, ease: 'none' });
 
         /* Botão de fala (WhatsApp) */
         const speechLoop = gsap.timeline({ paused: true });
         speechLoop.to('.typing-dots span', { y: -4, duration: 0.4, ease: 'sine.inOut', stagger: { each: 0.15, repeat: -1, yoyo: true } }, 0)
                   .to('.speech-wrap', { y: -6, duration: 2, yoyo: true, repeat: -1, ease: 'sine.inOut' }, 0);
-        ScrollTrigger.create({ trigger: '.custom-work', start: 'top bottom', end: 'bottom top', onToggle: (self) => self.isActive ? speechLoop.play() : speechLoop.pause() });
+        ScrollTrigger.create({ trigger: '.custom-work', start: 'top bottom', end: 'bottom top', onToggle: (self) => { if (ULTRA) return; self.isActive ? speechLoop.play() : speechLoop.pause(); } });
         const speechBtn = document.getElementById('speechBtn');
         speechBtn.addEventListener('mouseenter', () => gsap.to(speechBtn, { scale: 1.06, rotation: -2, duration: 0.4, ease: 'back.out(2)' }));
         speechBtn.addEventListener('mouseleave', () => gsap.to(speechBtn, { scale: 1, rotation: 0, duration: 0.4, ease: 'power2.out' }));
@@ -2076,6 +2288,7 @@
             let isHovering = false;
 
             window.addEventListener('mousemove', (e) => {
+                if (ULTRA) return;
                 if (!cursorShown) { gsap.set(cursor, { x: e.clientX, y: e.clientY }); gsap.to(cursor, { autoAlpha: 1, duration: 0.2 }); cursorShown = true; }
                 xTo(e.clientX);
                 yTo(e.clientY);
@@ -2083,6 +2296,7 @@
             document.addEventListener('mouseleave', () => { gsap.to(cursor, { autoAlpha: 0, duration: 0.2 }); cursorShown = false; });
 
             document.addEventListener('mouseover', (e) => {
+                if (ULTRA) return;
                 const over = !!e.target.closest(HOVER_SELECTOR);
                 if (over === isHovering) return;
                 isHovering = over;
@@ -2091,7 +2305,7 @@
 
             let colorIndex = 0;
             window.addEventListener('mousedown', (e) => {
-                if (e.button !== 0) return;
+                if (e.button !== 0 || ULTRA) return;
                 const color = PALETTE[colorIndex % PALETTE.length];
                 colorIndex++;
 
@@ -2105,7 +2319,8 @@
                 gsap.to(blot, { scale: 1, duration: 0.35, ease: 'back.out(3)' });
                 gsap.to(blot, { autoAlpha: 0, scale: 1.25, duration: 0.8, delay: 0.35, ease: 'power2.out', onComplete: () => blot.remove() });
 
-                for (let i = 0; i < 7; i++) {
+                const dropCount = BALANCED ? 3 : 7;
+                for (let i = 0; i < dropCount; i++) {
                     const drop = document.createElement('span');
                     drop.className = 'splash-drop';
                     const size = 3 + Math.random() * 6;
@@ -2226,6 +2441,7 @@
             const io = new IntersectionObserver((entries) => {
                 entries.forEach(e => canvasZones.set(e.target, e.isIntersecting));
                 canvasVisible = [...canvasZones.values()].some(Boolean);
+                ANIM_VISIBLE.canvas = canvasVisible;
             });
             ['shop', 'bio'].forEach(id => { const el = document.getElementById(id); if (el) io.observe(el); });
         } else {
@@ -2235,14 +2451,15 @@
         let lastCanvasFrame = 0;
         function animateCanvas(now) {
             requestAnimationFrame(animateCanvas);
-            if (LITE || !canvasVisible || document.hidden) return;
-            if (now - lastCanvasFrame < 32) return;           // ~30 fps chega para pinceladas lentas
+            if (LITE || (!canvasVisible && !CALIBRATING) || document.hidden) return;
+            const interval = BALANCED ? 48 : 32;             // Quality ~30 fps · Balanced ~20 fps
+            if (now - lastCanvasFrame < interval) return;
+            const steps = Math.round((now - lastCanvasFrame) / 16.7);
             lastCanvasFrame = now;
             bgCtx.clearRect(0, 0, bgCanvas.width, bgCanvas.height);
-            if (Math.random() < 0.02 && backgroundStrokes.length < 9) backgroundStrokes.push(new OrganicStroke());
+            if (Math.random() < 0.02 && backgroundStrokes.length < (BALANCED ? 5 : 9)) backgroundStrokes.push(new OrganicStroke());
             for (let i = 0; i < backgroundStrokes.length; i++) {
-                backgroundStrokes[i].update();
-                backgroundStrokes[i].update();                  // compensa a metade dos frames
+                for (let k = 0; k < Math.min(steps, 3); k++) backgroundStrokes[i].update();   // mantém a velocidade
                 backgroundStrokes[i].draw();
                 if (backgroundStrokes[i].fade <= 0) { backgroundStrokes.splice(i, 1); i--; }
             }
