@@ -436,6 +436,9 @@
         .to-top:hover { background: var(--accent-color); border-color: var(--accent-color); color: #fff; }
 
         @media (prefers-reduced-motion: reduce) { .scroll-cue-line::after { animation: none; } }
+        .perf-badge { position: fixed; right: 12px; bottom: 12px; z-index: 9600; padding: 0.35rem 0.7rem; border-radius: 20px; font-size: 0.68rem; font-weight: 600; letter-spacing: 0.3px; background: rgba(47,36,31,0.82); color: #F4EFE6; opacity: 0.75; transition: opacity 0.3s; }
+        .perf-badge:hover { opacity: 1; }
+        .perf-badge.is-lite { background: var(--accent-color); }
         html.lite body::after, html.lite #bg-canvas { display: none; }
         html.lite .art-frame, html.lite .expo-card { box-shadow: 0 14px 24px -12px rgba(47,36,31,0.45); }
 
@@ -880,28 +883,61 @@
 
         const IS_FINE_POINTER = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
         const REDUCED_MOTION = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        /* =========================================================
+           MODO LEVE AUTOMÁTICO
+           Mede a fluidez depois de o site abrir. Só liga o modo leve quando há
+           "engasgos" reais (frames muito demorados), e não quando o browser está
+           simplesmente limitado a 30 fps (ex.: poupança de energia do Chrome).
+        ========================================================= */
+        const SHOW_PERF_BADGE = true;   // ← pôr "false" antes de publicar o site
         let LITE = false;
-        try { LITE = sessionStorage.getItem('mgs-lite') === '1'; } catch (e) {}
-        function enableLite() {
-            if (LITE && document.documentElement.classList.contains('lite')) return;
-            LITE = true;
-            document.documentElement.classList.add('lite');
-            try { sessionStorage.setItem('mgs-lite', '1'); } catch (e) {}
+        let perfInfo = 'a medir…';
+        try { sessionStorage.removeItem('mgs-lite'); } catch (e) {}
+
+        function setLite(on, reason) {
+            LITE = on;
+            document.documentElement.classList.toggle('lite', on);
+            if (reason) perfInfo = reason;
+            updatePerfBadge();
         }
-        if (LITE) document.documentElement.classList.add('lite');
-        // Mede ~2 s de animação depois da entrada; se ficar abaixo de ~45 fps, alivia os efeitos
-        window.addEventListener('load', () => {
-            if (LITE) return;
-            setTimeout(() => {
-                let frames = 0, start = performance.now();
-                (function probe(now) {
-                    frames++;
-                    if (now - start < 2000) return requestAnimationFrame(probe);
-                    const fps = frames * 1000 / (now - start);
-                    if (fps < 45) enableLite();
-                })(start);
-            }, 3500);
-        });
+
+        function measurePerformance() {
+            if (document.hidden) { setTimeout(measurePerformance, 1500); return; }
+            const times = [];
+            let last = performance.now();
+            const start = last;
+            (function probe(now) {
+                times.push(now - last);
+                last = now;
+                if (now - start < 3000) return requestAnimationFrame(probe);
+                if (document.hidden) { setTimeout(measurePerformance, 1500); return; }
+                times.shift();
+                const sorted = times.slice().sort((a, b) => a - b);
+                const median = sorted[Math.floor(sorted.length / 2)];
+                const slowShare = times.filter(t => t > 50).length / times.length;
+                const fps = Math.round(1000 / median);
+                const lite = median > 45 || slowShare > 0.12;
+                setLite(lite, `${fps} fps · ${Math.round(slowShare * 100)}% engasgos`);
+            })(last);
+        }
+        window.addEventListener('load', () => setTimeout(measurePerformance, 4500));
+
+        // Pequeno aviso no canto (só para testes)
+        let perfBadge = null;
+        function updatePerfBadge() {
+            if (!perfBadge) return;
+            perfBadge.textContent = (LITE ? '● Modo leve ativo' : '○ Modo completo') + ' — ' + perfInfo;
+            perfBadge.classList.toggle('is-lite', LITE);
+        }
+        if (SHOW_PERF_BADGE) {
+            perfBadge = document.createElement('button');
+            perfBadge.className = 'perf-badge';
+            perfBadge.title = 'Clique para alternar entre modo leve e completo (teste)';
+            perfBadge.addEventListener('click', () => setLite(!LITE, 'alterado à mão'));
+            document.addEventListener('DOMContentLoaded', () => document.body.appendChild(perfBadge));
+            if (document.body) document.body.appendChild(perfBadge);
+            updatePerfBadge();
+        }
         const WHATSAPP_NUMBER = '351932444844';
         const PALETTE = ['138, 42, 34', '192, 159, 82', '74, 93, 35', '183, 93, 63', '47, 36, 31'];
 
@@ -2185,7 +2221,16 @@
 
         // O fundo só se vê atrás da Galeria e da Biografia (o resto tem fundo próprio)
         let canvasVisible = false;
-        ScrollTrigger.create({ trigger: '#shop', endTrigger: '#bio', start: 'top bottom', end: 'bottom top', onToggle: (self) => { canvasVisible = self.isActive; } });
+        const canvasZones = new Map();
+        if ('IntersectionObserver' in window) {
+            const io = new IntersectionObserver((entries) => {
+                entries.forEach(e => canvasZones.set(e.target, e.isIntersecting));
+                canvasVisible = [...canvasZones.values()].some(Boolean);
+            });
+            ['shop', 'bio'].forEach(id => { const el = document.getElementById(id); if (el) io.observe(el); });
+        } else {
+            canvasVisible = true;
+        }
 
         let lastCanvasFrame = 0;
         function animateCanvas(now) {
