@@ -982,8 +982,8 @@
 
             <div class="bio-stats">
                 <div class="bio-stat"><div class="stat-num" data-count="1989" data-from="1950">1989</div><div class="stat-label" data-i18n="bio.stat1">Primeira exposição<br>individual</div></div>
-                <div class="bio-stat"><div class="stat-num" data-count="5">5</div><div class="stat-label" data-i18n="bio.stat2">Igrejas e capelas<br>com obra sua</div></div>
-                <div class="bio-stat"><div class="stat-num" data-count="4">4</div><div class="stat-label" data-i18n="bio.stat3">Técnicas: aguarela, óleo,<br>acrílico e artesanato</div></div>
+                <div class="bio-stat"><div class="stat-num" data-count="40" data-prefix="+">+40</div><div class="stat-label" data-i18n="bio.stat2">Espaços com a<br>sua arte</div></div>
+                <div class="bio-stat"><div class="stat-num" data-count="35" data-prefix="+">+35</div><div class="stat-label" data-i18n="bio.stat3">Anos de<br>percurso artístico</div></div>
             </div>
         </div>
     </section>
@@ -1178,8 +1178,8 @@
             'bio.p8': 'I continued to create works for churches and chapels, such as the Church of Roda in Mangualde (2007) and the Chapel of Rainha Santa Isabel at Quinta da Estrada, Vale de Távora, Aguiar da Beira (2008). In 2013 I painted a mural with a biblical scene for the Church of Fornos de Maceira Dão and, in 2014, created a work for the Church of Gradiz in Aguiar da Beira.',
             'bio.p9': 'My journey is deeply marked by the union of art and spirituality. In every work I create, I seek to convey emotion, faith and beauty, leaving an artistic contribution that reflects not only my passion for painting but also my commitment to culture and the community.',
             'bio.readMore': 'Read full biography', 'bio.readLess': 'Show less',
-            'bio.stat1': 'First solo<br>exhibition', 'bio.stat2': 'Churches and chapels<br>with her work',
-            'bio.stat3': 'Techniques: watercolour, oil,<br>acrylic and crafts',
+            'bio.stat1': 'First solo<br>exhibition', 'bio.stat2': 'Places graced<br>by her art',
+            'bio.stat3': 'Years as<br>an artist',
             'custom.eyebrow': 'Commissions', 'custom.title': 'Custom<br><em>works.</em>',
             'custom.text': 'Some works begin on a canvas, others begin with a conversation. Portraits, murals, canvases or handmade pieces, made to measure for you.',
             'custom.btn': 'Tell me your idea', 'custom.caption': 'Direct chat on WhatsApp',
@@ -2860,11 +2860,12 @@
             const end = Number(el.dataset.count);
             const counter = { v: Number(el.dataset.from || 0) };
             if (REDUCED_MOTION) return;
-            el.textContent = counter.v;
+            const pre = el.dataset.prefix || '', suf = el.dataset.suffix || '';
+            el.textContent = pre + counter.v + suf;
             gsap.to(counter, {
                 v: end, duration: 2, ease: 'power2.out',
                 scrollTrigger: { trigger: el, start: 'top 90%', once: true },
-                onUpdate: () => { el.textContent = Math.round(counter.v); }
+                onUpdate: () => { el.textContent = pre + Math.round(counter.v) + suf; }
             });
         });
 
