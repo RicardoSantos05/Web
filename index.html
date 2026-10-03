@@ -887,7 +887,7 @@
                     <div class="expo-overlay"><span class="expo-year">2013</span><span class="expo-name">Mural Bíblico</span><span class="expo-local">em Fornos de Maceira Dão</span><span class="expo-more" data-i18n="expo.more">Ver registo</span></div>
                 </div>
 
-                <div class="expo-card" tabindex="0" data-title="2014 - Igreja de Gradiz" data-local="Aguiar da Beira" data-desc="Criação de uma pintura personalizada de Jesus que culminou na enorme concretização de a pintar diretamente no teto da capela, lá do alto dos andaimes." data-imgs="image_2024408208_20.jpg,image_2024408208_19.jpg">
+                <div class="expo-card" tabindex="0" data-title="2014 - Igreja de Gradiz" data-local="Aguiar da Beira" data-desc="Criação de uma pintura personalizada de Jesus que culminou na enorme concretização de a aplicar no teto da capela, lá do alto dos andaimes." data-imgs="image_2024408208_20.jpg,image_2024408208_19.jpg">
                     <div class="expo-mat"><img src="image_2024408208_20.jpg" alt="Igreja de Gradiz" draggable="false"></div>
                     <div class="expo-overlay"><span class="expo-year">2014</span><span class="expo-name">Igreja de Gradiz</span><span class="expo-local">em Aguiar da Beira</span><span class="expo-more" data-i18n="expo.more">Ver registo</span></div>
                 </div>
@@ -1884,7 +1884,10 @@
             const title = (en && f.titulo_en) || f.titulo || f.nome || '';
             const text = richToHtml((en && (f.mensagem_en || f.texto_en)) || f.mensagem || f.Mensagem || f.texto || '');
             const date = formatDate(f.data || f.date);
-            const local = (en && (f.local_en || f.localizacao_en)) || f.local || f.localizacao || f.localização || f.Localizacao || f.Localização || f.location || '';
+            // No Contentful o campo "Localização" tem o ID "localizao"; aceita também outros nomes começados por "local"
+            const localKey = Object.keys(f).find(k => /^(local|location)/i.test(k) && !/_en$/i.test(k));
+            const localEnKey = Object.keys(f).find(k => /^(local|location).*_en$/i.test(k));
+            const local = (en && localEnKey && f[localEnKey]) || (localKey && f[localKey]) || '';
             const titleEl = document.getElementById('eventTitle');
             if (title) titleEl.textContent = title;
             const meta = document.getElementById('eventMeta');
@@ -2151,7 +2154,7 @@
                     const contentTypeId = item.sys.contentType.sys.id.toLowerCase();
 
                     if (contentTypeId.includes('evento') || f.mensagem || f.Mensagem) {
-                        if (!eventFields && (f.mensagem || f.Mensagem || f.texto || f.titulo || f.local || f.localizacao || f.localização || f.Localizacao || f.Localização || f.location)) {
+                        if (!eventFields && (f.mensagem || f.Mensagem || f.texto || f.titulo || Object.keys(f).some(k => /^(local|location)/i.test(k)))) {
                             const evImgs = [];
                             // Imagem (opcional): campo "imagem" ou, se tiver outro nome, o primeiro campo com uma imagem
                             let evMain = assetUrl(f.imagem) || assetUrl(f.Imagem) || assetUrl(f.foto);
@@ -2558,7 +2561,7 @@
             openModal({
                 imgs,
                 framed: false,
-                eyebrow: isYear ? year : t('expo.modalEyebrow', 'Exposições & Percurso'),
+                eyebrow: '',   // sem etiqueta por cima do título (o ano já aparece em baixo)
                 title: card.dataset.title.replace(/^\d{4}\s*-\s*/, ''),
                 desc: card.dataset.desc,
                 specs: [
