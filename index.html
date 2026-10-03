@@ -389,16 +389,7 @@
         .custom-work { position: relative; overflow: hidden; background: var(--accent-color); color: var(--bg-color); padding: 8rem 5vw 7.5rem; text-align: center; isolation: isolate; }
         .custom-circle { position: absolute; z-index: -1; right: -12vw; top: -22vw; width: 52vw; aspect-ratio: 1; border-radius: 50%; background: rgba(0,0,0,0.13); }
         .custom-circle.small { right: auto; top: auto; left: -8vw; bottom: -14vw; width: 26vw; background: rgba(255,255,255,0.05); }
-        /* Palavras com exemplos de trabalhos, espalhadas pelo fundo bordeaux */
-        .cw-words { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
-        .cw-word { position: absolute; font-family: 'Playfair Display', serif; font-style: italic; font-weight: 500; white-space: nowrap; line-height: 1;
-            font-size: var(--sz); color: var(--bg-color); opacity: var(--op); transform: rotate(var(--rot)); will-change: transform; transition: opacity 0.4s ease, color 0.4s ease; }
-        .cw-word::before { content: '✦'; font-style: normal; font-size: 0.45em; vertical-align: 0.55em; margin-right: 0.45em; color: var(--accent-alt); opacity: 0.9; }
         .custom-work > p, .custom-work .speech-wrap { position: relative; z-index: 1; }
-        @media (hover: hover) and (pointer: fine) {
-            .cw-words { pointer-events: auto; }
-            .cw-word:hover { opacity: 0.85; color: #fff; }
-        }
         .custom-work .eyebrow { color: var(--accent-alt); }
         .custom-work h2 { position: relative; z-index: 1; font-size: clamp(3rem, 7vw, 6.5rem); line-height: 1; margin-top: 0; }
         .custom-work h2 em { color: var(--accent-alt); font-style: italic; }
@@ -585,14 +576,7 @@
             .event-panel.is-expanded .event-panel-media { flex-basis: 38vh; }
             .event-panel-body { padding: 2rem 1.6rem; }
 
-            .custom-work { padding: 7.5rem 6vw 7rem; }
-            .cw-desk { display: none; }
-            .cw-word { font-size: calc(var(--sz) * 0.62); }
-            .cw-word:nth-child(1) { left: 5% !important; top: 4% !important; }
-            .cw-word:nth-child(2) { right: 6% !important; top: 7% !important; }
-            .cw-word:nth-child(5) { left: 4% !important; top: auto !important; bottom: 7%; }
-            .cw-word:nth-child(6) { right: 5% !important; top: auto !important; bottom: 3.5%; }
-            .cw-word:nth-child(8) { right: auto !important; left: 34% !important; top: auto !important; bottom: 0.8%; }
+            .custom-work { padding: 6rem 6vw 5.5rem; }
             .custom-circle { width: 90vw; top: -40vw; right: -30vw; }
             .speech-btn { font-size: 1.1rem; }
             .contact-main { grid-template-columns: 1fr; padding-top: 5rem; }
@@ -970,8 +954,8 @@
 
             <div class="bio-stats">
                 <div class="bio-stat"><div class="stat-num" data-count="1989" data-from="1950">1989</div><div class="stat-label" data-i18n="bio.stat1">Primeira exposição<br>individual</div></div>
-                <div class="bio-stat"><div class="stat-num" data-count="40" data-prefix="+">+40</div><div class="stat-label" data-i18n="bio.stat2">Espaços com a<br>sua arte</div></div>
-                <div class="bio-stat"><div class="stat-num" data-count="35" data-prefix="+">+35</div><div class="stat-label" data-i18n="bio.stat3">Anos de<br>percurso artístico</div></div>
+                <div class="bio-stat"><div class="stat-num" data-count="500" data-prefix="+">+500</div><div class="stat-label" data-i18n="bio.stat2">Trabalhos<br>realizados</div></div>
+                <div class="bio-stat"><div class="stat-num" data-count="50" data-prefix="+">+50</div><div class="stat-label" data-i18n="bio.stat3">Anos de<br>percurso artístico</div></div>
             </div>
         </div>
     </section>
@@ -983,19 +967,6 @@
         <div class="custom-work">
             <span class="custom-circle" id="customCircle"></span>
             <span class="custom-circle small"></span>
-            <!-- Exemplos do que a artista faz, espalhados pelo fundo -->
-            <div class="cw-words" aria-hidden="true">
-                <span class="cw-word" data-i18n="cw.1" style="left:6%;top:13%;--sz:2.3rem;--rot:-6deg;--op:0.42">Retratos</span>
-                <span class="cw-word" data-i18n="cw.2" style="right:7%;top:11%;--sz:2.7rem;--rot:5deg;--op:0.45">Murais</span>
-                <span class="cw-word cw-desk" data-i18n="cw.3" style="left:13%;top:38%;--sz:1.55rem;--rot:3deg;--op:0.3">Arte sacra</span>
-                <span class="cw-word cw-desk" data-i18n="cw.4" style="right:4%;top:36%;--sz:1.4rem;--rot:-4deg;--op:0.3">Painéis de azulejo</span>
-                <span class="cw-word" data-i18n="cw.5" style="left:3%;top:62%;--sz:1.95rem;--rot:-3deg;--op:0.36">Aguarelas</span>
-                <span class="cw-word" data-i18n="cw.6" style="right:10%;top:60%;--sz:1.65rem;--rot:4deg;--op:0.34">Pintura a óleo</span>
-                <span class="cw-word cw-desk" data-i18n="cw.7" style="left:16%;top:86%;--sz:1.45rem;--rot:5deg;--op:0.28">Presépios</span>
-                <span class="cw-word" data-i18n="cw.8" style="right:17%;top:87%;--sz:1.8rem;--rot:-5deg;--op:0.36">Artesanato</span>
-                <span class="cw-word cw-desk" data-i18n="cw.9" style="left:30%;top:7%;--sz:1.15rem;--rot:2deg;--op:0.22">Acrílicos</span>
-                <span class="cw-word cw-desk" data-i18n="cw.10" style="right:29%;top:95%;--sz:1.1rem;--rot:-2deg;--op:0.22">Telas por encomenda</span>
-            </div>
             <h2 class="reveal" data-i18n="custom.title">Trabalhos<br><em>personalizados.</em></h2>
             <p class="reveal" data-i18n="custom.text">Algumas obras começam numa tela, outras começam numa conversa. Retratos, murais, telas ou peças de artesanato feitas à sua medida.</p>
             <div class="speech-wrap reveal">
@@ -1178,11 +1149,10 @@
             'bio.p7': 'She continued to create works for churches and chapels, such as the Church of Roda in Mangualde (2007) and the Chapel of Rainha Santa Isabel at Quinta da Estrada, Vale de Távora, Aguiar da Beira (2008). In 2013 she painted a mural with a biblical scene for the Church of Fornos de Maceira Dão and, in 2014, created a work for the Church of Gradiz in Aguiar da Beira.',
             'bio.p8': 'Her journey is deeply marked by the union of art and spirituality. In every work she creates, she seeks to convey emotion, faith and beauty, leaving an artistic contribution that reflects not only her passion for painting but also her commitment to culture and the community.',
             'bio.readMore': 'Read full biography', 'bio.readLess': 'Show less',
-            'bio.stat1': 'First solo<br>exhibition', 'bio.stat2': 'Places graced<br>by her art',
+            'bio.stat1': 'First solo<br>exhibition', 'bio.stat2': 'Works<br>created',
             'bio.stat3': 'Years as<br>an artist',
             'custom.eyebrow': 'Commissions', 'custom.title': 'Custom<br><em>works.</em>',
             'custom.text': 'Some works begin on a canvas, others begin with a conversation. Portraits, murals, canvases or handmade pieces, made to measure for you.',
-            'cw.1': 'Portraits', 'cw.2': 'Murals', 'cw.3': 'Sacred art', 'cw.4': 'Tile panels', 'cw.5': 'Watercolours', 'cw.6': 'Oil painting', 'cw.7': 'Nativity scenes', 'cw.8': 'Handcrafts', 'cw.9': 'Acrylics', 'cw.10': 'Commissioned canvases',
             'custom.btn': 'Tell me your idea', 'custom.caption': 'Direct chat on WhatsApp',
             'contact.eyebrow': 'Contact', 'contact.title': 'Shall we<br><span>talk?</span>',
             'contact.sub': 'To find out about a work, ask a question, discuss a commission or simply learn more about Maria da Graça’s work.',
@@ -2775,16 +2745,6 @@
         });
         if (!ULTRA) gsap.from('.bio-container', { scrollTrigger: { trigger: '.bio-section', start: 'top 75%' }, y: 50, autoAlpha: 0, duration: 1, ease: 'power3.out' });
         if (!ULTRA) gsap.from('.expo-card', { scrollTrigger: { trigger: '#exhibition', start: 'top 70%' }, y: 60, opacity: 0, duration: 1, stagger: 0.08, ease: 'power3.out' });
-        // Palavras do fundo: flutuam devagar e afastam-se a ritmos diferentes ao fazer scroll
-        if (!LITE && !REDUCED_MOTION) {
-            gsap.utils.toArray('.cw-word').forEach((w, k) => {
-                const rot = parseFloat(getComputedStyle(w).getPropertyValue('--rot')) || 0;
-                gsap.set(w, { rotation: rot });
-                gsap.to(w, { y: (k % 2 ? 1 : -1) * (8 + (k % 3) * 4), rotation: rot + (k % 2 ? 2 : -2), duration: 3 + (k % 4) * 0.7, yoyo: true, repeat: -1, ease: 'sine.inOut', delay: k * 0.3 });
-                gsap.fromTo(w, { yPercent: 0 }, { yPercent: (k % 3 - 1) * 60, ease: 'none', scrollTrigger: { trigger: '.custom-work', start: 'top bottom', end: 'bottom top', scrub: 1 } });
-            });
-            gsap.from('.cw-word', { scrollTrigger: { trigger: '.custom-work', start: 'top 75%' }, opacity: 0, scale: 0.8, duration: 1.2, stagger: 0.08, ease: 'power3.out', clearProps: 'opacity,scale' });
-        }
         if (!ULTRA) gsap.to('#customCircle', { scrollTrigger: { trigger: '.custom-work', start: 'top bottom', end: 'bottom top', scrub: 1 }, y: 120, scale: 1.1, ease: 'none' });
 
         /* Botão de fala (WhatsApp) */
