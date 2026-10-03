@@ -887,7 +887,7 @@
                     <div class="expo-overlay"><span class="expo-year">2013</span><span class="expo-name">Mural Bíblico</span><span class="expo-local">em Fornos de Maceira Dão</span><span class="expo-more" data-i18n="expo.more">Ver registo</span></div>
                 </div>
 
-                <div class="expo-card" tabindex="0" data-title="2014 - Igreja de Gradiz" data-local="Aguiar da Beira" data-desc="Criação de uma pintura personalizada de Jesus que culminou na enorme concretização de a aplicar no teto da capela, lá do alto dos andaimes." data-imgs="image_2024408208_20.jpg,image_2024408208_19.jpg">
+                <div class="expo-card" tabindex="0" data-title="2014 - Igreja de Gradiz" data-local="Aguiar da Beira" data-desc="Criação de uma pintura personalizada de Jesus que culminou na enorme concretização de a pintar diretamente no teto da capela, lá do alto dos andaimes." data-imgs="image_2024408208_20.jpg,image_2024408208_19.jpg">
                     <div class="expo-mat"><img src="image_2024408208_20.jpg" alt="Igreja de Gradiz" draggable="false"></div>
                     <div class="expo-overlay"><span class="expo-year">2014</span><span class="expo-name">Igreja de Gradiz</span><span class="expo-local">em Aguiar da Beira</span><span class="expo-more" data-i18n="expo.more">Ver registo</span></div>
                 </div>
@@ -1068,7 +1068,6 @@
                                 <circle cx="9.5" cy="19.5" r="1.4"/><circle cx="17" cy="19.5" r="1.4"/>
                             </svg>
                         </button>
-                        <p class="want-note" data-i18n="modal.wantNote">Antes de seguir para o contacto, será pedido que aceite os Termos e Condições.</p>
                     </div>
                 </div>
                 <div class="modal-pager" id="modalPager" hidden>
@@ -2453,7 +2452,7 @@
                     [t('spec.status', 'Estado'), a.available ? t('shop.available', 'Disponível') : t('shop.unavailable', 'Indisponível'), a.available ? 'ok' : 'sold']
                 ],
                 artwork: a
-            }, { kind: 'art', list, pos: list.indexOf(i) });
+            });   // na galeria não há botões de obra anterior/seguinte
         }
         grid.addEventListener('click', (e) => {
             const item = e.target.closest('.shop-item');
