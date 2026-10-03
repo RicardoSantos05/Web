@@ -11,12 +11,11 @@
     <meta property="og:title" content="Maria da Graça Silva | Portfólio de Arte">
     <meta property="og:description" content="Pintora e artesã portuguesa. Quadros, murais de arte sacra e artesanato feito à mão. Veja as obras e encomende a sua peça personalizada.">
     <meta property="og:site_name" content="Maria da Graça Silva">
-    <!-- Ícone "MG" (ficheiros na mesma pasta do index.html) -->
-    <link rel="icon" href="favicon.ico?v=4" sizes="48x48">
-    <link rel="icon" href="favicon.svg?v=4" type="image/svg+xml">
-    <link rel="icon" href="favicon-32.png?v=4" type="image/png" sizes="32x32">
-    <link rel="icon" href="icon-192.png?v=4" type="image/png" sizes="192x192">
-    <link rel="apple-touch-icon" href="apple-touch-icon.png?v=4">
+    <!-- Ícone (pintura; ficheiros na mesma pasta do index.html) -->
+    <link rel="icon" href="favicon.ico?v=5" sizes="48x48">
+    <link rel="icon" href="favicon-32.png?v=5" type="image/png" sizes="32x32">
+    <link rel="icon" href="icon-192.png?v=5" type="image/png" sizes="192x192">
+    <link rel="apple-touch-icon" href="apple-touch-icon.png?v=5">
     <!-- Dados estruturados para o Google perceber quem é a artista -->
     <script type="application/ld+json">
     {
@@ -150,7 +149,7 @@
         .event-ribbon:hover .palette-label { background: var(--accent-dark); }
 
         .event-veil { position: fixed; inset: 0; z-index: 1500; background: rgba(244,239,230,0.78); opacity: 0; visibility: hidden; }
-        .event-panel { position: fixed; left: 0; top: 50%; z-index: 1600; width: min(780px, 92vw); max-height: min(78vh, 620px); display: flex; background: var(--bg-color);
+        .event-panel { position: fixed; left: 0; top: 50%; z-index: 1600; width: min(480px, 92vw); max-height: min(78vh, 620px); display: flex; background: var(--bg-color);
             border-left: 6px solid var(--accent-color); border-radius: 0 18px 18px 0; box-shadow: 30px 30px 80px rgba(47,36,31,0.25); overflow: hidden; visibility: hidden; }
         .event-panel-media { position: relative; flex: 0 0 42%; min-height: 0; background: #1a1411; overflow: hidden; }
         .event-panel-media img { width: 100%; height: 100%; object-fit: cover; }
@@ -163,7 +162,10 @@
         .event-text { line-height: 1.75; opacity: 0.85; }
         .event-text p + p { margin-top: 0.9rem; }
         /* Pré-visualização: texto cortado em 4 linhas com um esbatido */
-        .event-panel:not(.is-expanded) .event-text { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 4; line-clamp: 4; overflow: hidden; }
+        .event-panel:not(.is-expanded) .event-text, .event-panel:not(.is-expanded) .event-panel-media { display: none; }
+        .event-panel.no-more .event-more { display: none; }
+        .event-meta a { color: inherit; text-decoration: underline; text-decoration-color: var(--accent-color); text-underline-offset: 3px; transition: color 0.25s ease; }
+        .event-meta a:hover { color: var(--accent-color); }
         .event-gallery { display: none; gap: 0.6rem; flex-wrap: wrap; margin-top: 0.4rem; }
         .event-panel.is-expanded .event-gallery.has-items { display: flex; }
         .event-thumb { width: 64px; height: 64px; border-radius: 8px; overflow: hidden; opacity: 0.55; outline: 2px solid transparent; outline-offset: 2px; transition: opacity 0.3s, outline-color 0.3s; }
@@ -1127,7 +1129,7 @@
             'nav.expo': 'Exhibitions', 'nav.shop': 'Gallery', 'nav.bio': 'About', 'nav.contact': 'Contact',
             'event.soon': 'Coming soon', 'event.ribbonAria': 'Upcoming event — see details', 'event.eyebrow': 'Upcoming event',
             'event.defaultTitle': 'News <em style="color: var(--accent-color);">on the way</em>',
-            'event.more': 'See more', 'event.less': 'See less', 'event.date': 'Date', 'event.place': 'Place',
+            'event.more': 'See more', 'event.less': 'See less', 'event.date': 'Date', 'event.place': 'Place', 'event.map': 'View on map',
             'hero.sub': 'Watercolour • Oil • Acrylic • Crafts', 'hero.cue': 'Discover',
             'expo.eyebrow': 'Journey', 'expo.title': 'Exhibitions<br><span>& Journey</span>',
             'expo.intro': 'A few photographic records that mark my artistic journey.',
@@ -1851,15 +1853,38 @@
         gsap.set(eventPanel, { xPercent: -105, yPercent: -50, autoAlpha: 0 });
 
         let EVENT_FIELDS = null;
+        // A mensagem pode vir como texto simples ou como Rich Text do Contentful
+        function richToHtml(v) {
+            if (!v) return '';
+            if (typeof v === 'string') return /<[a-z]/i.test(v) ? v : v.trim().replace(/\n/g, '<br>');
+            const esc = (x) => String(x).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+            const walk = (n) => {
+                if (!n) return '';
+                if (n.nodeType === 'text') {
+                    let h = esc(n.value || '').replace(/\n/g, '<br>');
+                    (n.marks || []).forEach(m => { if (m.type === 'bold') h = '<strong>' + h + '</strong>'; if (m.type === 'italic') h = '<em>' + h + '</em>'; });
+                    return h;
+                }
+                const inner = (n.content || []).map(walk).join('');
+                if (n.nodeType === 'paragraph') return inner ? '<p>' + inner + '</p>' : '';
+                if (n.nodeType === 'hyperlink') return '<a href="' + esc((n.data && n.data.uri) || '#') + '" target="_blank" rel="noopener">' + inner + '</a>';
+                if (n.nodeType === 'unordered-list') return '<ul style="padding-left:1.2rem">' + inner + '</ul>';
+                if (n.nodeType === 'ordered-list') return '<ol style="padding-left:1.2rem">' + inner + '</ol>';
+                if (n.nodeType === 'list-item') return '<li>' + inner + '</li>';
+                if (/^heading/.test(n.nodeType)) return '<p><strong>' + inner + '</strong></p>';
+                return inner;
+            };
+            return walk(v);
+        }
         // Textos do evento (mudam com o idioma; no Contentful podem existir titulo_en, mensagem_en, local_en)
         function fillEventTexts() {
             const f = EVENT_FIELDS;
             if (!f) return;
             const en = LANG === 'en';
             const title = (en && f.titulo_en) || f.titulo || f.nome || '';
-            const text = (en && (f.mensagem_en || f.texto_en)) || f.mensagem || f.Mensagem || f.texto || '';
+            const text = richToHtml((en && (f.mensagem_en || f.texto_en)) || f.mensagem || f.Mensagem || f.texto || '');
             const date = formatDate(f.data || f.date);
-            const local = (en && f.local_en) || f.local || f.localizacao || f.localização || '';
+            const local = (en && (f.local_en || f.localizacao_en)) || f.local || f.localizacao || f.localização || f.Localizacao || f.Localização || f.location || '';
             const titleEl = document.getElementById('eventTitle');
             if (title) titleEl.textContent = title;
             const meta = document.getElementById('eventMeta');
@@ -1870,11 +1895,22 @@
                 const strong = document.createElement('strong');
                 strong.textContent = label;
                 li.appendChild(strong);
-                li.appendChild(document.createTextNode(' ' + val));
+                li.appendChild(document.createTextNode(' '));
+                if (val === local) {
+                    // Localização: texto ("Galeria X, Lisboa") ou coordenadas do Contentful ({lat, lon}) → link para o Google Maps
+                    const coords = (typeof val === 'object' && val.lat != null && val.lon != null) ? val.lat + ',' + val.lon : null;
+                    const a = document.createElement('a');
+                    a.href = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(coords || String(val));
+                    a.target = '_blank'; a.rel = 'noopener';
+                    a.textContent = coords ? t('event.map', 'Ver no mapa') + ' ↗' : String(val);
+                    li.appendChild(a);
+                } else li.appendChild(document.createTextNode(val));
                 meta.appendChild(li);
             });
             meta.hidden = meta.children.length === 0;
             document.getElementById('eventText').innerHTML = text;
+            // "Ver mais" só aparece se houver algo para mostrar (mensagem e/ou imagem)
+            eventPanel.classList.toggle('no-more', !text && !(f._imgs && f._imgs.length));
             document.getElementById('eventImg').alt = title || t('event.eyebrow', 'Próximo evento');
         }
         onLangChange(fillEventTexts);
@@ -1995,7 +2031,7 @@
         function eventTargetSize(expanded) {
             const mobile = window.innerWidth <= 768;
             if (expanded) return { width: Math.min(1180, window.innerWidth * (mobile ? 0.96 : 0.9)), height: window.innerHeight * (mobile ? 0.9 : 0.86) };
-            return { width: Math.min(780, window.innerWidth * 0.92), height: null };
+            return { width: Math.min(480, window.innerWidth * 0.92), height: null };
         }
 
         function setEventExpanded(on, animate = true) {
@@ -2114,10 +2150,12 @@
                     const f = item.fields || {};
                     const contentTypeId = item.sys.contentType.sys.id.toLowerCase();
 
-                    if (contentTypeId === 'evento' || f.mensagem || f.Mensagem) {
-                        if (!eventFields && (f.mensagem || f.Mensagem || f.texto || f.titulo)) {
+                    if (contentTypeId.includes('evento') || f.mensagem || f.Mensagem) {
+                        if (!eventFields && (f.mensagem || f.Mensagem || f.texto || f.titulo || f.local || f.localizacao || f.localização || f.Localizacao || f.Localização || f.location)) {
                             const evImgs = [];
-                            const evMain = assetUrl(f.imagem);
+                            // Imagem (opcional): campo "imagem" ou, se tiver outro nome, o primeiro campo com uma imagem
+                            let evMain = assetUrl(f.imagem) || assetUrl(f.Imagem) || assetUrl(f.foto);
+                            if (!evMain) Object.keys(f).some(k => { const v = f[k]; if (v && v.sys && v.sys.linkType === 'Asset') evMain = assetUrl(v); return !!evMain; });
                             if (evMain) evImgs.push(evMain);
                             if (Array.isArray(f.imagens)) f.imagens.forEach(r => { const u = assetUrl(r); if (u && !evImgs.includes(u)) evImgs.push(u); });
                             eventFields = Object.assign({}, f, { _imgUrl: evMain || evImgs[0] || null, _imgs: evImgs });
