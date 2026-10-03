@@ -814,13 +814,33 @@
 
     <section class="hero" id="home">
         <div class="hero-slider">
-            <!-- IMAGENS DO HOME: homeimage1.jpg a homeimage6.jpg, na mesma pasta do index.html (nomes em minúsculas) -->
-            <div class="hero-slide" style="background-image: url('homeimage1.jpg')"></div>
-            <div class="hero-slide" style="background-image: url('homeimage2.jpg')"></div>
-            <div class="hero-slide" style="background-image: url('homeimage3.jpg')"></div>
-            <div class="hero-slide" style="background-image: url('homeimage4.jpg')"></div>
-            <div class="hero-slide" style="background-image: url('homeimage5.jpg')"></div>
-            <div class="hero-slide" style="background-image: url('homeimage6.jpg')"></div>
+            <!-- IMAGENS DO HOME: na mesma pasta do index.html. Se o nome no GitHub tiver maiúsculas/minúsculas diferentes, o script abaixo tenta as variantes automaticamente -->
+            <div class="hero-slide" style="background-image: url('homeimage1.jpg')" data-img="homeimage1.jpg"></div>
+            <div class="hero-slide" style="background-image: url('homeimage2.jpg')" data-img="homeimage2.jpg"></div>
+            <div class="hero-slide" style="background-image: url('homeimage3.jpg')" data-img="homeimage3.jpg"></div>
+            <div class="hero-slide" style="background-image: url('homeimage4.jpg')" data-img="homeimage4.jpg"></div>
+            <div class="hero-slide" style="background-image: url('homeImage5.jpg')" data-img="homeImage5.jpg"></div>
+            <div class="hero-slide" style="background-image: url('homeimage6.jpg')" data-img="homeimage6.jpg"></div>
+            <script>
+            (function(){
+                document.querySelectorAll('.hero-slide[data-img]').forEach(function(el){
+                    var n = el.getAttribute('data-img'), m = n.match(/^home(image)(\d+)\.(jpe?g)$/i);
+                    if (!m) return;
+                    var k = m[2], seen = {}, list = [n];
+                    ['homeimage','homeImage','Homeimage','HomeImage','HOMEIMAGE'].forEach(function(b){
+                        ['jpg','JPG','jpeg','JPEG'].forEach(function(e){ list.push(b + k + '.' + e); });
+                    });
+                    list = list.filter(function(x){ return seen[x] ? false : (seen[x] = 1); });
+                    (function tryNext(i){
+                        if (i >= list.length) return;
+                        var img = new Image();
+                        img.onload = function(){ if (i > 0) el.style.backgroundImage = "url('" + list[i] + "')"; };
+                        img.onerror = function(){ tryNext(i + 1); };
+                        img.src = list[i];
+                    })(0);
+                });
+            })();
+            </script>
         </div>
         <div class="hero-inner">
             <h1 class="hero-title"><span class="title-line">MARIA DA GRAÇA</span></h1>
