@@ -367,9 +367,13 @@
         .bio-section { padding: 3rem 5vw 8rem; }
         .bio-container { background: rgba(244, 239, 230, 0.94); padding: 3rem; border-radius: 12px; box-shadow: 0 10px 30px rgba(47, 36, 31, 0.05); max-width: 1400px; margin: 0 auto; }
         .bio-text-title { font-size: 3.5rem; line-height: 1.1; margin-bottom: 2rem; }
-        .bio-quote { margin: 0 0 2.5rem; padding-left: 1.5rem; border-left: 3px solid var(--accent-color); max-width: 720px; }
-        .bio-quote blockquote { font-family: 'Playfair Display', serif; font-style: italic; font-size: clamp(1.3rem, 2.2vw, 1.8rem); line-height: 1.4; }
-        .bio-quote figcaption { margin-top: 0.8rem; font-size: 0.78rem; letter-spacing: 2px; text-transform: uppercase; opacity: 0.6; }
+        .bio-quote { position: relative; margin: 0 0 2.8rem; padding: 2.2rem 2.2rem 1.8rem 4.2rem; background: rgba(138,42,34,0.05); border-left: 3px solid var(--accent-color); border-radius: 0 12px 12px 0; overflow: hidden; }
+        .bio-quote::before { content: '“'; position: absolute; left: 0.9rem; top: -0.6rem; font-family: 'Playfair Display', serif; font-size: 7rem; line-height: 1; color: var(--accent-color); opacity: 0.35; pointer-events: none; }
+        .bio-quote blockquote p { font-family: 'Playfair Display', serif !important; font-style: italic; font-size: clamp(1.12rem, 1.55vw, 1.32rem) !important; line-height: 1.65 !important; text-align: left !important; margin-bottom: 1.1rem !important; }
+        .bio-quote blockquote p:last-child { margin-bottom: 0 !important; }
+        .bio-quote figcaption { margin-top: 1.2rem; font-size: 0.74rem; letter-spacing: 2.5px; text-transform: uppercase; font-weight: 600; color: var(--accent-color); }
+        .bio-quote figcaption::before { content: '— '; }
+        @media (max-width: 768px) { .bio-quote { padding: 2rem 1.3rem 1.5rem 2.6rem; } .bio-quote::before { left: 0.4rem; font-size: 5rem; } }
         .bio-image { float: right; width: 320px; height: 390px; background-image: url('Imagem_retrato_bio.png'); background-size: cover; background-position: center; border-radius: 12px; box-shadow: 0 20px 40px rgba(47, 36, 31, 0.15); margin-left: 2rem; margin-bottom: 1.5rem; }
         .bio-content p { font-size: 1rem; line-height: 1.8; margin-bottom: 1.5rem; text-align: justify; }
         .bio-more-paragraphs { height: 0; overflow: hidden; opacity: 0; visibility: hidden; }
@@ -826,10 +830,12 @@
 
     <section class="hero" id="home">
         <div class="hero-slider">
-            <!-- TROCAR IMAGENS DO HOME: substituir os ficheiros abaixo pelas novas fotografias -->
-            <div class="hero-slide" style="background-image: url('WhatsApp Image 2026-08-18 at 20.00.54.jpeg')"></div>
-            <div class="hero-slide" style="background-image: url('WhatsApp Image 2026-08-18 at 20.07.11.jpeg')"></div>
-            <div class="hero-slide" style="background-image: url('imagem_7.jpeg')"></div>
+            <!-- IMAGENS DO HOME: ficheiros homeimage1.jpg a homeimage5.jpg, na mesma pasta do index.html -->
+            <div class="hero-slide" style="background-image: url('homeimage1.jpg')"></div>
+            <div class="hero-slide" style="background-image: url('homeimage2.jpg')"></div>
+            <div class="hero-slide" style="background-image: url('homeimage3.jpg')"></div>
+            <div class="hero-slide" style="background-image: url('homeimage4.jpg')"></div>
+            <div class="hero-slide" style="background-image: url('homeimage5.jpg')"></div>
         </div>
         <div class="hero-inner">
             <h1 class="hero-title"><span class="title-line">MARIA DA GRAÇA</span></h1>
@@ -931,26 +937,28 @@
         <div class="bio-container">
             <h2 class="bio-text-title" data-i18n="bio.title">Antes da obra,<br><span>existe uma história.</span></h2>
 
-            <!-- QUOTE DA BIOGRAFIA: escrever a citação e apagar o atributo "hidden" -->
-            <figure class="bio-quote" hidden>
-                <blockquote>Citação a definir.</blockquote>
-                <figcaption>Maria da Graça Silva</figcaption>
-            </figure>
-
             <div class="bio-content" data-nosnippet>
                 <div class="bio-image"></div>
 
-                <p data-i18n="bio.p1">Tinha apenas cinco ou seis anos quando, numa noite de São João, Maria da Graça se cruzou pela primeira vez com fotografias de artistas de teatro. A expressividade daquelas imagens despertou nela um fascínio que, embora ainda sem saber, viria a acompanhá-la ao longo de toda a vida. Pouco tempo depois, descobriu na dispensa da avó uma coleção de postais com reproduções de obras de arte. Encantaram-na as cores, as formas e, sobretudo, a diversidade de quem as criava. Entre pintores tradicionais e artistas que pintavam com a boca ou com os pés, começou a perceber que a arte não tinha limites nem uma única forma de existir.</p>
-                <p data-i18n="bio.p2">A minha formação artística teve início na Escola Industrial Oliveira Salazar, em Luanda, onde frequentei o curso de Pintura Decorativa. Foi aí que consolidei as bases técnicas e desenvolvi uma visão estética própria, que mais tarde se refletiria em todo o meu percurso artístico.</p>
-                <p id="bio1989" data-i18n="bio.p3">Ao longo da minha carreira, participei em diversas exposições. A minha primeira exposição individual realizou-se em 1989, na Galeria da Fundação Lar do Imigrante, em Santo Tirso. Foi um momento marcante, onde pude apresentar ao público obras que traduzem a minha sensibilidade e criatividade.</p>
+                <!-- Citação em destaque (palavras da própria artista) -->
+                <figure class="bio-quote">
+                    <blockquote>
+                        <p data-i18n="bio.q1">Tinha apenas cinco ou seis anos quando, numa noite de São João, me cruzei pela primeira vez com fotografias de artistas de teatro. A expressividade daquelas imagens despertou em mim um fascínio que, embora ainda sem saber, viria a acompanhar-me ao longo de toda a vida. Pouco tempo depois, descobri na despensa da avó uma coleção de postais com reproduções de obras de arte. Encantaram-me as cores, as formas e, sobretudo, a diversidade de quem as criava. Entre pintores tradicionais e artistas que pintavam com a boca ou com os pés, comecei a perceber que a arte não tinha limites nem uma única forma de existir.</p>
+                        <p data-i18n="bio.q2">A minha formação artística teve início na Escola Industrial Oliveira Salazar, em Luanda, onde frequentei o curso de Pintura Decorativa. Foi aí que consolidei as bases técnicas e desenvolvi uma visão estética própria, que mais tarde se refletiria em todo o meu percurso artístico.</p>
+                    </blockquote>
+                    <figcaption>Maria da Graça Silva</figcaption>
+                </figure>
+
+                <p data-i18n="bio.p1">A formação artística de Maria da Graça teve início na Escola Industrial Oliveira Salazar, em Luanda, onde frequentou o curso de Pintura Decorativa. Foi aí que consolidou as bases técnicas e desenvolveu uma visão estética própria, que mais tarde se refletiria em todo o seu percurso artístico.</p>
+                <p id="bio1989" data-i18n="bio.p2">Ao longo da sua carreira, participou em diversas exposições. A sua primeira exposição individual realizou-se em 1989, na Galeria da Fundação Lar do Imigrante, em Santo Tirso. Foi um momento marcante, onde pôde apresentar ao público obras que traduzem a sua sensibilidade e criatividade.</p>
+                <p data-i18n="bio.p3">Posteriormente, participou em exposições coletivas em espaços como o Hotel D. Henrique, no Porto (1991), a Galeria do Fórum da Câmara Municipal da Maia (1992) e a Casa Beira Alta, em Santa Catarina, Porto (1993), entre outros.</p>
 
                 <div class="bio-more-paragraphs" id="bioMore">
-                    <p data-i18n="bio.p4">Posteriormente, participei em exposições coletivas em espaços como o Hotel D. Henrique, no Porto (1991), a Galeria do Fórum da Câmara Municipal da Maia (1992) e a Casa Beira Alta, em Santa Catarina, Porto (1993), entre outros.</p>
-                    <p data-i18n="bio.p5">Também participei em vários concursos de pintura ao ar livre, em localidades como Vouzela, Santa Comba Dão, Mangualde, Oliveira de Frades e Penalva do Castelo. Nessas ocasiões, tive a honra de receber menções honrosas e prémios distintos, reconhecimento que reforçou a minha dedicação e motivação artística.</p>
-                    <p data-i18n="bio.p6">O meu trabalho estende-se igualmente à realização de murais e intervenções artísticas em instituições religiosas e espaços públicos. Em 2002, executei uma obra mural inspirada numa cena bíblica na Capela de Fagilde, no concelho de Mangualde. Em 2003, apresentei uma exposição na Biblioteca Municipal de Aguiar da Beira e desenvolvi um projeto artístico para a inauguração do Lar de Idosos de Fornos de Maceira Dão, concretizado no ano seguinte.</p>
-                    <p data-i18n="bio.p7">Em 2004, tive a honra de ver o meu trabalho integrado num momento solene, numa missa celebrada no Salão Principal do Lar de Idosos, com a presença do Bispo de Viseu, D. Ilídio Pinto Leandro, e de várias entidades municipais.</p>
-                    <p data-i18n="bio.p8">Continuei a realizar intervenções artísticas em igrejas e capelas, como na Igreja da Roda, em Mangualde (2007), e na Capela Rainha Santa Isabel, na Quinta da Estrada, em Vale de Távora, Aguiar da Beira (2008). Em 2013, criei um mural com uma cena bíblica para a Igreja de Fornos de Maceira Dão e, em 2014, desenvolvi uma obra para a Igreja de Gradiz, em Aguiar da Beira.</p>
-                    <p data-i18n="bio.p9">O meu percurso é profundamente marcado pela união entre arte e espiritualidade. Em cada obra que realizo, procuro transmitir emoção, fé e beleza, deixando um contributo artístico que reflita não só a minha paixão pela pintura, mas também o meu compromisso com a cultura e a comunidade.</p>
+                    <p data-i18n="bio.p4">Também participou em vários concursos de pintura ao ar livre, em localidades como Vouzela, Santa Comba Dão, Mangualde, Oliveira de Frades e Penalva do Castelo. Nessas ocasiões, teve a honra de receber menções honrosas e prémios distintos, reconhecimento que reforçou a sua dedicação e motivação artística.</p>
+                    <p data-i18n="bio.p5">O seu trabalho estende-se igualmente à realização de murais e intervenções artísticas em instituições religiosas e espaços públicos. Em 2002, executou uma obra mural inspirada numa cena bíblica na Capela de Fagilde, no concelho de Mangualde. Em 2003, apresentou uma exposição na Biblioteca Municipal de Aguiar da Beira e desenvolveu um projeto artístico para a inauguração do Lar de Idosos de Fornos de Maceira Dão, concretizado no ano seguinte.</p>
+                    <p data-i18n="bio.p6">Em 2004, teve a honra de ver o seu trabalho integrado num momento solene, numa missa celebrada no Salão Principal do Lar de Idosos, com a presença do Bispo de Viseu, D. Ilídio Pinto Leandro, e de várias entidades municipais.</p>
+                    <p data-i18n="bio.p7">Continuou a realizar intervenções artísticas em igrejas e capelas, como na Igreja da Roda, em Mangualde (2007), e na Capela Rainha Santa Isabel, na Quinta da Estrada, em Vale de Távora, Aguiar da Beira (2008). Em 2013, criou um mural com uma cena bíblica para a Igreja de Fornos de Maceira Dão e, em 2014, desenvolveu uma obra para a Igreja de Gradiz, em Aguiar da Beira.</p>
+                    <p data-i18n="bio.p8">O seu percurso é profundamente marcado pela união entre arte e espiritualidade. Em cada obra que realiza, procura transmitir emoção, fé e beleza, deixando um contributo artístico que reflete não só a sua paixão pela pintura, mas também o seu compromisso com a cultura e a comunidade.</p>
                 </div>
             </div>
 
@@ -1158,15 +1166,16 @@
             'modal.image': 'Image', 'zoom.click': 'Click the image to zoom', 'zoom.full': 'Tap to view full screen',
             'zoom.tapIn': 'Tap to zoom in', 'zoom.tapOut': 'Tap to zoom out',
             'bio.title': 'Before the artwork,<br><span>there is a story.</span>',
-            'bio.p1': 'She was only five or six years old when, on a São João night, Maria da Graça first came across photographs of theatre actors. The expressiveness of those images sparked in her a fascination that, without her knowing it yet, would stay with her for the rest of her life. Shortly afterwards, she found in her grandmother’s pantry a collection of postcards with reproductions of works of art. She was enchanted by the colours, the shapes and, above all, the diversity of the people who created them. Between traditional painters and artists who painted with their mouths or feet, she began to realise that art had no limits and no single way of existing.',
-            'bio.p2': 'My artistic training began at the Escola Industrial Oliveira Salazar in Luanda, where I studied Decorative Painting. It was there that I built my technical foundations and developed my own aesthetic vision, which would later be reflected throughout my artistic journey.',
-            'bio.p3': 'Throughout my career I have taken part in many exhibitions. My first solo exhibition took place in 1989 at the Galeria da Fundação Lar do Imigrante in Santo Tirso. It was a defining moment, in which I was able to present to the public works that express my sensitivity and creativity.',
-            'bio.p4': 'I later took part in group exhibitions in venues such as the Hotel D. Henrique in Porto (1991), the Forum Gallery of Maia City Council (1992) and Casa Beira Alta in Santa Catarina, Porto (1993), among others.',
-            'bio.p5': 'I have also taken part in several outdoor painting contests in places such as Vouzela, Santa Comba Dão, Mangualde, Oliveira de Frades and Penalva do Castelo. On those occasions I had the honour of receiving honourable mentions and awards, recognition that strengthened my dedication and artistic motivation.',
-            'bio.p6': 'My work also extends to murals and artistic projects for religious institutions and public spaces. In 2002 I painted a mural inspired by a biblical scene at the Chapel of Fagilde, in the municipality of Mangualde. In 2003 I held an exhibition at the Aguiar da Beira Municipal Library and developed an art project for the opening of the Fornos de Maceira Dão care home, completed the following year.',
-            'bio.p7': 'In 2004 I had the honour of seeing my work form part of a solemn occasion: a mass celebrated in the main hall of the care home, attended by the Bishop of Viseu, D. Ilídio Pinto Leandro, and several local officials.',
-            'bio.p8': 'I continued to create works for churches and chapels, such as the Church of Roda in Mangualde (2007) and the Chapel of Rainha Santa Isabel at Quinta da Estrada, Vale de Távora, Aguiar da Beira (2008). In 2013 I painted a mural with a biblical scene for the Church of Fornos de Maceira Dão and, in 2014, created a work for the Church of Gradiz in Aguiar da Beira.',
-            'bio.p9': 'My journey is deeply marked by the union of art and spirituality. In every work I create, I seek to convey emotion, faith and beauty, leaving an artistic contribution that reflects not only my passion for painting but also my commitment to culture and the community.',
+            'bio.q1': 'I was only five or six years old when, on a São João night, I first came across photographs of theatre actors. The expressiveness of those images sparked in me a fascination that, without my knowing it yet, would stay with me for the rest of my life. Shortly afterwards, I found in my grandmother’s pantry a collection of postcards with reproductions of works of art. I was enchanted by the colours, the shapes and, above all, the diversity of the people who created them. Between traditional painters and artists who painted with their mouths or feet, I began to realise that art had no limits and no single way of existing.',
+            'bio.q2': 'My artistic training began at the Escola Industrial Oliveira Salazar in Luanda, where I studied Decorative Painting. It was there that I built my technical foundations and developed my own aesthetic vision, which would later be reflected throughout my artistic journey.',
+            'bio.p1': 'Maria da Graça’s artistic training began at the Escola Industrial Oliveira Salazar in Luanda, where she studied Decorative Painting. It was there that she built her technical foundations and developed her own aesthetic vision, which would later be reflected throughout her artistic journey.',
+            'bio.p2': 'Throughout her career she has taken part in many exhibitions. Her first solo exhibition took place in 1989 at the Galeria da Fundação Lar do Imigrante in Santo Tirso. It was a defining moment, in which she was able to present to the public works that express her sensitivity and creativity.',
+            'bio.p3': 'She later took part in group exhibitions in venues such as the Hotel D. Henrique in Porto (1991), the Forum Gallery of Maia City Council (1992) and Casa Beira Alta in Santa Catarina, Porto (1993), among others.',
+            'bio.p4': 'She has also taken part in several outdoor painting contests in places such as Vouzela, Santa Comba Dão, Mangualde, Oliveira de Frades and Penalva do Castelo. On those occasions she had the honour of receiving honourable mentions and awards, recognition that strengthened her dedication and artistic motivation.',
+            'bio.p5': 'Her work also extends to murals and artistic projects for religious institutions and public spaces. In 2002 she painted a mural inspired by a biblical scene at the Chapel of Fagilde, in the municipality of Mangualde. In 2003 she held an exhibition at the Aguiar da Beira Municipal Library and developed an art project for the opening of the Fornos de Maceira Dão care home, completed the following year.',
+            'bio.p6': 'In 2004 she had the honour of seeing her work form part of a solemn occasion: a mass celebrated in the main hall of the care home, attended by the Bishop of Viseu, D. Ilídio Pinto Leandro, and several local officials.',
+            'bio.p7': 'She continued to create works for churches and chapels, such as the Church of Roda in Mangualde (2007) and the Chapel of Rainha Santa Isabel at Quinta da Estrada, Vale de Távora, Aguiar da Beira (2008). In 2013 she painted a mural with a biblical scene for the Church of Fornos de Maceira Dão and, in 2014, created a work for the Church of Gradiz in Aguiar da Beira.',
+            'bio.p8': 'Her journey is deeply marked by the union of art and spirituality. In every work she creates, she seeks to convey emotion, faith and beauty, leaving an artistic contribution that reflects not only her passion for painting but also her commitment to culture and the community.',
             'bio.readMore': 'Read full biography', 'bio.readLess': 'Show less',
             'bio.stat1': 'First solo<br>exhibition', 'bio.stat2': 'Places graced<br>by her art',
             'bio.stat3': 'Years as<br>an artist',
