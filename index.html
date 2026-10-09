@@ -4,12 +4,12 @@
     <meta charset="UTF-8">
     <meta name="google-site-verification" content="qAsm46rlGUONncDxyQ5D-aI7vzW8FcU7ukd_C9QsghM" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, viewport-fit=cover">
-    <meta name="description" content="Artista portuguesa: quadros em óleo, aguarela e acrílico, murais e artesanato feito à mão. Veja as obras e encomende a sua peça personalizada.">
+    <meta name="description" content="Pintora e artesã portuguesa. Quadros em óleo, aguarela e acrílico, murais de arte sacra e artesanato feito à mão. Veja as obras disponíveis e encomende a sua peça personalizada.">
     <meta name="theme-color" content="#F4EFE6">
     <meta property="og:type" content="website">
     <meta property="og:locale" content="pt_PT">
     <meta property="og:title" content="Maria da Graça Silva | Portfólio de Arte">
-    <meta property="og:description" content="Artista portuguesa: quadros em óleo, aguarela e acrílico, murais e artesanato feito à mão. Veja as obras e encomende a sua peça personalizada.">
+    <meta property="og:description" content="Pintora e artesã portuguesa. Quadros, murais de arte sacra e artesanato feito à mão. Veja as obras e encomende a sua peça personalizada.">
     <meta property="og:site_name" content="Maria da Graça Silva">
     <!-- Ícone (pintura; ficheiros na mesma pasta do index.html) -->
     <link rel="icon" href="favicon.ico?v=5" sizes="48x48">
@@ -25,7 +25,7 @@
       "url": "https://mariadagracasilva.com/",
       "image": "https://mariadagracasilva.com/icon-512.png",
       "jobTitle": "Pintora e artesã",
-      "description": "Artista portuguesa: quadros em óleo, aguarela e acrílico, murais e artesanato feito à mão.",
+      "description": "Pintora e artesã portuguesa: quadros em óleo, aguarela e acrílico, murais de arte sacra e artesanato feito à mão.",
       "address": { "@type": "PostalAddress", "addressLocality": "Albergaria-a-Velha", "addressCountry": "PT" },
       "email": "mailto:ateliermariadagraca@sapo.pt",
       "sameAs": ["https://www.facebook.com/pintarular", "https://www.tiktok.com/@maria.da.graa.alb4"]
@@ -787,7 +787,7 @@
                 <span class="lang-sep" aria-hidden="true"></span>
                 <button type="button" class="lang-btn" data-lang="en" lang="en" aria-label="English">EN</button>
                 <span class="lang-sep" aria-hidden="true"></span>
-            <button type="button" class="sound-btn is-on" id="soundBtn" aria-pressed="true" aria-label="Desligar música" title="Desligar música">
+            <button type="button" class="sound-btn" id="soundBtn" aria-pressed="false" aria-label="Ligar música" title="Ligar música">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                     <path d="M4 9.5h3.2L12 5.5v13l-4.8-4H4z" fill="currentColor" fill-opacity="0.15"/>
                     <path class="snd-wave" d="M15.5 9.2a4 4 0 0 1 0 5.6"/>
@@ -2930,6 +2930,7 @@
 
                 const nextColor = PALETTE[colorIndex % PALETTE.length].split(',').map(n => parseInt(n, 10));
                 // pincel fica a preto e branco; só o salpico tem cor
+                paintSplat();
             });
         }
 
@@ -3059,6 +3060,93 @@
         }
         if (!REDUCED_MOTION) requestAnimationFrame(animateCanvas);
 
+
+        /* =========================================================
+           SOM DE TINTA AO CLICAR
+           Usa o ficheiro "clique-tinta.mp3" (na mesma pasta do index.html),
+           com um tom diferente em cada clique. Se o ficheiro faltar,
+           usa um som suave gerado pelo próprio browser.
+           Segue o botão de som do menu: com o som desligado, o clique fica em silêncio.
+        ========================================================= */
+        let sfxCtx = null, sfxBufs = [], sfxLast = 0, sfxFile = null, sfxFileData = null;
+        // Descarrega o som logo ao abrir (é muito leve), para o 1.º clique já soar
+        fetch('clique-tinta.mp3').then(r => r.ok ? r.arrayBuffer() : null).then(b => { sfxFileData = b; }).catch(() => {});
+        const SFX_PITCHES = [0.8, 0.95, 1.12, 1.32, 1.55, 1.8, 2.1];   // tons bem diferentes (acima de 1 = mais rápido e agudo)
+        let sfxLastPitch = -1;
+        function makeSplat(ac) {
+            const sr = ac.sampleRate, len = Math.floor(sr * 0.18);
+            const buf = ac.createBuffer(1, len, sr), d = buf.getChannelData(0);
+            const f0 = 240 + Math.random() * 60, f1 = 430 + Math.random() * 90;   // gota grave e redonda
+            const dropAt = 0.006 + Math.random() * 0.006;
+            let lp1 = 0, lp2 = 0, ph = 0, peak = 0;
+            for (let i = 0; i < len; i++) {
+                const t = i / sr;
+                // "pff" de tinta: ruído muito abafado, entra e sai com suavidade
+                lp1 += ((Math.random() * 2 - 1) - lp1) * 0.09;
+                lp2 += (lp1 - lp2) * 0.09;
+                let v = lp2 * 3.2 * Math.min(1, t / 0.004) * Math.exp(-t / 0.038);
+                // gotinha: tom grave que sobe pouco e se apaga devagar
+                const u = t - dropAt;
+                if (u >= 0) {
+                    const f = f0 + (f1 - f0) * (1 - Math.exp(-u / 0.018));
+                    ph += 2 * Math.PI * f / sr;
+                    v += Math.sin(ph) * 0.4 * Math.min(1, u / 0.006) * Math.exp(-u / 0.035);
+                }
+                d[i] = v;
+                peak = Math.max(peak, Math.abs(v));
+            }
+            for (let i = 0; i < len; i++) d[i] /= (peak || 1);
+            return buf;
+        }
+        function paintSplat() {
+            if (window.mgsSoundOn && !window.mgsSoundOn()) return;
+            const AC = window.AudioContext || window.webkitAudioContext;
+            if (!AC) return;
+            const nowMs = performance.now();
+            if (nowMs - sfxLast < 70) return;            // cliques muito seguidos não se acumulam
+            sfxLast = nowMs;
+            try {
+                if (!sfxCtx) {
+                    sfxCtx = new AC();
+                    for (let k = 0; k < 6; k++) sfxBufs.push(makeSplat(sfxCtx));   // som de reserva
+                }
+                if (sfxCtx.state === 'suspended') sfxCtx.resume();
+                const ac = sfxCtx, t0 = ac.currentTime + 0.005;
+
+                // Ficheiro "clique-tinta.mp3": descodifica uma vez e toca com um tom diferente de cada vez
+                const playFile = () => {
+                    let k;
+                    do { k = Math.floor(Math.random() * SFX_PITCHES.length); } while (k === sfxLastPitch);   // nunca repete o mesmo tom
+                    sfxLastPitch = k;
+                    const src = ac.createBufferSource();
+                    src.buffer = sfxFile;
+                    src.playbackRate.value = SFX_PITCHES[k] * (0.98 + Math.random() * 0.04);
+                    const g = ac.createGain();
+                    g.gain.value = 0.18;                  // volume do clique (0 a 1)
+                    src.connect(g).connect(ac.destination);
+                    src.start(ac.currentTime + 0.005);
+                };
+                if (sfxFile) { playFile(); return; }
+                if (sfxFileData) {                         // 1.º clique: descodifica e toca logo a seguir
+                    const data = sfxFileData; sfxFileData = null;
+                    let handled = false;
+                    const done = (b) => { if (handled || !b) return; handled = true; sfxFile = b; playFile(); };
+                    const p = ac.decodeAudioData(data, done, () => {});
+                    if (p && p.then) p.then(done).catch(() => {});
+                    return;
+                }
+                const src = ac.createBufferSource();
+                src.buffer = sfxBufs[Math.floor(Math.random() * sfxBufs.length)];
+                src.playbackRate.value = 0.92 + Math.random() * 0.16;
+                const lp = ac.createBiquadFilter();       // tudo abafado: nada de agudos
+                lp.type = 'lowpass'; lp.frequency.value = 1400; lp.Q.value = 0.4;
+                const g = ac.createGain();
+                g.gain.value = 0.3;
+                src.connect(lp).connect(g).connect(ac.destination);
+                src.start(t0);
+            } catch (e) {}
+        }
+
         /* =========================================================
            MÚSICA DE FUNDO (volume baixo, com botão para silenciar)
            · Os browsers não deixam tocar som sem o visitante interagir,
@@ -3070,8 +3158,9 @@
             const btn = document.getElementById('soundBtn');
             if (!audio || !btn) return;
             const VOLUME = 0.18;                       // volume baixo (0 a 1)
+            // Som ATIVADO por defeito em todas as visitas (o botão só silencia durante a visita atual)
             let wantOn = true, playing = false, ctx = null, gain = null;
-            try { if (localStorage.getItem('mgs-sound') === 'off') wantOn = false; } catch (e) {}
+            try { localStorage.removeItem('mgs-sound'); if (sessionStorage.getItem('mgs-sound') === 'off') wantOn = false; } catch (e) {}
 
             function setupGain() {                     // no iPhone o "volume" é ignorado; o GainNode resolve
                 if (ctx || !(window.AudioContext || window.webkitAudioContext)) return;
@@ -3106,13 +3195,14 @@
                 btn.title = label;
             }
             function play() {
+                if (playing) { if (ctx && ctx.state === 'suspended') ctx.resume(); return; }
                 setupGain();
                 if (ctx && ctx.state === 'suspended') ctx.resume();
                 if (!gain) audio.volume = 0;
                 playing = true; updateBtn();
                 const p = audio.play();
                 const ok = () => fadeTo(VOLUME, 2.5);
-                if (p && p.then) p.then(ok).catch(() => { playing = false; updateBtn(); }); else ok();
+                if (p && p.then) p.then(ok).catch(() => { playing = false; waitForGesture(); }); else ok();
             }
             function stop() {
                 playing = false; updateBtn();
@@ -3123,7 +3213,7 @@
             btn.addEventListener('click', (e) => {
                 e.stopPropagation();
                 wantOn = !wantOn;
-                try { localStorage.setItem('mgs-sound', wantOn ? 'on' : 'off'); } catch (err) {}
+                try { sessionStorage.setItem('mgs-sound', wantOn ? 'on' : 'off'); } catch (err) {}
                 wantOn ? play() : stop();
             });
 
@@ -3134,7 +3224,17 @@
                 EVS.forEach(ev => document.removeEventListener(ev, kick, true));
                 if (wantOn && !playing) play();
             };
-            EVS.forEach(ev => document.addEventListener(ev, kick, true));
+            function waitForGesture() { EVS.forEach(ev => document.addEventListener(ev, kick, true)); }
+
+            // Tenta logo tocar ao abrir o site (alguns browsers deixam); se bloquear, começa no 1.º clique/toque
+            function tryAutoplay() {
+                if (!wantOn || playing) return;
+                audio.volume = 0;
+                const p = audio.play();
+                if (p && p.then) p.then(() => { playing = true; updateBtn(); fadeTo(VOLUME, 2.5); }).catch(waitForGesture);
+                else waitForGesture();
+            }
+            tryAutoplay();
 
             // Ao mudar de separador / minimizar, faz pausa; ao voltar, retoma
             document.addEventListener('visibilitychange', () => {
@@ -3142,6 +3242,7 @@
                 else if (playing) { if (ctx && ctx.state === 'suspended') ctx.resume(); audio.play().catch(() => {}); }
             });
 
+            window.mgsSoundOn = () => wantOn;          // o som do clique (pincel) segue o mesmo botão
             onLangChange(updateBtn);
             updateBtn();
         }
