@@ -4,12 +4,12 @@
     <meta charset="UTF-8">
     <meta name="google-site-verification" content="qAsm46rlGUONncDxyQ5D-aI7vzW8FcU7ukd_C9QsghM" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, viewport-fit=cover">
-    <meta name="description" content="Pintora e artesã portuguesa. Quadros em óleo, aguarela e acrílico, murais de arte sacra e artesanato feito à mão. Veja as obras disponíveis e encomende a sua peça personalizada.">
+    <meta name="description" content="Artista portuguesa: quadros em óleo, aguarela e acrílico, murais e artesanato feito à mão. Veja as obras e encomende a sua peça personalizada.">
     <meta name="theme-color" content="#F4EFE6">
     <meta property="og:type" content="website">
     <meta property="og:locale" content="pt_PT">
     <meta property="og:title" content="Maria da Graça Silva | Portfólio de Arte">
-    <meta property="og:description" content="Pintora e artesã portuguesa. Quadros, murais de arte sacra e artesanato feito à mão. Veja as obras e encomende a sua peça personalizada.">
+    <meta property="og:description" content="Artista portuguesa: quadros em óleo, aguarela e acrílico, murais e artesanato feito à mão. Veja as obras e encomende a sua peça personalizada.">
     <meta property="og:site_name" content="Maria da Graça Silva">
     <!-- Ícone (pintura; ficheiros na mesma pasta do index.html) -->
     <link rel="icon" href="favicon.ico?v=5" sizes="48x48">
@@ -486,6 +486,20 @@
         .to-top:hover { background: var(--accent-color); border-color: var(--accent-color); color: #fff; opacity: 1; }
 
         @media (prefers-reduced-motion: reduce) { .scroll-cue-line::after { animation: none; } }
+        /* Música de fundo: botão de som ao lado do PT | EN */
+        .sound-btn { display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 30px; margin-left: 0.15rem; border-radius: 50%; color: var(--text-color); opacity: 0.55; transition: opacity 0.3s ease, color 0.3s ease, background 0.3s ease; }
+        .sound-btn:hover { opacity: 1; color: var(--accent-color); background: rgba(138, 42, 34, 0.08); }
+        .sound-btn.is-on { opacity: 1; color: var(--accent-color); }
+        .sound-btn svg { width: 19px; height: 19px; overflow: visible; }
+        .sound-btn .snd-wave, .sound-btn .snd-off { transition: opacity 0.3s ease; }
+        .sound-btn .snd-off { opacity: 0; }
+        .sound-btn:not(.is-on) .snd-wave { opacity: 0; }
+        .sound-btn:not(.is-on) .snd-off { opacity: 1; }
+        .sound-btn.is-on .snd-wave { animation: sndPulse 1.8s ease-in-out infinite; }
+        .sound-btn.is-on .snd-wave.w2 { animation-delay: 0.25s; }
+        @keyframes sndPulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
+        html.ultra .sound-btn .snd-wave { animation: none !important; }
+        @media (max-width: 768px) { .sound-btn { width: 32px; height: 32px; } .sound-btn svg { width: 18px; height: 18px; } }
         .perf-badge { position: fixed; right: 10px; bottom: 8px; z-index: 9600; pointer-events: none; font-size: 0.58rem; font-weight: 500; letter-spacing: 1px; text-transform: uppercase; color: var(--text-color); opacity: 0; transition: opacity 0.6s ease; }
         .perf-badge.show { opacity: 0.3; }
         body.no-scroll .perf-badge { opacity: 0 !important; }
@@ -772,6 +786,15 @@
                 <button type="button" class="lang-btn" data-lang="pt" lang="pt" aria-label="Português">PT</button>
                 <span class="lang-sep" aria-hidden="true"></span>
                 <button type="button" class="lang-btn" data-lang="en" lang="en" aria-label="English">EN</button>
+                <span class="lang-sep" aria-hidden="true"></span>
+            <button type="button" class="sound-btn" id="soundBtn" aria-pressed="false" aria-label="Ligar música" title="Ligar música">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M4 9.5h3.2L12 5.5v13l-4.8-4H4z" fill="currentColor" fill-opacity="0.15"/>
+                    <path class="snd-wave" d="M15.5 9.2a4 4 0 0 1 0 5.6"/>
+                    <path class="snd-wave w2" d="M18.2 6.6a7.6 7.6 0 0 1 0 10.8"/>
+                    <path class="snd-off" d="M16 9.5l5 5M21 9.5l-5 5"/>
+                </svg>
+            </button>
             </div>
         </div>
     </nav>
@@ -1179,7 +1202,7 @@
             'contact.eyebrow': 'Contact', 'contact.title': 'Shall we<br><span>talk?</span>',
             'contact.sub': 'To find out about a work, ask a question, discuss a commission or simply learn more about Maria da Graça’s work.',
             'contact.termsBefore': 'Before ordering, please read the', 'contact.termsLink': 'Terms and Conditions', 'contact.location': 'Location',
-            'footer.copy': '© 2026 Maria da Graça Silva. All rights reserved.', 'footer.top': 'Back to top', 'common.close': 'Close',
+            'footer.copy': '© 2026 Maria da Graça Silva. All rights reserved.', 'footer.top': 'Back to top', 'common.close': 'Close', 'sound.on': 'Play music', 'sound.off': 'Mute music',
             'terms.confirm': 'To continue to contact the artist, please confirm that you have read and accept the Terms and Conditions.',
             'terms.decline': 'I don’t accept', 'terms.accept': 'I accept',
             'terms.body': `<h3 id="termsTitle">Terms and Conditions</h3>
@@ -3035,6 +3058,96 @@
             }
         }
         if (!REDUCED_MOTION) requestAnimationFrame(animateCanvas);
+
+        /* =========================================================
+           MÚSICA DE FUNDO (volume baixo, com botão para silenciar)
+           · Os browsers não deixam tocar som sem o visitante interagir,
+             por isso a música começa no primeiro clique/toque/tecla.
+           · Se o visitante silenciar, fica guardado para as próximas visitas.
+        ========================================================= */
+        function initBgMusic() {
+            const audio = document.getElementById('bgMusic');
+            const btn = document.getElementById('soundBtn');
+            if (!audio || !btn) return;
+            const VOLUME = 0.18;                       // volume baixo (0 a 1)
+            let wantOn = true, playing = false, ctx = null, gain = null;
+            try { if (localStorage.getItem('mgs-sound') === 'off') wantOn = false; } catch (e) {}
+
+            function setupGain() {                     // no iPhone o "volume" é ignorado; o GainNode resolve
+                if (ctx || !(window.AudioContext || window.webkitAudioContext)) return;
+                try {
+                    ctx = new (window.AudioContext || window.webkitAudioContext)();
+                    gain = ctx.createGain();
+                    gain.gain.value = 0;
+                    ctx.createMediaElementSource(audio).connect(gain).connect(ctx.destination);
+                    audio.volume = 1;
+                } catch (e) { ctx = null; gain = null; }
+            }
+            function fadeTo(v, secs) {
+                if (gain) {
+                    const now = ctx.currentTime;
+                    gain.gain.cancelScheduledValues(now);
+                    gain.gain.setValueAtTime(gain.gain.value, now);
+                    gain.gain.linearRampToValueAtTime(v, now + secs);
+                } else {
+                    const from = audio.volume, start = performance.now();
+                    (function step(tm) {
+                        const k = Math.min(1, (tm - start) / (secs * 1000));
+                        audio.volume = Math.max(0, Math.min(1, from + (v - from) * k));
+                        if (k < 1) requestAnimationFrame(step);
+                    })(start);
+                }
+            }
+            function updateBtn() {
+                btn.classList.toggle('is-on', playing);
+                btn.setAttribute('aria-pressed', String(playing));
+                const label = playing ? t('sound.off', 'Desligar música') : t('sound.on', 'Ligar música');
+                btn.setAttribute('aria-label', label);
+                btn.title = label;
+            }
+            function play() {
+                setupGain();
+                if (ctx && ctx.state === 'suspended') ctx.resume();
+                if (!gain) audio.volume = 0;
+                playing = true; updateBtn();
+                const p = audio.play();
+                const ok = () => fadeTo(VOLUME, 2.5);
+                if (p && p.then) p.then(ok).catch(() => { playing = false; updateBtn(); }); else ok();
+            }
+            function stop() {
+                playing = false; updateBtn();
+                fadeTo(0, 0.6);
+                setTimeout(() => { if (!playing) audio.pause(); }, 650);
+            }
+
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                wantOn = !playing;
+                try { localStorage.setItem('mgs-sound', wantOn ? 'on' : 'off'); } catch (err) {}
+                wantOn ? play() : stop();
+            });
+
+            // Primeira interação em qualquer sítio do site → começa a música (se não foi silenciada)
+            const EVS = ['pointerdown', 'keydown', 'touchend'];
+            const kick = (e) => {
+                if (btn.contains(e.target)) return;
+                EVS.forEach(ev => document.removeEventListener(ev, kick, true));
+                if (wantOn && !playing) play();
+            };
+            EVS.forEach(ev => document.addEventListener(ev, kick, true));
+
+            // Ao mudar de separador / minimizar, faz pausa; ao voltar, retoma
+            document.addEventListener('visibilitychange', () => {
+                if (document.hidden) { if (playing) audio.pause(); }
+                else if (playing) { if (ctx && ctx.state === 'suspended') ctx.resume(); audio.play().catch(() => {}); }
+            });
+
+            onLangChange(updateBtn);
+            updateBtn();
+        }
+        if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initBgMusic); else initBgMusic();
     </script>
+    <!-- Música de fundo: ficheiro "Adagio for the Forgotten.mp3" na mesma pasta do index.html -->
+    <audio id="bgMusic" src="Adagio%20for%20the%20Forgotten.mp3" loop preload="none"></audio>
 </body>
 </html>
