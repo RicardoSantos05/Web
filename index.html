@@ -123,6 +123,8 @@
         .lang-btn.is-active { opacity: 1; color: var(--accent-color); }
         .lang-btn.is-active::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 1.5px; background: var(--accent-color); }
         .lang-sep { width: 1px; height: 12px; background: var(--text-color); opacity: 0.25; }
+        /* Telemóvel: assinatura encostada à esquerda, idiomas e som à direita (sem se sobreporem) */
+        @media (max-width: 768px) { .logo { align-self: flex-start; } .logo a { display: block; } .logo-img { max-width: calc(100vw - 175px); object-fit: contain; object-position: left center; } }
         @media (max-width: 768px) { nav { position: fixed; } .lang-switch { position: absolute; top: 0.85rem; right: 1rem; margin: 0; padding: 0; border: none; } .lang-btn { font-size: 0.72rem; min-height: 32px; } }
         @media (max-width: 360px) { .lang-switch { right: 0.6rem; } }
 
@@ -2213,6 +2215,8 @@
                         desc_pt: f.descricao || f.descrição || f.description || '', desc_en: f.descricao_en || '',
                         tecnica_pt: f.tecnica || f.técnica || '', tecnica_en: f.tecnica_en || '',
                         dimensoes: f.dimensoes || f.dimensões || '',
+                        // data em que a obra foi inserida no Contentful (para ordenar os separadores)
+                        created: Date.parse(item.sys.createdAt || item.sys.updatedAt || '') || 0,
                         imgs
                     });
                 });
@@ -2386,10 +2390,14 @@
 
         function computeVisible() {
             let matches = shopItems.filter(it => currentType === 'all' || it.dataset.type === currentType);
-            // Em "Quadros" e "Artesanato": disponíveis primeiro, indisponíveis no fim (em "Tudo" fica tudo misturado)
+            // Em "Quadros" e "Artesanato": disponíveis primeiro, da mais recente para a mais antiga
+            // (pela data em que foram inseridas no Contentful); indisponíveis no fim.
+            // Em "Tudo" fica tudo misturado, como antes.
             if (currentType !== 'all') {
-                const isAvail = (it) => artworks[+it.dataset.index] && artworks[+it.dataset.index].available;
-                matches = [...matches.filter(isAvail), ...matches.filter(it => !isAvail(it))];
+                const art = (it) => artworks[+it.dataset.index];
+                const isAvail = (it) => art(it) && art(it).available;
+                const avail = matches.filter(isAvail).sort((a, b) => (art(b).created || 0) - (art(a).created || 0));
+                matches = [...avail, ...matches.filter(it => !isAvail(it))];
             }
             expandContainer.style.display = (currentType === 'all' && matches.length > GALLERY_LIMIT) ? 'block' : 'none';
             return (currentType === 'all' && !galleryExpanded) ? matches.slice(0, GALLERY_LIMIT) : matches;
